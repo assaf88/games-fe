@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 import {BrowserRouter as Router, Link, Route, Routes, useNavigate, useParams} from 'react-router-dom';
 
 const App = () => {
