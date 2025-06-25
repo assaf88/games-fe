@@ -1,5 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Link, Route, Routes, useNavigate, useParams} from 'react-router-dom';
+import MultiplayerGame from "./MultiplayerGame.jsx";
 
 const App = () => {
     return (
@@ -53,7 +54,9 @@ const AvalonPartyPage = () => {
     return (
         <div>
             <h1>Welcome to party number {id}</h1>
+            <MultiplayerGame/>
         </div>
+
     );
 };
 
