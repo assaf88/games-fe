@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Link, Route, Routes, useNavigate, useParams} from 'react-router-dom';
 import MultiplayerGame from "./MultiplayerGame.jsx";
+import './styles/GameListPage.css';
 
 const App = () => {
     return (
@@ -17,14 +18,15 @@ const App = () => {
 // 1. Game List Page
 const GameListPage = () => {
     return (
-        <div>
-            <h1>Games List</h1>
-            <Link to="/avalon">
-                <button>Avalon</button>
-            </Link>
-            <Link to="/avalon2">
-                <button>Avalon2</button>
-            </Link>
+        <div className="game-list-rpg-bg">
+            <div className="game-list-rpg-container">
+                <Link to="/avalon" className="game-list-rpg-link">
+                    <button className="game-list-rpg-btn">Avalon</button>
+                </Link>
+                <Link to="/avalon2" className="game-list-rpg-link">
+                    <button className="game-list-rpg-btn">TBA..</button>
+                </Link>
+            </div>
         </div>
     );
 };

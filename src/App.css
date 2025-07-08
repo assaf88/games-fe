@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+html, body, #root {
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Optimize background image for lightweight: use compressed JPG/WEBP, set background-attachment: fixed for performance, and avoid large images. */
