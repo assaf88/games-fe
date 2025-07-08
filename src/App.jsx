@@ -1,9 +1,8 @@
-import React from 'react';
 import {BrowserRouter as Router, Link, Route, Routes, useNavigate, useParams} from 'react-router-dom';
 import MultiplayerGame from "./MultiplayerGame.jsx";
-import './styles/GameListPage.css';
+import './styles/GamesList.css';
 
-const App = () => {
+const GamesList = () => {
     return (
         <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
             <Routes>
@@ -62,4 +61,4 @@ const AvalonPartyPage = () => {
     );
 };
 
-export default App;
+export default GamesList;
