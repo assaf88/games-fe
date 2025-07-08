@@ -6,14 +6,14 @@ import './styles/GamesList.css';
 const GamesListPage = () => {
     return (
         <div className="game-list-rpg-bg">
-            <div className="game-list-rpg-container">
+            {/* <div className="game-list-rpg-container"> */}
                 <Link to="/avalon" className="game-list-rpg-link">
                     <button className="game-list-rpg-btn">Avalon</button>
                 </Link>
-                <Link to="/avalon2" className="game-list-rpg-link">
+                {/* <Link to="/avalon2" className="game-list-rpg-link">
                     <button className="game-list-rpg-btn">TBA..</button>
-                </Link>
-            </div>
+                </Link> */}
+            {/* </div> */}
         </div>
     );
 };

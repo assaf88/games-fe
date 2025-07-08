@@ -27,7 +27,7 @@ const MultiplayerGame = () => {
                 console.log("WebSocket connected!");
                 // we don't need to see this now, the BE broadcasts this
                 // websocket.current.send(JSON.stringify({ action: "join_game", username: "Player1" }));
-                 startPing();
+                 startPing(); //todo: later in backend - if ping - just return game state
             };
 
             ws.onmessage = (event) => {
@@ -42,7 +42,7 @@ const MultiplayerGame = () => {
                 }
 
                 // Update game state based on WebSocket message
-                if (messageData.type === "update_board") {
+                if (messageData.action === "update_board") {
                     setGameState(prev => ({
                         ...prev,
                         board: messageData.board,
@@ -51,6 +51,11 @@ const MultiplayerGame = () => {
                     setGameState((prev) => ({
                         ...prev,
                         players: [...prev.players, messageData.username],
+                    }));
+                } else if (messageData.action === "leave_game") {
+                    setGameState((prev) => ({
+                        ...prev,
+                        players: prev.players.filter(player => player !== messageData.username),
                     }));
                 } else if (messageData.action === "play_card") {
                     setGameState((prev) => ({
@@ -85,7 +90,7 @@ const MultiplayerGame = () => {
 
             pingIntervalId = setInterval(() => {
                 if (websocket.current.readyState === WebSocket.OPEN) {
-                    websocket.current.send(JSON.stringify({ type: "ping"})); // todo: support empty
+                    websocket.current.send(JSON.stringify({ action: "ping" }));
                 }
             }, pingInterval);
         }
