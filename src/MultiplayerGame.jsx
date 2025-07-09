@@ -119,56 +119,130 @@ const MultiplayerGame = () => {
     };
 
     return (
-        <div>
-            <h1>Multiplayer Game</h1>
+        <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
+            <div style={{ flex: 1, maxWidth: "500px" }}>
+                {/* Removed <h1>Multiplayer Game</h1> */}
+                {/* Display connected players */}
+                <h2>Players:</h2>
+                {gameState.players.length === 0 ? (
+                    <p>No players connected yet.</p>
+                ) : (
+                    <ul>
+                        {gameState.players.map((player, index) => (
+                            <li key={index}>{player}</li>
+                        ))}
+                    </ul>
+                )}
+                {/* Display the game board */}
+                <h2>Game Board:</h2>
+                {gameState.board.length === 0 ? (
+                    <p>The board is currently empty!</p>
+                ) : (
+                    <div style={{display: "flex", flexWrap: "wrap"}}>
+                        {gameState.board.map((card, index) => (
+                            <div
+                                key={index}
+                                style={{
+                                    border: "1px solid black",
+                                    margin: "5px",
+                                    padding: "10px",
+                                    borderRadius: "5px",
+                                }}
+                            >
+                                {card}
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {/* Display chat/broadcast messages */}
+                <h2>Broadcast Messages:</h2>
+                {gameState.messages.length === 0 ? (
+                    <p>No messages yet.</p>
+                ) : (
+                    <div>
+                        {gameState.messages.map((message, index) => (
+                            <p key={index}>{message}</p>
+                        ))}
+                    </div>
+                )}
+                <button onClick={sendMessage}>Play Card</button>
+            </div>
+            <div className="poker-circle-container" style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <PokerCircle players={gameState.players} />
+            </div>
+        </div>
+    );
+};
 
-            {/* Display connected players */}
-            <h2>Players:</h2>
-            {gameState.players.length === 0 ? (
-                <p>No players connected yet.</p>
-            ) : (
-                <ul>
-                    {gameState.players.map((player, index) => (
-                        <li key={index}>{player}</li>
-                    ))}
-                </ul>
-            )}
-
-            {/* Display the game board */}
-            <h2>Game Board:</h2>
-            {gameState.board.length === 0 ? (
-                <p>The board is currently empty!</p>
-            ) : (
-                <div style={{display: "flex", flexWrap: "wrap"}}>
-                    {gameState.board.map((card, index) => (
-                        <div
-                            key={index}
-                            style={{
-                                border: "1px solid black",
-                                margin: "5px",
-                                padding: "10px",
-                                borderRadius: "5px",
-                            }}
-                        >
-                            {card}
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {/* Display chat/broadcast messages */}
-            <h2>Broadcast Messages:</h2>
-            {gameState.messages.length === 0 ? (
-                <p>No messages yet.</p>
-            ) : (
-                <div>
-                    {gameState.messages.map((message, index) => (
-                        <p key={index}>{message}</p>
-                    ))}
-                </div>
-            )}
-
-            <button onClick={sendMessage}>Play Card</button>
+// PokerCircle component for circular player arrangement
+const PokerCircle = ({ players }) => {
+    // For demo, pick the first player as self if no session/connection id
+    const selfIndex = 0;
+    const numPlayers = players.length;
+    const circleSize = Math.min(window.innerWidth, window.innerHeight) * 0.625; // 62.5vw or vh
+    const portraitWidth = 90 * 1.3; // 117px
+    const portraitHeight = 135 * 1.3; // 175.5px
+    const selfPortraitWidth = portraitWidth * 1.1; // 128.7px
+    const selfPortraitHeight = portraitHeight * 1.1; // 193.05px
+    const center = circleSize / 2;
+    // Increase radius by 20% for more space between portraits
+    const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * 1.2;
+    // Place self at hour 6 (bottom, 90deg, π/2)
+    return (
+        <div
+            className="poker-circle"
+            style={{
+                position: "fixed",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+                width: circleSize,
+                height: circleSize,
+                margin: 0,
+                borderRadius: "50%",
+                background: "none",
+                boxShadow: "none",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 10,
+            }}
+        >
+            {players.map((player, i) => {
+                // Self at hour 6 (90deg, π/2), others spaced evenly
+                const angle = ((i - selfIndex) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
+                const isSelf = i === selfIndex;
+                const width = isSelf ? selfPortraitWidth : portraitWidth;
+                const height = isSelf ? selfPortraitHeight : portraitHeight;
+                const x = center + radius * Math.cos(angle) - width / 2;
+                const y = center + radius * Math.sin(angle) - height / 2;
+                return (
+                    <div
+                        key={player}
+                        className={"poker-portrait" + (isSelf ? " self" : "")}
+                        style={{
+                            position: "absolute",
+                            left: x,
+                            top: y,
+                            width: width,
+                            height: height,
+                            borderRadius: "50%",
+                            background: isSelf ? "#4a90e2" : "#444",
+                            color: "#fff",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            fontSize: height * 0.0735, // 30% smaller than before (0.105 * 0.7)
+                            border: isSelf ? "3px solid #fff" : "2px solid #888",
+                            boxShadow: isSelf ? "0 0 10px #4a90e2" : "0 0 6px #222",
+                            zIndex: isSelf ? 2 : 1,
+                        }}
+                    >
+                        {player}
+                    </div>
+                );
+            })}
         </div>
     );
 };
