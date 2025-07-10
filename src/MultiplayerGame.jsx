@@ -180,10 +180,10 @@ const PokerCircle = ({ players }) => {
     const selfIndex = 0;
     const numPlayers = players.length;
     const circleSize = Math.min(window.innerWidth, window.innerHeight) * 0.625; // 62.5vw or vh
-    const portraitWidth = 90 * 1.3; // 117px
-    const portraitHeight = 135 * 1.3; // 175.5px
-    const selfPortraitWidth = portraitWidth * 1.1; // 128.7px
-    const selfPortraitHeight = portraitHeight * 1.1; // 193.05px
+    const portraitWidth = circleSize / 7; // 
+    const portraitHeight = portraitWidth * 1.5
+    const selfPortraitWidth = portraitWidth * 1.1;
+    const selfPortraitHeight = portraitHeight * 1.1;
     const center = circleSize / 2;
     // Increase radius by 20% for more space between portraits
     const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * 1.2;
