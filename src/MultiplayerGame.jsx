@@ -1,6 +1,12 @@
 import  { useRef, useState, useEffect } from "react";
 
-const MultiplayerGame = ({ partyId }) => {
+const MultiplayerGame = ({ partyId: propPartyId }) => {
+    // Fallback: try to extract partyId from URL if not provided
+    let partyId = propPartyId;
+    if (!partyId) {
+        const match = window.location.pathname.match(/party\/(\w+)/);
+        if (match) partyId = match[1];
+    }
     const websocket = useRef(null); // Persistent WebSocket instance across renders
     const [gameState, setGameState] = useState({
         board: [],          // Represents the cardboard state
@@ -9,11 +15,13 @@ const MultiplayerGame = ({ partyId }) => {
     });
 
     useEffect(() => {
+        if (!partyId) {
+            console.error("No partyId provided to MultiplayerGame!");
+            return;
+        }
         // Open the WebSocket connection
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-        const wsUrl = partyId
-            ? `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`
-            : `${wsProtocol}://${window.location.host}/game`;
+        const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`;
         let reconnectTimeout; // Timeout for reconnect
         let isUnmounted = false; // To prevent retries after unmounting
         const pingInterval = 30000;
