@@ -8,7 +8,7 @@ const AvalonParty = () => {
     return (
         <div>
             <h1>Welcome to party number {id}</h1>
-            <MultiplayerGame/>
+            <MultiplayerGame partyId={id}/>
         </div>
     );
 };
