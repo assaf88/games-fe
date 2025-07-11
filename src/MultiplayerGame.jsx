@@ -1,6 +1,6 @@
 import  { useRef, useState, useEffect } from "react";
 
-const MultiplayerGame = ({ partyId }) => {
+const MultiplayerGame = () => {
     const websocket = useRef(null); // Persistent WebSocket instance across renders
     const [gameState, setGameState] = useState({
         board: [],          // Represents the cardboard state
@@ -11,9 +11,7 @@ const MultiplayerGame = ({ partyId }) => {
     useEffect(() => {
         // Open the WebSocket connection
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-        const wsUrl = partyId
-            ? `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`
-            : `${wsProtocol}://${window.location.host}/game`;
+        const wsUrl = `${wsProtocol}://${window.location.host}/game`;
         let reconnectTimeout; // Timeout for reconnect
         let isUnmounted = false; // To prevent retries after unmounting
         const pingInterval = 30000;
