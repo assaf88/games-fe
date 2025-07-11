@@ -39,11 +39,18 @@ jobs:
           npm run build
 
       # Deploy to S3
-      - name: Deploy to S3
+      - name: Deploy assets to S3 (cache forever)
         run: |
-          aws s3 sync ./dist/ s3://gamesfe --delete
+          aws s3 sync ./dist/ s3://gamesfe --delete --exclude "index.html" --cache-control "public, max-age=31536000, immutable"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'us-east-1'
 
+      - name: Deploy index.html to S3 (no cache)
+        run: |
+          aws s3 cp ./dist/index.html s3://gamesfe/index.html --cache-control "no-cache"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'us-east-1'
