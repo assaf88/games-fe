@@ -1,7 +1,6 @@
 import  { useRef, useState, useEffect } from "react";
 
 const MultiplayerGame = ({ partyId: propPartyId }) => {
-    // Fallback: try to extract partyId from URL if not provided
     let partyId = propPartyId;
     if (!partyId) {
         const match = window.location.pathname.match(/party\/(\w+)/);
@@ -22,7 +21,7 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
         // Open the WebSocket connection
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
         const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`;
-        let reconnectTimeout; // Timeout for reconnect
+        let reconnectTimeout; 
         let isUnmounted = false; // To prevent retries after unmounting
         const pingInterval = 30000;
         let pingIntervalId = null;
@@ -35,9 +34,7 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
 
             websocket.current.onopen = () => {
                 console.log("WebSocket connected!");
-                // we don't need to see this now, the BE broadcasts this
-                // websocket.current.send(JSON.stringify({ action: "join_game", username: "Player1" }));
-                 startPing(); //todo: later in backend - if ping - just return game state
+                startPing(); //todo: later in backend - if ping - just return game state
             };
 
             ws.onmessage = (event) => {
@@ -45,14 +42,19 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
                 let messageData;
                 try {
                     console.log("WebSocket message received:", rawData);
-                    // If the server doesn't prefix messages with strings like "Broadcast:",
                     messageData = JSON.parse(rawData);
                 } catch (err) {
                     console.error("Failed to parse WebSocket message:", rawData, err);
                 }
 
                 // Update game state based on WebSocket message
-                if (messageData.action === "update_board") {
+                if (messageData.action === "update_state") {
+                    setGameState(prev => ({
+                        ...prev,
+                        ...messageData,
+                        players: messageData.players || [],
+                    }));
+                } else if (messageData.action === "update_board") {
                     setGameState(prev => ({
                         ...prev,
                         board: messageData.board,
@@ -131,19 +133,17 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
     return (
         <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
             <div style={{ flex: 1, maxWidth: "500px" }}>
-                {/* Removed <h1>Multiplayer Game</h1> */}
-                {/* Display connected players */}
                 <h2>Players:</h2>
                 {gameState.players.length === 0 ? (
                     <p>No players connected yet.</p>
                 ) : (
                     <ul>
                         {gameState.players.map((player, index) => (
-                            <li key={index}>{player}</li>
+                            <li key={player.id}>{player.name}</li>
                         ))}
                     </ul>
                 )}
-                {/* Display the game board */}
+                
                 <h2>Game Board:</h2>
                 {gameState.board.length === 0 ? (
                     <p>The board is currently empty!</p>
@@ -164,7 +164,7 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
                         ))}
                     </div>
                 )}
-                {/* Display chat/broadcast messages */}
+                
                 <h2>Broadcast Messages:</h2>
                 {gameState.messages.length === 0 ? (
                     <p>No messages yet.</p>
@@ -228,7 +228,7 @@ const PokerCircle = ({ players }) => {
                 const y = center + radius * Math.sin(angle) - height / 2;
                 return (
                     <div
-                        key={player}
+                        key={player.id}
                         className={"poker-portrait" + (isSelf ? " self" : "")}
                         style={{
                             position: "absolute",
@@ -249,7 +249,7 @@ const PokerCircle = ({ players }) => {
                             zIndex: isSelf ? 2 : 1,
                         }}
                     >
-                        {player}
+                        {player.name}
                     </div>
                 );
             })}
