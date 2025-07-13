@@ -64,6 +64,8 @@ const AvalonHome = () => {
   const [showNameModal, setShowNameModal] = useState(false);
   const [pendingAction, setPendingAction] = useState(null); // 'create' or 'join'
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [error, setError] = useState(null);
+  const [joinError, setJoinError] = useState(null);
 
   // Check if player info exists
   const getPlayerInfo = () => {
@@ -72,15 +74,24 @@ const AvalonHome = () => {
     return id && name ? { id, name } : null;
   };
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!getPlayerInfo()) {
       setPendingAction('create');
       setShowNameModal(true);
       return;
     }
-    // TODO: Call backend to create party and get unique partyId
-    // For now, just navigate to a placeholder
-    navigate(`/avalon/party/pending`); // Will be replaced after backend call
+    setError(null);
+    try {
+      const res = await fetch('/game/create-party', { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok || !data.partyId) {
+        setError(data.error || 'Failed to create party.');
+        return;
+      }
+      navigate(`/avalon/party/${data.partyId}`);
+    } catch (e) {
+      setError('Failed to create party.');
+    }
   };
 
   const handleJoin = () => {
@@ -101,9 +112,44 @@ const AvalonHome = () => {
     if (pendingAction === 'join') handleJoin();
   };
 
-  const handleJoinCodeSubmit = (code) => {
+  const handleJoinCodeSubmit = async (code) => {
     setShowJoinModal(false);
-    navigate(`/avalon/party/${code}`);
+    setJoinError(null);
+    // Retry logic
+    const retryKey = 'join_retries';
+    const now = Date.now();
+    let retries = JSON.parse(localStorage.getItem(retryKey) || '[]').filter(ts => now - ts < 60 * 60 * 1000);
+    if (retries.length >= 10) {
+      setJoinError('Too many join attempts. Please try again later.');
+      return;
+    }
+    // Try to open a WebSocket connection to check if party exists
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(code)}`;
+    let ws;
+    let didNavigate = false;
+    try {
+      ws = new window.WebSocket(wsUrl);
+      ws.onopen = () => {
+        ws.close();
+        if (!didNavigate) {
+          didNavigate = true;
+          // Save retry timestamps
+          retries.push(now);
+          localStorage.setItem(retryKey, JSON.stringify(retries));
+          navigate(`/avalon/party/${code}`);
+        }
+      };
+      ws.onerror = () => {
+        setJoinError('Party not found.');
+        retries.push(now);
+        localStorage.setItem(retryKey, JSON.stringify(retries));
+      };
+    } catch (e) {
+      setJoinError('Party not found.');
+      retries.push(now);
+      localStorage.setItem(retryKey, JSON.stringify(retries));
+    }
   };
 
   return (
@@ -111,6 +157,7 @@ const AvalonHome = () => {
       <h1>Avalon Game</h1>
       <button onClick={handleCreate}>Create</button>
       <button onClick={handleJoin} style={{ marginLeft: 12 }}>Join</button>
+      {error && <div style={{ color: 'red', margin: 8 }}>{error}</div>}
       <PlayerNameModal
         visible={showNameModal}
         onSubmit={handleNameSubmit}
@@ -122,6 +169,7 @@ const AvalonHome = () => {
         onSubmit={handleJoinCodeSubmit}
         onCancel={() => setShowJoinModal(false)}
       />
+      {joinError && <div style={{ color: 'red', margin: 8 }}>{joinError}</div>}
     </div>
   );
 };
