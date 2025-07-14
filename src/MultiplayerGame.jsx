@@ -30,12 +30,12 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
         let isUnmounted = false;
         let pingIntervalId = null;
         let reconnectTimeoutId = null;
-
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
         const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`;
+        let attempt = 0; // Track reconnect attempts in closure
 
         // Connect WebSocket with reconnection logic
-        const connectWebSocket = (attempt = 0) => {
+        const connectWebSocket = () => {
             if (isUnmounted) return;
             setReconnecting(attempt > 0);
             setReconnectAttempts(attempt);
@@ -44,8 +44,7 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
 
             ws.onopen = () => {
                 setReconnecting(false);
-                setReconnectAttempts(0); // Reset attempts on successful connect
-                attempt = 0
+                attempt = 0; // Reset attempts on successful connect
                 console.log("WebSocket connected!");
                 // Send player id and name on connect
                 const playerId = localStorage.getItem('player_id');
@@ -92,8 +91,9 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
                 if (!isUnmounted && attempt < maxReconnectAttempts) {
                     // First retry is immediate, subsequent retries use exponential backoff
                     const delay = attempt === 0 ? 0 : Math.min(5000 * Math.pow(2, attempt - 1), 30000);
-                    console.log(`Reconnecting WebSocket in ${delay / 1000}s... (attempt ${attempt + 1})`);
-                    reconnectTimeoutId = setTimeout(() => connectWebSocket(attempt + 1), delay);
+                    attempt++;
+                    console.log(`Reconnecting WebSocket in ${delay / 1000}s... (attempt ${attempt})`);
+                    reconnectTimeoutId = setTimeout(connectWebSocket, delay);
                 } else if (!isUnmounted) {
                     setReconnecting(false);
                 }
