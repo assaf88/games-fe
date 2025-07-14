@@ -36,26 +36,27 @@ const PlayerNameModal = ({ visible, onSubmit, initialButton, onCancel }) => {
   );
 };
 
-const JoinPartyModal = ({ visible, onSubmit, onCancel }) => {
+const JoinPartyModal = ({ visible, onSubmit, onCancel, isAvalon }) => {
   const [code, setCode] = useState('');
   if (!visible) return null;
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-      <div style={{ background: 'white', padding: 24, borderRadius: 8, minWidth: 300, textAlign: 'center' }}>
-        <h2>Enter 4-digit Party Code</h2>
+      <div className={isAvalon ? 'avalon-modal-bg' : ''}>
+        <div className={isAvalon ? 'avalon-modal-title' : ''}>Enter 4-digit Party Code</div>
         <input
           type="text"
           value={code}
           maxLength={4}
           onChange={e => setCode(e.target.value.replace(/[^0-9]/g, ''))}
           placeholder="1234"
+          className={isAvalon ? 'avalon-modal-input' : ''}
           style={{ fontSize: 18, padding: 8, width: '80%', letterSpacing: 4, textAlign: 'center' }}
         />
-        <div style={{ fontSize: 12, color: '#888', margin: '8px 0' }}>
+        <div className={isAvalon ? 'avalon-modal-hint' : ''}>
           4 digits
         </div>
-        <button style={{ margin: 8 }} onClick={() => { if (code.length === 4) onSubmit(code); }}>Join</button>
-        {onCancel && <button style={{ margin: 8 }} onClick={onCancel}>Cancel</button>}
+        <button className={isAvalon ? 'button' : ''} style={{ margin: 8 }} onClick={() => { if (code.length === 4) onSubmit(code); }}>Join</button>
+        {onCancel && <button className={isAvalon ? 'button' : ''} style={{ margin: 8 }} onClick={onCancel}>Cancel</button>}
       </div>
     </div>
   );
@@ -175,9 +176,9 @@ const GameLobby = () => {
         </div>
       ) : (
         <>
-          <h1 style={{ fontFamily: isAvalon ? 'Lancelot, Cinzel, serif' : undefined }}>Avalon Game</h1>
-          <button onClick={handleCreate}>Create</button>
-          <button onClick={handleJoin} style={{ marginLeft: 12 }}>Join</button>
+          <h1 className={isAvalon ? 'avalon-heading' : ''}>Avalon Game</h1>
+          <button className={isAvalon ? 'button' : ''} onClick={handleCreate}>Create</button>
+          <button className={isAvalon ? 'button' : ''} onClick={handleJoin} style={{ marginLeft: 12 }}>Join</button>
           {error && <div style={{ color: 'red', margin: 8 }}>{error}</div>}
           <PlayerNameModal
             visible={showNameModal}
@@ -189,6 +190,7 @@ const GameLobby = () => {
             visible={showJoinModal}
             onSubmit={handleJoinCodeSubmit}
             onCancel={() => setShowJoinModal(false)}
+            isAvalon={isAvalon}
           />
           {joinError && <div style={{ color: 'red', margin: 8 }}>{joinError}</div>}
         </>

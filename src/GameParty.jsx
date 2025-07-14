@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
-import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
 import './styles/avalon/avalon-theme.css';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
@@ -15,7 +14,7 @@ const GameParty = () => {
     });
     const [reconnecting, setReconnecting] = useState(false);
     const [reconnectAttempts, setReconnectAttempts] = useState(0);
-    const [loading, setLoading] = useState(true);
+    // No loading animation here; handled in lobby
     const maxReconnectAttempts = 10;
     const isHost = getLocalPlayerId() && gameState.hostId && getLocalPlayerId() === gameState.hostId;
     const location = window.location;
@@ -46,7 +45,6 @@ const GameParty = () => {
                     ws.send(JSON.stringify({ action: "register", id: playerId, name: playerName }));
                 }
                 startPing();
-                setLoading(false);
             };
 
             ws.onmessage = (event) => {
@@ -120,46 +118,39 @@ const GameParty = () => {
 
     return (
         <div className={isAvalon ? 'avalon-bg' : ''}>
-            {loading && isAvalon ? (
-                <div className="avalon-loading-container">
-                    <StoneEmberProgressBar />
-                    <div className="avalon-loading-message">Joining party…</div>
+            <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
+                <div style={{ flex: 1, maxWidth: "500px" }}>
+                    {reconnecting && (
+                        <div style={{ color: 'orange', margin: 8 }}>Reconnecting... (attempt {reconnectAttempts})</div>
+                    )}
+                    {/* Show only gameState.players before game starts; show poker circle after */}
+                    {!gameState.gameStarted ? (
+                        <div>
+                            <h2>Players:</h2>
+                            {gameState.players.length === 0 ? (
+                                <p>No players connected yet.</p>
+                            ) : (
+                                <ul>
+                                    {gameState.players.map((player, index) => (
+                                        <li key={player.id}>
+                                            {player.name}
+                                            {gameState.hostId === player.id && (
+                                                <span style={{ color: 'green', marginLeft: 8 }} title="Host">●</span>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                            {isHost && (
+                                <button onClick={sendStartGame} style={{ marginTop: 16 }}>Start Game</button>
+                            )}
+                        </div>
+                    ) : null}
                 </div>
-            ) : (
-                <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
-                    <div style={{ flex: 1, maxWidth: "500px" }}>
-                        {reconnecting && (
-                            <div style={{ color: 'orange', margin: 8 }}>Reconnecting... (attempt {reconnectAttempts})</div>
-                        )}
-                        {/* Show only gameState.players before game starts; show poker circle after */}
-                        {!gameState.gameStarted ? (
-                            <div>
-                                <h2>Players:</h2>
-                                {gameState.players.length === 0 ? (
-                                    <p>No players connected yet.</p>
-                                ) : (
-                                    <ul>
-                                        {gameState.players.map((player, index) => (
-                                            <li key={player.id}>
-                                                {player.name}
-                                                {gameState.hostId === player.id && (
-                                                    <span style={{ color: 'green', marginLeft: 8 }} title="Host">●</span>
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                                {isHost && (
-                                    <button onClick={sendStartGame} style={{ marginTop: 16 }}>Start Game</button>
-                                )}
-                            </div>
-                        ) : null}
-                    </div>
-                    <div className="poker-circle-container" style={{ flex: 1, display: gameState.gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center" }}>
-                        <AvalonBoard players={gameState.players} hostId={gameState.hostId} />
-                    </div>
+                <div className="poker-circle-container" style={{ flex: 1, display: gameState.gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center" }}>
+                    <AvalonBoard players={gameState.players} hostId={gameState.hostId} />
                 </div>
-            )}
+            </div>
         </div>
     );
 };
