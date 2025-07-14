@@ -1,6 +1,6 @@
 import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
-import AvalonHome from './AvalonHome.jsx';
-import AvalonParty from './AvalonParty.jsx';
+import GameLobby from './GameLobby.jsx';
+import GameParty from './GameParty.jsx';
 import './styles/GamesList.css';
 
 const GamesListPage = () => {
@@ -23,8 +23,8 @@ const GamesList = () => {
         <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
             <Routes>
                 <Route exact path="/" element={<GamesListPage />} />
-                <Route path="/avalon" element={<AvalonHome />} />
-                <Route path="/avalon/party/:id" element={<AvalonParty />} />
+                <Route path="/avalon" element={<GameLobby />} />
+                <Route path="/avalon/party/:id" element={<GameParty />} />
             </Routes>
         </Router>
     );

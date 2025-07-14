@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function generateGUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -59,8 +59,9 @@ const JoinPartyModal = ({ visible, onSubmit, onCancel }) => {
   );
 };
 
-const AvalonHome = () => {
+const GameLobby = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showNameModal, setShowNameModal] = useState(false);
   const [pendingAction, setPendingAction] = useState(null); // 'create' or 'join'
   const [showJoinModal, setShowJoinModal] = useState(false);
@@ -93,7 +94,7 @@ const AvalonHome = () => {
         setError(data.error || 'Failed to create party.');
         return;
       }
-      navigate(`/avalon/party/${data.partyId}`);
+      navigate(`${location.pathname.replace(/\/$/, '')}/party/${data.partyId}`);
     } catch (e) {
       setError('Failed to create party.');
     }
@@ -142,7 +143,7 @@ const AvalonHome = () => {
           // Save retry timestamps
           retries.push(now);
           localStorage.setItem(retryKey, JSON.stringify(retries));
-          navigate(`/avalon/party/${code}`);
+          navigate(`${location.pathname.replace(/\/$/, '')}/party/${code}`);
         }
       };
       ws.onerror = () => {
@@ -179,4 +180,4 @@ const AvalonHome = () => {
   );
 };
 
-export default AvalonHome; 
+export default GameLobby; 
