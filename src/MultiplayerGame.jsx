@@ -1,42 +1,51 @@
-import  { useRef, useState, useEffect } from "react";
-
+// Utility functions
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
+import { useRef, useState, useEffect } from "react";
+
+// Main MultiplayerGame component
 const MultiplayerGame = ({ partyId: propPartyId }) => {
+    // --- State and Refs ---
     let partyId = propPartyId;
     if (!partyId) {
         const match = window.location.pathname.match(/party\/(\w+)/);
         if (match) partyId = match[1];
     }
-    const websocket = useRef(null); // Persistent WebSocket instance across renders
+    const websocket = useRef(null);
     const [gameState, setGameState] = useState({
-        board: [],          // Represents the cardboard state
-        players: [],        // List of connected players
-        messages: [],       // Optional: Chat messages or logs
-        hostId: null,       // Host player id
+        players: [],
+        hostId: null,
+        gameStarted: false,
     });
-    const [gameStarted, setGameStarted] = useState(false);
+    const [reconnecting, setReconnecting] = useState(false);
+    const [reconnectAttempts, setReconnectAttempts] = useState(0);
+    // Maximum number of WebSocket reconnection attempts before giving up
+    const maxReconnectAttempts = 10;
 
+    // --- Derived state ---
+    const isHost = getLocalPlayerId() && gameState.hostId && getLocalPlayerId() === gameState.hostId;
+
+    // --- Effects ---
     useEffect(() => {
-        if (!partyId) {
-            console.error("No partyId provided to MultiplayerGame!");
-            return;
-        }
-        // Open the WebSocket connection
+        let isUnmounted = false;
+        let pingIntervalId = null;
+        let reconnectTimeoutId = null;
+
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
         const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`;
-        let reconnectTimeout; 
-        let isUnmounted = false; // To prevent retries after unmounting
-        const pingInterval = 30000;
-        let pingIntervalId = null;
 
-        //method
-        const connectWebSocket = () => {
-            console.log("Connecting to WebSocket:", wsUrl);
+        // Connect WebSocket with reconnection logic
+        const connectWebSocket = (attempt = 0) => {
+            if (isUnmounted) return;
+            setReconnecting(attempt > 0);
+            setReconnectAttempts(attempt);
             websocket.current = new WebSocket(wsUrl);
             const ws = websocket.current;
 
-            websocket.current.onopen = () => {
+            ws.onopen = () => {
+                setReconnecting(false);
+                setReconnectAttempts(0); // Reset attempts on successful connect
+                attempt = 0
                 console.log("WebSocket connected!");
                 // Send player id and name on connect
                 const playerId = localStorage.getItem('player_id');
@@ -56,8 +65,7 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
                 } catch (err) {
                     console.error("Failed to parse WebSocket message:", rawData, err);
                 }
-
-                // Update game state based on WebSocket message
+                // Handle update_state
                 if (messageData.action === "update_state") {
                     setGameState(prev => {
                         const newState = {
@@ -70,26 +78,6 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
                         console.log('Updated gameState:', newState);
                         return newState;
                     });
-                } else if (messageData.action === "update_board") {
-                    setGameState(prev => ({
-                        ...prev,
-                        board: messageData.board,
-                    }));
-                } else if (messageData.action === "join_game") {
-                    setGameState((prev) => ({
-                        ...prev,
-                        players: [...prev.players, messageData.username],
-                    }));
-                } else if (messageData.action === "leave_game") {
-                    setGameState((prev) => ({
-                        ...prev,
-                        players: prev.players.filter(player => player !== messageData.username),
-                    }));
-                } else if (messageData.action === "play_card") {
-                    setGameState((prev) => ({
-                        ...prev,
-                        messages: [...prev.messages, messageData.card],
-                    }));
                 }
             };
 
@@ -101,50 +89,51 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
                 console.log("WebSocket closed:", event.reason || "No reason provided");
                 console.log(`Socket closed with code: ${event.code}, reason: ${event.reason}`);
                 clearInterval(pingIntervalId);
-                // Remove reconnecting logic
+                if (!isUnmounted && attempt < maxReconnectAttempts) {
+                    // First retry is immediate, subsequent retries use exponential backoff
+                    const delay = attempt === 0 ? 0 : Math.min(5000 * Math.pow(2, attempt - 1), 30000);
+                    console.log(`Reconnecting WebSocket in ${delay / 1000}s... (attempt ${attempt + 1})`);
+                    reconnectTimeoutId = setTimeout(() => connectWebSocket(attempt + 1), delay);
+                } else if (!isUnmounted) {
+                    setReconnecting(false);
+                }
             };
         };
 
-        //keeps the connection alive, instead of opening a new one everytime it becomes inactive
         function startPing() {
-            if (pingIntervalId) {
-                // Clear any existing interval to avoid multiple intervals
-                clearInterval(pingIntervalId);
-            }
-
+            if (pingIntervalId) clearInterval(pingIntervalId);
             pingIntervalId = setInterval(() => {
                 if (websocket.current.readyState === WebSocket.OPEN) {
                     websocket.current.send(JSON.stringify({ action: "ping" }));
                 }
-            }, pingInterval);
+            }, 30000);
         }
 
         connectWebSocket();
-
-        // Cleanup function when the component unmounts
         return () => {
             isUnmounted = true;
-            console.log("Cleaning up WebSocket...");
-            if (reconnectTimeout) clearTimeout(reconnectTimeout);
             if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
                 websocket.current.close();
             }
+            if (pingIntervalId) clearInterval(pingIntervalId);
+            if (reconnectTimeoutId) clearTimeout(reconnectTimeoutId);
         };
-    }, []); // Run the effect only once when the component mounts
+    }, [partyId]);
 
+    // --- Handlers ---
     const sendStartGame = () => {
         if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
             websocket.current.send(JSON.stringify({ action: "start_game" }));
-            setGameStarted(true);
         }
     };
 
-    const isHost = getLocalPlayerId() && gameState.hostId && getLocalPlayerId() === gameState.hostId;
-
+    // --- Render ---
     return (
         <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
             <div style={{ flex: 1, maxWidth: "500px" }}>
-                {/* Remove Players, Game Board, Broadcast Messages as per requirements */}
+                {reconnecting && (
+                    <div style={{ color: 'orange', margin: 8 }}>Reconnecting... (attempt {reconnectAttempts})</div>
+                )}
                 {/* Show only gameState.players before game starts; show poker circle after */}
                 {!gameState.gameStarted ? (
                     <div>
@@ -176,7 +165,7 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
     );
 };
 
-// PokerCircle component for circular player arrangement
+// --- PokerCircle component ---
 const PokerCircle = ({ players, hostId }) => {
     const selfId = getLocalPlayerId();
     const numPlayers = players.length;
@@ -189,15 +178,13 @@ const PokerCircle = ({ players, hostId }) => {
             ...players.slice(0, selfIndex)
         ];
     }
-    const circleSize = Math.min(window.innerWidth, window.innerHeight) * 0.625; // 62.5vw or vh
-    const portraitWidth = circleSize / 7; // 
-    const portraitHeight = portraitWidth * 1.5
+    const circleSize = Math.min(window.innerWidth, window.innerHeight) * 0.625;
+    const portraitWidth = circleSize / 7;
+    const portraitHeight = portraitWidth * 1.5;
     const selfPortraitWidth = portraitWidth * 1.1;
     const selfPortraitHeight = portraitHeight * 1.1;
     const center = circleSize / 2;
-    // Increase radius by 20% for more space between portraits
     const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * 1.2;
-    // Place self at hour 6 (bottom, 90deg, π/2)
     return (
         <div
             className="poker-circle"
@@ -219,7 +206,6 @@ const PokerCircle = ({ players, hostId }) => {
             }}
         >
             {rotatedPlayers.map((player, i) => {
-                // Self at hour 6 (90deg, π/2), others spaced evenly
                 const angle = ((i) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
                 const isSelf = player.id === selfId;
                 const isHost = player.id === hostId;
@@ -244,7 +230,7 @@ const PokerCircle = ({ players, hostId }) => {
                             alignItems: "center",
                             justifyContent: "center",
                             fontWeight: "bold",
-                            fontSize: height * 0.0735, // 30% smaller than before (0.105 * 0.7)
+                            fontSize: height * 0.0735,
                             border: isSelf ? "3px solid #fff" : "2px solid #888",
                             boxShadow: isSelf ? "0 0 10px #4a90e2" : "0 0 6px #222",
                             zIndex: isSelf ? 2 : 1,
