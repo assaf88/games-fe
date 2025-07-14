@@ -1,5 +1,7 @@
 import  { useRef, useState, useEffect } from "react";
 
+const getLocalPlayerId = () => localStorage.getItem('player_id');
+
 const MultiplayerGame = ({ partyId: propPartyId }) => {
     let partyId = propPartyId;
     if (!partyId) {
@@ -11,7 +13,9 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
         board: [],          // Represents the cardboard state
         players: [],        // List of connected players
         messages: [],       // Optional: Chat messages or logs
+        hostId: null,       // Host player id
     });
+    const [gameStarted, setGameStarted] = useState(false);
 
     useEffect(() => {
         if (!partyId) {
@@ -34,7 +38,13 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
 
             websocket.current.onopen = () => {
                 console.log("WebSocket connected!");
-                startPing(); //todo: later in backend - if ping - just return game state
+                // Send player id and name on connect
+                const playerId = localStorage.getItem('player_id');
+                const playerName = localStorage.getItem('player_name');
+                if (playerId && playerName) {
+                    ws.send(JSON.stringify({ action: "register", id: playerId, name: playerName }));
+                }
+                startPing();
             };
 
             ws.onmessage = (event) => {
@@ -49,11 +59,17 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
 
                 // Update game state based on WebSocket message
                 if (messageData.action === "update_state") {
-                    setGameState(prev => ({
-                        ...prev,
-                        ...messageData,
-                        players: messageData.players || [],
-                    }));
+                    setGameState(prev => {
+                        const newState = {
+                            ...prev,
+                            ...messageData,
+                            players: messageData.players || [],
+                            hostId: messageData.hostId || null,
+                            gameStarted: messageData.gameStarted || false,
+                        };
+                        console.log('Updated gameState:', newState);
+                        return newState;
+                    });
                 } else if (messageData.action === "update_board") {
                     setGameState(prev => ({
                         ...prev,
@@ -82,14 +98,10 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
             };
 
             ws.onclose = (event) => {
-                //this not suppose to happen without ping or without user is afk
                 console.log("WebSocket closed:", event.reason || "No reason provided");
                 console.log(`Socket closed with code: ${event.code}, reason: ${event.reason}`);
                 clearInterval(pingIntervalId);
-                if (!isUnmounted) {
-                    console.log("Reconnecting WebSocket connection in 2 seconds...");
-                    reconnectTimeout = setTimeout(connectWebSocket, 2000);
-                }
+                // Remove reconnecting logic
             };
         };
 
@@ -120,75 +132,63 @@ const MultiplayerGame = ({ partyId: propPartyId }) => {
         };
     }, []); // Run the effect only once when the component mounts
 
-
-    const sendMessage = () => {
-        // console.log("try to play spades.....");
+    const sendStartGame = () => {
         if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
-            websocket.current.send(
-                JSON.stringify({ action: "play_card", card: "Ace of Spades" })
-            );
+            websocket.current.send(JSON.stringify({ action: "start_game" }));
+            setGameStarted(true);
         }
     };
+
+    const isHost = getLocalPlayerId() && gameState.hostId && getLocalPlayerId() === gameState.hostId;
 
     return (
         <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
             <div style={{ flex: 1, maxWidth: "500px" }}>
-                <h2>Players:</h2>
-                {gameState.players.length === 0 ? (
-                    <p>No players connected yet.</p>
-                ) : (
-                    <ul>
-                        {gameState.players.map((player, index) => (
-                            <li key={player.id}>{player.name}</li>
-                        ))}
-                    </ul>
-                )}
-                
-                <h2>Game Board:</h2>
-                {gameState.board.length === 0 ? (
-                    <p>The board is currently empty!</p>
-                ) : (
-                    <div style={{display: "flex", flexWrap: "wrap"}}>
-                        {gameState.board.map((card, index) => (
-                            <div
-                                key={index}
-                                style={{
-                                    border: "1px solid black",
-                                    margin: "5px",
-                                    padding: "10px",
-                                    borderRadius: "5px",
-                                }}
-                            >
-                                {card}
-                            </div>
-                        ))}
-                    </div>
-                )}
-                
-                <h2>Broadcast Messages:</h2>
-                {gameState.messages.length === 0 ? (
-                    <p>No messages yet.</p>
-                ) : (
+                {/* Remove Players, Game Board, Broadcast Messages as per requirements */}
+                {/* Show only gameState.players before game starts; show poker circle after */}
+                {!gameState.gameStarted ? (
                     <div>
-                        {gameState.messages.map((message, index) => (
-                            <p key={index}>{message}</p>
-                        ))}
+                        <h2>Players:</h2>
+                        {gameState.players.length === 0 ? (
+                            <p>No players connected yet.</p>
+                        ) : (
+                            <ul>
+                                {gameState.players.map((player, index) => (
+                                    <li key={player.id}>
+                                        {player.name}
+                                        {gameState.hostId === player.id && (
+                                            <span style={{ color: 'green', marginLeft: 8 }} title="Host">●</span>
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        {isHost && (
+                            <button onClick={sendStartGame} style={{ marginTop: 16 }}>Start Game</button>
+                        )}
                     </div>
-                )}
-                <button onClick={sendMessage}>Play Card</button>
+                ) : null}
             </div>
-            <div className="poker-circle-container" style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <PokerCircle players={gameState.players} />
+            <div className="poker-circle-container" style={{ flex: 1, display: gameState.gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center" }}>
+                <PokerCircle players={gameState.players} hostId={gameState.hostId} />
             </div>
         </div>
     );
 };
 
 // PokerCircle component for circular player arrangement
-const PokerCircle = ({ players }) => {
-    // For demo, pick the first player as self if no session/connection id
-    const selfIndex = 0;
+const PokerCircle = ({ players, hostId }) => {
+    const selfId = getLocalPlayerId();
     const numPlayers = players.length;
+    // Rotate players so self is always at index 0
+    let rotatedPlayers = players;
+    const selfIndex = players.findIndex(p => p.id === selfId);
+    if (selfIndex > 0) {
+        rotatedPlayers = [
+            ...players.slice(selfIndex),
+            ...players.slice(0, selfIndex)
+        ];
+    }
     const circleSize = Math.min(window.innerWidth, window.innerHeight) * 0.625; // 62.5vw or vh
     const portraitWidth = circleSize / 7; // 
     const portraitHeight = portraitWidth * 1.5
@@ -218,10 +218,11 @@ const PokerCircle = ({ players }) => {
                 zIndex: 10,
             }}
         >
-            {players.map((player, i) => {
+            {rotatedPlayers.map((player, i) => {
                 // Self at hour 6 (90deg, π/2), others spaced evenly
-                const angle = ((i - selfIndex) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
-                const isSelf = i === selfIndex;
+                const angle = ((i) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
+                const isSelf = player.id === selfId;
+                const isHost = player.id === hostId;
                 const width = isSelf ? selfPortraitWidth : portraitWidth;
                 const height = isSelf ? selfPortraitHeight : portraitHeight;
                 const x = center + radius * Math.cos(angle) - width / 2;
@@ -250,6 +251,9 @@ const PokerCircle = ({ players }) => {
                         }}
                     >
                         {player.name}
+                        {isHost && (
+                            <span style={{ color: 'green', marginLeft: 6, fontSize: 18 }} title="Host">●</span>
+                        )}
                     </div>
                 );
             })}

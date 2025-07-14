@@ -82,7 +82,12 @@ const AvalonHome = () => {
     }
     setError(null);
     try {
-      const res = await fetch('/game/create-party', { method: 'POST' });
+      const player = getPlayerInfo();
+      const res = await fetch('/game/create-party', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: player.id, name: player.name })
+      });
       const data = await res.json();
       if (!res.ok || !data.partyId) {
         setError(data.error || 'Failed to create party.');
