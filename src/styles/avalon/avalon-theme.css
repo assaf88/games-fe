@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Lancelot&family=Cinzel:wght@700&display=swap');
+
+.avalon-bg {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(120deg, #18181b 0%, #23233a 50%, #18181b 100%);
+  background-size: 200% 200%;
+  animation: avalon-gradient 8s ease-in-out infinite;
+  font-family: 'Lancelot', 'Cinzel', serif;
+  color: #e0c97f;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 0;
+}
+
+@keyframes avalon-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.avalon-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 10;
+  background: transparent;
+}
+
+.avalon-loading-message {
+  color: #e0c97f;
+  font-family: 'Lancelot', 'Cinzel', serif;
+  font-size: 1.5rem;
+  margin-top: 24px;
+  text-shadow: 0 0 8px #3a2c0f, 0 0 2px #fff;
+} 

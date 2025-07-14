@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
+import './styles/avalon/avalon-theme.css';
 
 function generateGUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -67,6 +69,7 @@ const GameLobby = () => {
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [error, setError] = useState(null);
   const [joinError, setJoinError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // Check if player info exists
   const getPlayerInfo = () => {
@@ -75,6 +78,8 @@ const GameLobby = () => {
     return id && name ? { id, name } : null;
   };
 
+  const isAvalon = location.pathname.includes('avalon') || location.pathname === '/';
+
   const handleCreate = async () => {
     if (!getPlayerInfo()) {
       setPendingAction('create');
@@ -82,6 +87,7 @@ const GameLobby = () => {
       return;
     }
     setError(null);
+    setLoading(true);
     try {
       const player = getPlayerInfo();
       const res = await fetch('/game/create-party', {
@@ -92,11 +98,13 @@ const GameLobby = () => {
       const data = await res.json();
       if (!res.ok || !data.partyId) {
         setError(data.error || 'Failed to create party.');
+        setLoading(false);
         return;
       }
       navigate(`${location.pathname.replace(/\/$/, '')}/party/${data.partyId}`);
     } catch (e) {
       setError('Failed to create party.');
+      setLoading(false);
     }
   };
 
@@ -159,23 +167,32 @@ const GameLobby = () => {
   };
 
   return (
-    <div>
-      <h1>Avalon Game</h1>
-      <button onClick={handleCreate}>Create</button>
-      <button onClick={handleJoin} style={{ marginLeft: 12 }}>Join</button>
-      {error && <div style={{ color: 'red', margin: 8 }}>{error}</div>}
-      <PlayerNameModal
-        visible={showNameModal}
-        onSubmit={handleNameSubmit}
-        initialButton={pendingAction === 'create' ? 'Create' : 'Join'}
-        onCancel={() => setShowNameModal(false)}
-      />
-      <JoinPartyModal
-        visible={showJoinModal}
-        onSubmit={handleJoinCodeSubmit}
-        onCancel={() => setShowJoinModal(false)}
-      />
-      {joinError && <div style={{ color: 'red', margin: 8 }}>{joinError}</div>}
+    <div className={isAvalon ? 'avalon-bg' : ''}>
+      {loading && isAvalon ? (
+        <div className="avalon-loading-container">
+          <StoneEmberProgressBar />
+          <div className="avalon-loading-message">Creating party…</div>
+        </div>
+      ) : (
+        <>
+          <h1 style={{ fontFamily: isAvalon ? 'Lancelot, Cinzel, serif' : undefined }}>Avalon Game</h1>
+          <button onClick={handleCreate}>Create</button>
+          <button onClick={handleJoin} style={{ marginLeft: 12 }}>Join</button>
+          {error && <div style={{ color: 'red', margin: 8 }}>{error}</div>}
+          <PlayerNameModal
+            visible={showNameModal}
+            onSubmit={handleNameSubmit}
+            initialButton={pendingAction === 'create' ? 'Create' : 'Join'}
+            onCancel={() => setShowNameModal(false)}
+          />
+          <JoinPartyModal
+            visible={showJoinModal}
+            onSubmit={handleJoinCodeSubmit}
+            onCancel={() => setShowJoinModal(false)}
+          />
+          {joinError && <div style={{ color: 'red', margin: 8 }}>{joinError}</div>}
+        </>
+      )}
     </div>
   );
 };
