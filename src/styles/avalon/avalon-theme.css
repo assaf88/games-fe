@@ -1,5 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Lancelot&family=Cinzel:wght@700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pirata+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Astloch&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Forum&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caudex&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+
+
+
+:root {
+  --avalon-text-main: #e0c97f;
+  --avalon-text-light: #f3e7b3;
+  --avalon-text-dark: #d5c595;
+}
+
 .avalon-bg {
   min-height: 100vh;
   width: 100vw;
@@ -7,10 +26,12 @@
   background-size: 200% 200%;
   animation: avalon-gradient 8s ease-in-out infinite;
   font-family: 'Lancelot', 'Cinzel', serif;
-  color: #e0c97f;
+  color: var(--avalon-text-main);
   position: fixed;
   top: 0; left: 0;
   z-index: 0;
+  box-sizing: border-box;
+  /* No border */
 }
 
 @keyframes avalon-gradient {
@@ -46,12 +67,16 @@
   padding: 12px 32px;
   border-radius: 8px;
   background: linear-gradient(90deg, #232323 0%, #3a2c0f 100%);
-  color: #e0c97f;
+  color: var(--avalon-text-main);
   border: 2px solid #bfa76f;
   box-shadow: 0 2px 8px #18181b88;
   margin: 8px 0;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 .button:hover, button:hover, .avalon-btn:hover {
   background: linear-gradient(90deg, #3a2c0f 0%, #232323 100%);
@@ -60,7 +85,7 @@
 
 .avalon-heading, h1, h2, h3 {
   font-family: 'Lancelot', 'Cinzel', serif;
-  color: #e0c97f;
+  color: var(--avalon-text-light);
   text-shadow: 0 0 8px #3a2c0f, 0 0 2px #fff;
 }
 
@@ -71,8 +96,9 @@
   pointer-events: none;
   z-index: 1;
   opacity: 0.18;
-  background: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none"/><path d="M10 90 Q 50 10 90 90" stroke="%23666" stroke-width="2" fill="none"/><circle cx="50" cy="50" r="40" stroke="%23666" stroke-width="1" fill="none"/></svg>');
+  background: url('data:image/svg+xml;utf8,<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" fill="none"/><path d="M20 180 Q 100 20 180 180" stroke="%23666" stroke-width="2" fill="none"/><circle cx="100" cy="100" r="80" stroke="%23666" stroke-width="1" fill="none"/><path d="M40 100 Q100 40 160 100 Q100 160 40 100 Z" fill="none" stroke="%23bfa76f" stroke-width="1.5"/><ellipse cx="100" cy="100" rx="90" ry="30" fill="none" stroke="%233a2c0f" stroke-width="1"/></svg>');
   background-repeat: repeat;
+  background-position: center;
 }
 
 /* Avalon Join Party Modal */
@@ -81,20 +107,21 @@
   border: 2px solid #bfa76f;
   border-radius: 12px;
   box-shadow: 0 4px 32px #18181bcc;
-  color: #e0c97f;
+  color: var(--avalon-text-main);
   padding: 24px;
-  min-width: 300px;
+  min-width: 320px;
+  max-width: 400px;
   text-align: center;
   position: relative;
 }
 .avalon-modal-title {
   font-family: 'Lancelot', 'Cinzel', serif;
-  color: #e0c97f;
+  color: var(--avalon-text-light);
   font-size: 1.3rem;
   margin-bottom: 12px;
 }
 .avalon-modal-hint {
-  color: #bfa76f;
+  color: var(--avalon-text-light);
   font-family: 'Cinzel', serif;
   font-size: 1rem;
   margin: 8px 0;
@@ -107,5 +134,5 @@
   margin-bottom: 12px;
   width: 80%;
   background: #232323;
-  color: #e0c97f;
+  color: var(--avalon-text-light);
 } 

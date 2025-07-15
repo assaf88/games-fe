@@ -36,27 +36,26 @@ const PlayerNameModal = ({ visible, onSubmit, initialButton, onCancel }) => {
   );
 };
 
-const JoinPartyModal = ({ visible, onSubmit, onCancel, isAvalon }) => {
+const JoinPartyModal = ({ visible, onSubmit, onCancel, isAvalon, gameName }) => {
   const [code, setCode] = useState('');
   if (!visible) return null;
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-      <div className={isAvalon ? 'avalon-modal-bg' : ''}>
-        <div className={isAvalon ? 'avalon-modal-title' : ''}>Enter 4-digit Party Code</div>
+      <div className={gameName + '-modal-bg'}>
+        <div className={gameName + '-modal-title'}>Enter 4-digit Party Code</div>
         <input
           type="text"
           value={code}
           maxLength={4}
           onChange={e => setCode(e.target.value.replace(/[^0-9]/g, ''))}
           placeholder="1234"
-          className={isAvalon ? 'avalon-modal-input' : ''}
+          className={gameName + '-modal-input'}
           style={{ fontSize: 18, padding: 8, width: '80%', letterSpacing: 4, textAlign: 'center' }}
         />
-        <div className={isAvalon ? 'avalon-modal-hint' : ''}>
-          4 digits
+        <div style={isAvalon ? { display: 'flex', gap: 12, justifyContent: 'center', marginTop: 12 } : {}}>
+          <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' } : { margin: 8 }} onClick={() => { if (code.length === 4) onSubmit(code); }}>Join</button>
+          {onCancel && <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' } : { margin: 8 }} onClick={onCancel}>Cancel</button>}
         </div>
-        <button className={isAvalon ? 'button' : ''} style={{ margin: 8 }} onClick={() => { if (code.length === 4) onSubmit(code); }}>Join</button>
-        {onCancel && <button className={isAvalon ? 'button' : ''} style={{ margin: 8 }} onClick={onCancel}>Cancel</button>}
       </div>
     </div>
   );
@@ -79,7 +78,9 @@ const GameLobby = () => {
     return id && name ? { id, name } : null;
   };
 
-  const isAvalon = location.pathname.includes('avalon') || location.pathname === '/';
+  // const isAvalon = location.pathname.includes('avalon') || location.pathname === '/';
+  const gameName = location.pathname.split('/')[1];
+  const isAvalon = gameName === 'avalon' || gameName === '';
 
   const handleCreate = async () => {
     if (!getPlayerInfo()) {
@@ -102,7 +103,36 @@ const GameLobby = () => {
         setLoading(false);
         return;
       }
-      navigate(`${location.pathname.replace(/\/$/, '')}/party/${data.partyId}`);
+      // Wait for the player list to be loaded before navigating
+      // const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+      // const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(data.partyId)}`;
+      // let ws;
+      // let navigated = false;
+      // ws = new window.WebSocket(wsUrl);
+      // ws.onopen = () => {
+      //   const playerId = localStorage.getItem('player_id');
+      //   const playerName = localStorage.getItem('player_name');
+      //   if (playerId && playerName) {
+      //     ws.send(JSON.stringify({ action: "register", id: playerId, name: playerName }));
+      //   }
+      // };
+      // ws.onmessage = (event) => {
+      //   try {
+      //     const messageData = JSON.parse(event.data);
+      //     if (messageData.action === "update_state" && !navigated) {
+      //       navigated = true;
+      //       ws.close();
+      //       setTimeout(() => {
+      //         setLoading(false);
+              navigate(`${location.pathname.replace(/\/$/, '')}/party/${data.partyId}`);
+      //       }, 0);
+      //     }
+      //   } catch {}
+      // };
+      // ws.onerror = () => {
+      //   setError('Failed to connect to party.');
+      //   setLoading(false);
+      // };
     } catch (e) {
       setError('Failed to create party.');
       setLoading(false);
@@ -168,7 +198,7 @@ const GameLobby = () => {
   };
 
   return (
-    <div className={isAvalon ? 'avalon-bg' : ''}>
+    <div className={gameName + '-bg'}>
       {loading && isAvalon ? (
         <div className="avalon-loading-container">
           <StoneEmberProgressBar />
@@ -176,9 +206,12 @@ const GameLobby = () => {
         </div>
       ) : (
         <>
-          <h1 className={isAvalon ? 'avalon-heading' : ''}>Avalon Game</h1>
-          <button className={isAvalon ? 'button' : ''} onClick={handleCreate}>Create</button>
-          <button className={isAvalon ? 'button' : ''} onClick={handleJoin} style={{ marginLeft: 12 }}>Join</button>
+          <h1 className={gameName + '-heading'}>{gameName.charAt(0).toUpperCase() + gameName.slice(1)} Game</h1>
+          <div style={isAvalon ? { display: 'flex', gap: 16, justifyContent: 'center', marginBottom: 16 } : {}}>
+            {/*todo: in the next game styling we add- put all styles to css and find their class by gameName + the rest of the class name like above*/}
+            <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}} onClick={handleCreate}>Create</button>
+            <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : { marginLeft: 12 }} onClick={handleJoin}>Join</button>
+          </div>
           {error && <div style={{ color: 'red', margin: 8 }}>{error}</div>}
           <PlayerNameModal
             visible={showNameModal}
@@ -191,6 +224,7 @@ const GameLobby = () => {
             onSubmit={handleJoinCodeSubmit}
             onCancel={() => setShowJoinModal(false)}
             isAvalon={isAvalon}
+            gameName={gameName}
           />
           {joinError && <div style={{ color: 'red', margin: 8 }}>{joinError}</div>}
         </>
