@@ -52,47 +52,19 @@ html, body, #root {
 
 /* Poker circle layout */
 .poker-circle-container {
-  /*display: flex;*/
-  /*justify-content: center;*/
-  /*align-items: center;*/
-  /*margin-top: 2rem;*/
-  /*flex: 1;*/
+
 }
 .poker-circle {
-  /*position: relative;*/
-  /*width: 50vw;*/
-  /*height: 50vw;*/
-  /*max-width: 90vw;*/
-  /*max-height: 90vw;*/
-  /*min-width: 250px;*/
-  /*min-height: 250px;*/
-  /*border-radius: 50%;*/
-  /*!* Invisible circle *!*/
-  /*background: none;*/
-  /*box-shadow: none;*/
+
 }
 .poker-portrait {
-  /*position: absolute;*/
-  /*background: #444;*/
-  /*color: #fff;*/
-  /* border-radius set inline for true ellipse: 50%*/
-  /*display: flex;*/
-  /*align-items: center;*/
-  /*justify-content: center;*/
-  /*font-weight: bold;*/
-  /*border: 2px solid #888;*/
-  /*box-shadow: 0 0 6px #222;*/
-  /*transition: transform 0.2s;*/
-  /*font-size: 0.7rem;*/
-  /* Normal: width 117px, height 175.5px; Self: 128.7px x 193.05px*/
+
 }
 .poker-portrait.self {
-  /*background: #4a90e2;*/
-  /*border: 3px solid #fff;*/
-  /*box-shadow: 0 0 10px #4a90e2;*/
-  /*z-index: 2;*/
+
   transform: scale(1.05);
 }
+
 /* Mobile-first adjustments */
 @media (max-width: 600px) {
   .poker-circle {

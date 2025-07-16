@@ -143,16 +143,6 @@ const GameParty = () => {
                             <div style={{ color: 'orange', margin: 8 }}>Reconnecting... (attempt {reconnectAttempts})</div>
                         )}
                         {/* Show only gameState.players before game starts; show poker circle after */}
-                        {/*UnifrakturCook
-                            UnifrakturMaguntia
-                            MedievalSharp
-                            Pirata One
-                            Astloch
-                            Cinzel Decorative
-                            Forum
-                            Cormorant Garamond
-                            Caudex
-                            EB Garamond*/}
                         {!gameState.gameStarted ? (
                             <div style={{textAlign:'center'}}>
                                 <h2>Players:</h2>

@@ -75,33 +75,25 @@ const AvalonBoard = ({ players, hostId }) => {
                                 width: width,
                                 height: height,
                                 borderRadius: "50%",
-                                // background: isSelf ? "#4a90e2" : "#444",
                                 backgroundImage: `url(${cardbackImg})`,
-                                // backgroundImage: `url(${assassinImg})`,
+                                // backgroundImage: `url(${assassinImg})`, - dont remove
                                 backgroundSize: '108%',
-                                // backgroundSize: '147%',//assassin final
-                                // backgroundSize: '125%',
-                                // backgroundSize: '130%',
+                                // backgroundSize: '147%',//assassin final - dont remove
                                 backgroundPosition: '55% 50%',
-                                // backgroundPosition: '40% 35%',//assassin final
-                                // backgroundPosition: '40% 63%',
-                                // backgroundPosition: '40% 55%',
+                                // backgroundPosition: '40% 35%',//assassin final - dont remove
                                 backgroundRepeat: "no-repeat",
                                 color: "#fff",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 fontWeight: "bold",
-                                // border: isSelf ? "2px solid #666" : "3px solid #333",
                                 color2: "#ddbb53",//do not delete - for easier choosing colors for other atts
                                 boxShadow: isSelf ? "0 0 12px #DDBB53FF" : "0 0 15px #111",
-                                // boxShadow: isSelf ? "0 0 15px #4a90e2" : "0 0 12px #111",
-                                // boxShadow: isSelf ? "0 0 5px #4a90e2" : "0 0 32px #1f1",
+                                // boxShadow: isSelf ? "0 0 5px #4a90e2" : "0 0 32px #1f1", //selecting player - do not remove
                                 zIndex: isSelf ? 2 : 1,
                                 position: 'relative',
                             }}
                         >
-                            {/* No green dot, host is indicated in name below */}
                             <div style={{
                                 position: 'absolute',
                                 left: isSelf ? 0 : -3,
@@ -111,17 +103,8 @@ const AvalonBoard = ({ players, hostId }) => {
                                 fontFamily: 'Lancelot, serif',
                                 fontSize: portraitWidth/3.3,
                                 // fontSize: '1.38rem',
-                                //  textAlign: 'center',
                                 textShadow: '0 0 4px #18181b',
-                                // overflow: 'hidden',
-                                // whiteSpace: 'nowrap',
-                                // textOverflow: 'ellipsis',
                                 marginTop: isSelf ? Math.max(15, height * 0.08) : 7,
-                                // textTransform: 'none',
-                                // WebkitTextTransform: 'none',
-                                // MozTextTransform: 'none',
-                                // msTextTransform: 'none',
-                                // textTransform: 'none !important',
                             }}>{player.name}{isHost ? ' (host)' : ''}</div>
                         </div>
                     </div>
@@ -132,7 +115,7 @@ const AvalonBoard = ({ players, hostId }) => {
     );
 };
 
-function getPortraitStyle(role, isSelf) {
+function getPortraitStyle(role, isSelf) { //for later do not remove
     let backgroundPosition = "40% 55%";
     let backgroundSize = "130%";
 

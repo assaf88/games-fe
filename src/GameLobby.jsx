@@ -103,36 +103,8 @@ const GameLobby = () => {
         setLoading(false);
         return;
       }
-      // Wait for the player list to be loaded before navigating
-      // const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-      // const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(data.partyId)}`;
-      // let ws;
-      // let navigated = false;
-      // ws = new window.WebSocket(wsUrl);
-      // ws.onopen = () => {
-      //   const playerId = localStorage.getItem('player_id');
-      //   const playerName = localStorage.getItem('player_name');
-      //   if (playerId && playerName) {
-      //     ws.send(JSON.stringify({ action: "register", id: playerId, name: playerName }));
-      //   }
-      // };
-      // ws.onmessage = (event) => {
-      //   try {
-      //     const messageData = JSON.parse(event.data);
-      //     if (messageData.action === "update_state" && !navigated) {
-      //       navigated = true;
-      //       ws.close();
-      //       setTimeout(() => {
-      //         setLoading(false);
-              navigate(`${location.pathname.replace(/\/$/, '')}/party/${data.partyId}`);
-      //       }, 0);
-      //     }
-      //   } catch {}
-      // };
-      // ws.onerror = () => {
-      //   setError('Failed to connect to party.');
-      //   setLoading(false);
-      // };
+      navigate(`${location.pathname.replace(/\/$/, '')}/party/${data.partyId}`);
+
     } catch (e) {
       setError('Failed to create party.');
       setLoading(false);
