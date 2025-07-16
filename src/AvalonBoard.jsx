@@ -76,7 +76,7 @@ const AvalonBoard = ({ players, hostId }) => {
                                 height: height,
                                 borderRadius: "50%",
                                 backgroundImage: `url(${cardbackImg})`,
-                                // backgroundImage: `url(${assassinImg})`, - dont remove
+                                // backgroundImage: `url(${assassinImg})`, // dont remove
                                 backgroundSize: '108%',
                                 // backgroundSize: '147%',//assassin final - dont remove
                                 backgroundPosition: '55% 50%',
@@ -84,6 +84,7 @@ const AvalonBoard = ({ players, hostId }) => {
                                 backgroundRepeat: "no-repeat",
                                 color: "#fff",
                                 display: "flex",
+                                flexDirection: "column",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 fontWeight: "bold",
@@ -94,19 +95,20 @@ const AvalonBoard = ({ players, hostId }) => {
                                 position: 'relative',
                             }}
                         >
-                            <div style={{
-                                position: 'absolute',
-                                left: isSelf ? 0 : -3,
-                                top: '100%',
-                                width: '100%',
-                                color: 'var(--avalon-text-dark)',
-                                fontFamily: 'Lancelot, serif',
-                                fontSize: portraitWidth/3.3,
-                                // fontSize: '1.38rem',
-                                textShadow: '0 0 4px #18181b',
-                                marginTop: isSelf ? Math.max(15, height * 0.08) : 7,
-                            }}>{player.name}{isHost ? ' (host)' : ''}</div>
                         </div>
+                        <div style={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: height + (isSelf ? Math.max(15, height * 0.08) : 7),
+                            transform: 'translateX(-50%)',
+                            color: 'var(--avalon-text-dark)',
+                            fontFamily: 'Lancelot, serif',
+                            fontSize: portraitWidth/3.3,
+                            textShadow: '0 0 4px #18181b',
+                            textAlign: 'center',
+                            whiteSpace: 'nowrap',
+                            pointerEvents: 'none',
+                        }}>{player.name}{isHost ? ' (host)' : ''}</div>
                     </div>
 
                 );
