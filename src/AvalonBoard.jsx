@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import assassinImg from './styles/avalon/assassin.webp';
 import cardbackImg from './styles/avalon/cardback.jpg';
 
+import oberonImg from './styles/avalon/oberon20b.webp';
+
+
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
 const AvalonBoard = ({ players, hostId }) => {
@@ -75,11 +78,14 @@ const AvalonBoard = ({ players, hostId }) => {
                                 width: width,
                                 height: height,
                                 borderRadius: "50%",
-                                backgroundImage: `url(${cardbackImg})`,
+                                backgroundImage: `url(${oberonImg})`,
+                                // backgroundImage: `url(${cardbackImg})`,
                                 // backgroundImage: `url(${assassinImg})`, // dont remove
-                                backgroundSize: '108%',
+                                backgroundSize: '155%', //oberon
+                                // backgroundSize: '108%', //cardbackImg
                                 // backgroundSize: '147%',//assassin final - dont remove
-                                backgroundPosition: '55% 50%',
+                                backgroundPosition: '50% 0%', //oberon
+                                // backgroundPosition: '55% 50%', //cardbackImg
                                 // backgroundPosition: '40% 35%',//assassin final - dont remove
                                 backgroundRepeat: "no-repeat",
                                 color: "#fff",
