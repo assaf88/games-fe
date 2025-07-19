@@ -131,7 +131,7 @@ const GameParty = () => {
 
     return (
         <div className={gameName+'-bg'}>
-            <div style={{ position: 'relative', zIndex: 1, width: '100vw', height: '100vh' }}>
+            <div>
                 {loading && isAvalon ? (
                     <div className="avalon-loading-container">
                         <StoneEmberProgressBar />
