@@ -176,37 +176,38 @@ const GameLobby = () => {
 
   return (
     <div className={gameName + '-bg'}>
-      {loading && isAvalon ? (
-        <div className="avalon-loading-container">
-          <StoneEmberProgressBar />
-          <div className="avalon-loading-message">Creating party…</div>
-        </div>
-      ) : (
-        <>
-          <h1 className={gameName + '-heading'}>{gameName.charAt(0).toUpperCase() + gameName.slice(1)} Game</h1>
-          <div style={isAvalon ? { display: 'flex', gap: 16, justifyContent: 'center', marginBottom: 16 } : {}}>
-            {/*todo: in the next game styling we add- put all styles to css and find their class by gameName + the rest of the class name like above*/}
-            <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}} onClick={handleCreate}>Create</button>
-            <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : { marginLeft: 12 }} onClick={handleJoin}>Join</button>
+      <div style={{ position: 'relative', zIndex: 1, width: '100vw', height: '100vh' }}>
+        {loading && isAvalon ? (
+          <div className="avalon-loading-container">
+            <StoneEmberProgressBar />
+            <div className="avalon-loading-message">Creating party…</div>
           </div>
-          {error && <div style={{ color: 'red', margin: 8 }}>{error}</div>}
-          <PlayerNameModal
-            visible={showNameModal}
-            onSubmit={handleNameSubmit}
-            initialButton={pendingAction === 'create' ? 'Create' : 'Join'}
-            onCancel={() => setShowNameModal(false)}
-            gameName={gameName}
-          />
-          <JoinPartyModal
-            visible={showJoinModal}
-            onSubmit={handleJoinCodeSubmit}
-            onCancel={() => setShowJoinModal(false)}
-            isAvalon={isAvalon}
-            gameName={gameName}
-          />
-          {joinError && <div style={{ color: 'red', margin: 8 }}>{joinError}</div>}
-        </>
-      )}
+        ) : (
+          <>
+            <h1 className={gameName + '-heading'}>{gameName.charAt(0).toUpperCase() + gameName.slice(1)} Game</h1>
+            <div style={isAvalon ? { display: 'flex', gap: 16, justifyContent: 'center', marginBottom: 16 } : {}}>
+              {/*todo: in the next game styling we add- put all styles to css and find their class by gameName + the rest of the class name like above*/}
+              <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}} onClick={handleCreate}>Create</button>
+              <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : { marginLeft: 12 }} onClick={handleJoin}>Join</button>
+            </div>
+            {error && <div style={{ color: 'red', margin: 8 }}>{error}</div>}
+            <PlayerNameModal
+              visible={showNameModal}
+              onSubmit={handleNameSubmit}
+              initialButton={pendingAction === 'create' ? 'Create' : 'Join'}
+              onCancel={() => setShowNameModal(false)}
+              gameName={gameName}
+            />
+            <JoinPartyModal
+              visible={showJoinModal}
+              onSubmit={handleJoinCodeSubmit}
+              onCancel={() => setShowJoinModal(false)}
+              isAvalon={isAvalon}
+              gameName={gameName}
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };
