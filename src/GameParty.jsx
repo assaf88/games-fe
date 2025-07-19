@@ -130,73 +130,71 @@ const GameParty = () => {
     }, [gameState.players]);
 
     return (
-        <div className={gameName+'-bg'}>
-            <div>
-                {loading && isAvalon ? (
-                    <div className="avalon-loading-container">
-                        <StoneEmberProgressBar />
-                        <div className="avalon-loading-message">Joining party…</div>
+        <div className="avalon-party">
+            {loading && isAvalon ? (
+                <div className="avalon-loading-container">
+                    <StoneEmberProgressBar />
+                    <div className="avalon-loading-message">Joining party…</div>
+                </div>
+            ) : (
+                <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
+                    <div style={{ flex: 1, maxWidth: "500px" }}>
+                        {reconnecting && (
+                            <div style={{ color: 'orange', margin: 8 }}>Reconnecting... (attempt {reconnectAttempts})</div>
+                        )}
+                        {/* Show only gameState.players before game starts; show poker circle after */}
+                        {!gameState.gameStarted ? (
+                            <div style={{textAlign:'center'}}>
+                                <h2>Players:</h2>
+                                <ul style={{
+                                    fontSize: '1.85rem',
+                                    fontFamily: 'Lancelot, Cinzel, serif',
+                                    textTransform: 'none',
+                                    color: 'var(--avalon-text-dark)',
+                                    margin: 0,
+                                    padding: 0
+                                }}>
+                                    {gameState.players.map((player, index) => (
+                                        <li key={player.id} style={{
+                                            marginBottom: 8,
+                                            listStyle: 'none',
+                                            color: 'var(--avalon-text-dark)',
+                                            WebkitTextTransform: 'none',
+                                            MozTextTransform: 'none',
+                                            msTextTransform: 'none'
+                                        }}>
+                                            {/*<span style={{ fontFamily: 'Cormorant Garamond, Cinzel, serif', fontSize: '1.65rem' }} >{index + 1}. </span>*/}
+                                            {player.name}
+                                            {gameState.hostId === player.id ? ' (host)' : ''}
+                                        </li>
+                                    ))}
+                                </ul>
+                                {isAvalon && gameState.players.length < avalonMinPlayers && (
+                                    <div style={{marginTop: '1.7rem'}}>
+                                        <h3>Avalon game requires {avalonMinPlayers}-{avalonMaxPlayers} players. Waiting for more...</h3>
+                                    </div>
+                                )}
+                                {!isHost && gameState.players.length >= avalonMinPlayers && (
+                                    <div style={{marginTop: '1.7rem'}}>
+                                        <h3>waiting for the host to start the game...</h3>
+                                    </div>
+                                )}
+                                {isHost && gameState.players.length >= avalonMinPlayers &&(
+                                    <div style={{display: 'flex', justifyContent: 'center', marginTop: '1.5rem'}}>
+                                        <button className={isAvalon ? 'button' : ''} onClick={sendStartGame}>Start
+                                            Game
+                                        </button>
+                                    </div>
+                                )}
+                                <h3>Code: {partyId}</h3>
+                            </div>
+                        ) : null}
                     </div>
-                ) : (
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
-                        <div style={{ flex: 1, maxWidth: "500px" }}>
-                            {reconnecting && (
-                                <div style={{ color: 'orange', margin: 8 }}>Reconnecting... (attempt {reconnectAttempts})</div>
-                            )}
-                            {/* Show only gameState.players before game starts; show poker circle after */}
-                            {!gameState.gameStarted ? (
-                                <div style={{textAlign:'center'}}>
-                                    <h2>Players:</h2>
-                                    <ul style={{
-                                        fontSize: '1.85rem',
-                                        fontFamily: 'Lancelot, Cinzel, serif',
-                                        textTransform: 'none',
-                                        color: 'var(--avalon-text-dark)',
-                                        margin: 0,
-                                        padding: 0
-                                    }}>
-                                        {gameState.players.map((player, index) => (
-                                            <li key={player.id} style={{
-                                                marginBottom: 8,
-                                                listStyle: 'none',
-                                                color: 'var(--avalon-text-dark)',
-                                                WebkitTextTransform: 'none',
-                                                MozTextTransform: 'none',
-                                                msTextTransform: 'none'
-                                            }}>
-                                                {/*<span style={{ fontFamily: 'Cormorant Garamond, Cinzel, serif', fontSize: '1.65rem' }} >{index + 1}. </span>*/}
-                                                {player.name}
-                                                {gameState.hostId === player.id ? ' (host)' : ''}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    {isAvalon && gameState.players.length < avalonMinPlayers && (
-                                        <div style={{marginTop: '1.7rem'}}>
-                                            <h3>Avalon game requires {avalonMinPlayers}-{avalonMaxPlayers} players. Waiting for more...</h3>
-                                        </div>
-                                    )}
-                                    {!isHost && gameState.players.length >= avalonMinPlayers && (
-                                        <div style={{marginTop: '1.7rem'}}>
-                                            <h3>waiting for the host to start the game...</h3>
-                                        </div>
-                                    )}
-                                    {isHost && gameState.players.length >= avalonMinPlayers &&(
-                                        <div style={{display: 'flex', justifyContent: 'center', marginTop: '1.5rem'}}>
-                                            <button className={isAvalon ? 'button' : ''} onClick={sendStartGame}>Start
-                                                Game
-                                            </button>
-                                        </div>
-                                    )}
-                                    <h3>Code: {partyId}</h3>
-                                </div>
-                            ) : null}
-                        </div>
-                        <div className="poker-circle-container" style={{ flex: 1, display: gameState.gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center" }}>
-                            <AvalonBoard players={gameState.players} hostId={gameState.hostId} />
-                        </div>
+                    <div className="poker-circle-container" style={{ flex: 1, display: gameState.gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center" }}>
+                        <AvalonBoard players={gameState.players} hostId={gameState.hostId} />
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 };

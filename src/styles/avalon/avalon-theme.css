@@ -33,6 +33,27 @@
   box-sizing: border-box;
 }
 
+.avalon-lobby {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.avalon-lobby > * {
+  transform: translateY(-30vh); /* Move content up by 5% of viewport height */
+}
+
+.avalon-party {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  margin-top: 20vh;
+}
+
 @keyframes avalon-gradient {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -80,6 +101,11 @@
 .button:hover, button:hover, .avalon-btn:hover {
   background: linear-gradient(90deg, #3a2c0f 0%, #232323 100%);
   color: #fffbe6;
+}
+
+.avalon-heading{
+  font-size: clamp(2.5rem, 14vw, 6rem);
+  line-height: 16.5;
 }
 
 .avalon-heading, h1, h2, h3 {
