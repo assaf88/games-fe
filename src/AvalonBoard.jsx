@@ -41,7 +41,7 @@ const AvalonBoard = ({ players, hostId }) => {
     const animRef = useRef();
     useEffect(() => {
         let start = null;
-        const duration = 7000; // 10 seconds
+        const duration = 4500; 
         function easeOut(t) {
             return 1 - Math.pow(1 - t, 2); // quadratic ease-out
         }
@@ -86,8 +86,8 @@ const AvalonBoard = ({ players, hostId }) => {
                 const isSelf = player.id === selfId;
                 const isHost = player.id === hostId;
                 const showSelfStyle = isSelf && progress >= 1;
-                const width = showSelfStyle ? selfPortraitWidth : portraitWidth;
-                const height = showSelfStyle ? selfPortraitHeight : portraitHeight;
+                const width = portraitWidth;
+                const height = portraitHeight;
                 const x = center + radius * Math.cos(angle) - width / 2;
                 const y = center + radius * Math.sin(angle) - height / 2;
                 // Final name position (after animation)
@@ -123,7 +123,10 @@ const AvalonBoard = ({ players, hostId }) => {
                                     boxShadow: showSelfStyle ? "0 0 12px #DDBB53FF" : "0 0 15px #111",
                                     zIndex: showSelfStyle ? 2 : 1,
                                     position: 'relative',
-                                    transition: 'box-shadow 0.3s',
+                                    //  transition: 'box-shadow 0.3s',
+                                    transformOrigin: 'center',
+                                    transform: showSelfStyle ? 'scale(1.1)' : 'scale(1)',
+                                    transition: 'transform 2.2s, box-shadow 2.2s, z-index 2.2s',
                                 }}
                             >
                             </div>
@@ -142,8 +145,9 @@ const AvalonBoard = ({ players, hostId }) => {
                                 whiteSpace: 'nowrap',
                                 pointerEvents: 'none',
                                 fontWeight: showSelfStyle ? 'bold' : 'normal',
-                                opacity: 1,
-                                transition: 'opacity 0.3s',
+                                // opacity: 3,
+                                // transition: 'opacity 0.3s',
+                                transition: 'opacity 5.2s',
                             }}>
                                 {player.name}{isHost ? ' (host)' : ''}
                             </div>
