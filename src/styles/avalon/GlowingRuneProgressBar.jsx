@@ -1,7 +1,7 @@
 import React from 'react';
 import './avalon-theme.css';
 
-const StoneEmberProgressBar = () => (
+const StoneEmberProgressBar = ({ duration = 2.5 }) => (
   <div style={{ position: 'relative', width: 320, height: 80, margin: '0 auto' }}>
     {/* Stone slab background */}
     <svg width="320" height="80" viewBox="0 0 320 80" style={{ position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
@@ -28,7 +28,7 @@ const StoneEmberProgressBar = () => (
       </defs>
       <rect x="18" y="28" width="264" height="24" rx="8" fill="url(#glow-bar)" filter="url(#glow-bar-effect)" style={{
         transformOrigin: 'center',
-        animation: 'avalon-bar-fill 2.5s linear infinite',
+        animation: `avalon-bar-fill ${duration}s linear infinite`,
       }} />
     </svg>
     {/* Flickering embers */}
