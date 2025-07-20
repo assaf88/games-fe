@@ -73,12 +73,15 @@
 
 @media (max-width: 600px) {
   .avalon-lobby {
-    transform: translateY(-15vh);
+    transform: translateY(-20vh);
   }
   .avalon-lobby-intro {
     font-size: 1.0rem;
-    width: 80vw;
+    width: 75vw;
     transform: translateY(0vh);
+  }
+  .avalon-lobby-buttons {
+    transform: translateY(10vh);
   }
 }
 
