@@ -72,13 +72,19 @@
 }
 
 @media (max-width: 600px) {
+  html, body {
+    position: fixed;
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
+  }
   .avalon-lobby {
-    transform: translateY(-21vh);
+    transform: translateY(-25vh);
   }
   .avalon-lobby-intro {
     font-size: 1.0rem;
     width: 72vw;
-    line-height: 1.1;
+    line-height: 1.2;
     transform: translateY(0vh);
   }
   .avalon-lobby-buttons {
