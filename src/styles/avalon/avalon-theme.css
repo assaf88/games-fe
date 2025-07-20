@@ -78,12 +78,7 @@
   html, body {
     position: fixed;
     overflow: hidden;
-    overscroll-behavior: none;
-    touch-action: none;
   }
-  /* .avalon-lobby {
-    transform: translateY(-25vh);
-  } */
   .avalon-lobby-intro {
     font-size: 1.0rem;
     width: 85vw;
@@ -96,14 +91,6 @@
 }
 
 
-/* .avalon-party {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-} */
 
 @keyframes avalon-gradient {
   0% { background-position: 0% 50%; }
