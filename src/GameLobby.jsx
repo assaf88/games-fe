@@ -184,6 +184,10 @@ const GameLobby = () => {
       ) : (
         <>
           <h1 className={gameName + '-heading'}>{gameName.charAt(0).toUpperCase() + gameName.slice(1)}</h1>
+          <div className={gameName + '-lobby-intro'}>
+            Consectetur adipiscing elit. Consectetur adipiscing elit. Donec ultricies est at dolor tempus finibus. 12345674890
+            Nulla dapibus sed eros eget mollis. Vestibulum vitae lorem quis mauris commodo sagittis at nec lacus.
+          </div>
           <div className={gameName + '-lobby-buttons'}>
             {/*todo: in the next game styling we add- put all styles to css and find their class by gameName + the rest of the class name like above*/}
             <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}} onClick={handleCreate}>Create</button>
