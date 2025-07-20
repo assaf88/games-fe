@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import './styles/avalon/avalon-theme.css';
 import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
+import useWakeLock from './services/useWakeLock';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
@@ -23,7 +24,8 @@ const GameParty = () => {
     const isAvalon = gameName === 'avalon' || gameName === '';
     const avalonMinPlayers = 3;
     const avalonMaxPlayers = 10;
-    // const isAvalon = location.pathname.includes('avalon') || location.pathname === '/';
+    
+    useWakeLock();
 
     useEffect(() => {
         let isUnmounted = false;
