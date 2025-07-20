@@ -25,7 +25,7 @@
   top: 0;
   width: 100vw;
   height: 100vh;
-  background: #1c1c22 url('./desktop-bg80cr.webp') center/cover no-repeat fixed;
+  background: url('./desktop-bg80cr.webp') center/cover no-repeat fixed;
   z-index: -1;
   pointer-events: none;
   font-family: 'Lancelot', 'Cinzel', serif;
@@ -43,7 +43,6 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  transform: translateY(-24vh);
 }
 
 .avalon-heading, h1, h2, h3 {
@@ -54,24 +53,23 @@
 .avalon-heading{
   font-size: clamp(2.5rem, 18vw, 12rem);
   line-height: 0;
+  transform: translateY(-24vh);
 }
 
 .avalon-lobby-intro {
   font-family: 'Lancelot', 'Cinzel', serif;
   color: var(--avalon-text-dark);
-  /* font-size: 1.3rem; */
   font-size: clamp(1rem, 2.5vw, 1.3rem);
   text-align: center;
-  width: 500px;
-  transform: translateY(-2vh);
+  width: 500px;  
+  transform: translateY(-26vh);
 }
-
 
 .avalon-lobby-buttons {
   display: flex;
   gap: 16px;
   justify-content: center;
-  transform: translateY(12vh);
+  transform: translateY(-12vh);
 }
 
 @media (max-width: 600px) {
@@ -109,7 +107,6 @@
   top: 0; left: 0;
   z-index: 10;
   background: transparent;
-  transform: translateY(10vh);
 }
 /* .avalon-loading-container > div {
   width: 320px; 
@@ -181,4 +178,13 @@
   width: 80%;
   background: #232323;
   color: var(--avalon-text-light);
+} 
+
+.poker-circle.spinning {
+  animation: avalon-spin 7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes avalon-spin {
+  0% { transform: translate(-50%, -50%) rotate(1440deg); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
 } 
