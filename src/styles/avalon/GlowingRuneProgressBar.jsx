@@ -27,8 +27,8 @@ const StoneEmberProgressBar = () => (
         </filter>
       </defs>
       <rect x="18" y="28" width="264" height="24" rx="8" fill="url(#glow-bar)" filter="url(#glow-bar-effect)" style={{
-        transformOrigin: 'left',
-        animation: 'avalon-bar-fill 1.2s linear infinite',
+        transformOrigin: 'center',
+        animation: 'avalon-bar-fill 2.5s linear infinite',
       }} />
     </svg>
     {/* Flickering embers */}
