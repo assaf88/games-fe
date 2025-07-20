@@ -4,6 +4,7 @@ import assassinImg from './styles/avalon/assassin.webp';
 import cardbackImg from './styles/avalon/cardback.jpg';
 
 import oberonImg from './styles/avalon/oberon20b.webp';
+import frame1bImg from './styles/avalon/frame1b.png';
 
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
@@ -41,7 +42,7 @@ const AvalonBoard = ({ players, hostId }) => {
     const animRef = useRef();
     useEffect(() => {
         let start = null;
-        const duration = 4500; 
+        const duration = 5000; 
         function easeOut(t) {
             return 1 - Math.pow(1 - t, 2); // quadratic ease-out
         }
@@ -104,14 +105,14 @@ const AvalonBoard = ({ players, hostId }) => {
                             display: "block"
                         }}>
                             <div
-                                className={"poker-portrait" + (showSelfStyle ? " self" : "")}
+                                className={"avalon-portrait" + (showSelfStyle ? " self" : "")}
                                 style={{
                                     width: width,
                                     height: height,
                                     borderRadius: "50%",
-                                    backgroundImage: `url(${cardbackImg})`,
-                                    backgroundSize: '108%',
-                                    backgroundPosition: '55% 50%',
+                                    backgroundImage: `url(${oberonImg})`,
+                                    backgroundSize: '140%',
+                                    backgroundPosition: '50% 60%',
                                     backgroundRepeat: "no-repeat",
                                     color: "#fff",
                                     display: "flex",
@@ -120,15 +121,33 @@ const AvalonBoard = ({ players, hostId }) => {
                                     justifyContent: "center",
                                     fontWeight: "bold",
                                     color2: "#ddbb53",
-                                    boxShadow: showSelfStyle ? "0 0 12px #DDBB53FF" : "0 0 15px #111",
+                                    boxShadow: showSelfStyle ? "0 0 10px 6px #DDBB53FF" : "0 0 15px #111",
                                     zIndex: showSelfStyle ? 2 : 1,
                                     position: 'relative',
                                     //  transition: 'box-shadow 0.3s',
                                     transformOrigin: 'center',
                                     transform: showSelfStyle ? 'scale(1.1)' : 'scale(1)',
-                                    transition: 'transform 2.2s, box-shadow 2.2s, z-index 2.2s',
+                                    transition: 'transform 2.7s, box-shadow 2.7s, z-index 2.7s',
                                 }}
                             >
+                                <div
+                                    className="avalon-portrait-frame"
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        pointerEvents: 'none',
+                                        backgroundImage: `url(${frame1bImg})`,
+                                        backgroundSize: '100% 100%',
+                                        backgroundPosition: 'center',
+                                        backgroundRepeat: 'no-repeat',
+                                        zIndex: 3,
+                                        transform: 'scale(1.15)',
+                                        transformOrigin: 'center',
+                                    }}
+                                />
                             </div>
                         </div>
                         {progress >= 1 && (
