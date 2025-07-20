@@ -135,7 +135,7 @@ const GameParty = () => {
         <div className="avalon-party">
             {loading && isAvalon ? (
                 <div className="avalon-loading-container">
-                    <StoneEmberProgressBar duration={3.5} />
+                    <StoneEmberProgressBar duration={3.0} />
                     <div className="avalon-loading-message">Joining party…</div>
                 </div>
             ) : (
