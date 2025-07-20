@@ -75,7 +75,7 @@
   html, body {
     position: fixed;
     overflow: hidden;
-    overscroll-behavior: none;
+    /* overscroll-behavior: none; */
     /* touch-action: none; */
   }
   .avalon-lobby {
@@ -88,7 +88,7 @@
     transform: translateY(0vh);
   }
   .avalon-lobby-buttons {
-    transform: translateY(12vh);
+    transform: translateY(15vh);
   }
 }
 
