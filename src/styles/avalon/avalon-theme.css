@@ -62,18 +62,24 @@
   width: 500px;
   transform: translateY(-2vh);
 }
-@media (max-width: 600px) {
-  .avalon-lobby-intro {
-    font-size: 1.0rem;
-    /* width: 70%; */
-  }
-}
+
 
 .avalon-lobby-buttons {
   display: flex;
   gap: 16px;
   justify-content: center;
   transform: translateY(12vh);
+}
+
+@media (max-width: 600px) {
+  .avalon-lobby {
+    transform: translateY(-15vh);
+  }
+  .avalon-lobby-intro {
+    font-size: 1.0rem;
+    width: 80vw;
+    transform: translateY(0vh);
+  }
 }
 
 
