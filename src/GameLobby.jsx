@@ -183,8 +183,8 @@ const GameLobby = () => {
         </div>
       ) : (
         <>
-          <h1 className={gameName + '-heading'}>{gameName.charAt(0).toUpperCase() + gameName.slice(1)} Game</h1>
-          <div style={isAvalon ? { display: 'flex', gap: 16, justifyContent: 'center', marginBottom: 16 } : {}}>
+          <h1 className={gameName + '-heading'}>{gameName.charAt(0).toUpperCase() + gameName.slice(1)}</h1>
+          <div className={gameName + '-lobby-buttons'}>
             {/*todo: in the next game styling we add- put all styles to css and find their class by gameName + the rest of the class name like above*/}
             <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}} onClick={handleCreate}>Create</button>
             <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : { marginLeft: 12 }} onClick={handleJoin}>Join</button>

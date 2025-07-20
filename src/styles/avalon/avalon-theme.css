@@ -42,9 +42,13 @@
   width: 100vw;
 }
 
-.avalon-lobby > * {
-  transform: translateY(-30vh); /* Move content up by 5% of viewport height */
+.avalon-lobby-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  transform: translateY(-7vh);
 }
+
 
 .avalon-party {
   display: flex;
@@ -104,8 +108,9 @@
 }
 
 .avalon-heading{
-  font-size: clamp(2.5rem, 14vw, 6rem);
-  line-height: 16.5;
+  font-size: clamp(2.5rem, 18vw, 13rem);
+  line-height: 0;
+  transform: translateY(-27vh);
 }
 
 .avalon-heading, h1, h2, h3 {
