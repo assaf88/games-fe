@@ -81,9 +81,9 @@
     overscroll-behavior: none;
     touch-action: none;
   }
-  .avalon-lobby {
+  /* .avalon-lobby {
     transform: translateY(-25vh);
-  }
+  } */
   .avalon-lobby-intro {
     font-size: 1.0rem;
     width: 85vw;
