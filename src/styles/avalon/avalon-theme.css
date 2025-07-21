@@ -73,8 +73,14 @@
 }
 
 @media (max-width: 600px) {
-  .avalon-bg, .avalon-lobby, .avalon-party {
-    overscroll-behavior: contain;
+  html, body {
+    /* position: fixed;
+    overflow: hidden; */
+    height: 100%;
+    overflow: auto;
+  }
+  #root {
+    min-height: 200vh;
   }
   .avalon-lobby-intro {
     font-size: 1.0rem;
