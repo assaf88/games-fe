@@ -33,7 +33,7 @@ const AvalonBoard = ({ players, hostId }) => {
             ...players.slice(0, selfIndex)
         ];
     }
-    const portraitWidth = circleSize / 8.2;
+    const portraitWidth = circleSize / (isVertical ? 7: 8.2);
     const portraitHeight = portraitWidth * 1.31;
     const center = circleSize / 2;
     const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * (isVertical ? 1.1 : 1.2);
