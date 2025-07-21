@@ -95,6 +95,10 @@ const AvalonBoard = ({ players, hostId }) => {
                 // Final name position (after animation)
                 const nameX = center + radius * Math.cos(finalAngle) - width / 2;
                 const nameY = center + radius * Math.sin(finalAngle) - height / 2;
+                
+                const boxShadowWidth = portraitWidth * 0.1;
+                const boxShadowHeight = portraitHeight * 0.1;
+
                 return (
                     <React.Fragment key={player.id}>
                         <div style={{
@@ -123,7 +127,7 @@ const AvalonBoard = ({ players, hostId }) => {
                                     fontWeight: "bold",
                                     color2: "#ddbb53",
                                     boxShadow: showSelfStyle
-                                        ? `0 0 ${portraitHeight * 0.1}px ${portraitWidth * 0.1}px #DDBB53FF`
+                                        ? `0 0 ${boxShadowHeight}px ${boxShadowWidth}px #DDBB53FF`
                                         : "0 0 15px #111",
                                     // boxShadow: showSelfStyle ? "0 0 10px 8px #DDBB53FF" : "0 0 15px #111",
                                     zIndex: showSelfStyle ? 2 : 1,
@@ -158,11 +162,12 @@ const AvalonBoard = ({ players, hostId }) => {
                             <div style={{
                                 position: 'absolute',
                                 left: nameX + width / 2,
-                                top: nameY + height + (isSelf ? Math.max(15, height * 0.08) : 7),
+                                top: nameY + height + (isSelf ? boxShadowHeight * 1.05 : 2),
+                                // top: nameY + height + (isSelf ? Math.max(15, height * 0.08) : 7),
                                 transform: 'translateX(-50%)',
                                 color: showSelfStyle ? 'var(--avalon-text-main)' : 'var(--avalon-text-dark)',
                                 fontFamily: 'Lancelot, serif',
-                                fontSize: portraitWidth/3.4,
+                                fontSize: isVertical ? portraitWidth/3 : portraitWidth/3.8,
                                 textShadow: '0 0 4px #18181b',
                                 textAlign: 'center',
                                 whiteSpace: 'nowrap',
@@ -172,7 +177,7 @@ const AvalonBoard = ({ players, hostId }) => {
                                 // transition: 'opacity 0.3s',
                                 transition: 'opacity 5.2s',
                             }}>
-                                {player.name}{isHost ? ' (host)' : ''}
+                                {player.name}{isHost ? ' (h)' : ''}
                             </div>
                         )}
                     </React.Fragment>

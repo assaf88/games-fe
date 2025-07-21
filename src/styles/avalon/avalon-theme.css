@@ -75,11 +75,7 @@
 @media (max-width: 600px) {
   html, body {
     position: fixed;
-    /* overflow: hidden; */
   }
-  /* #root {
-    min-height: 200vh;
-  } */
   .avalon-lobby-intro {
     font-size: 1.0rem;
     width: 85vw;
