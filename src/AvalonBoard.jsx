@@ -162,7 +162,8 @@ const AvalonBoard = ({ players, hostId }) => {
                             <div style={{
                                 position: 'absolute',
                                 left: nameX + width / 2,
-                                top: nameY + height + (isSelf ? boxShadowHeight * 1.05 : 2),
+                                top: nameY + height + (isSelf ? boxShadowHeight * 1.05 : 0) + (isVertical ? -3 : 4),
+                                // top: (nameY + height + (isSelf ? boxShadowHeight * 1.055 : 0)) * (isVertical ? 1 : 1.01),
                                 // top: nameY + height + (isSelf ? Math.max(15, height * 0.08) : 7),
                                 transform: 'translateX(-50%)',
                                 color: showSelfStyle ? 'var(--avalon-text-main)' : 'var(--avalon-text-dark)',
