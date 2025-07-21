@@ -16,6 +16,7 @@ const GameParty = () => {
     });
     const [reconnecting, setReconnecting] = useState(false);
     const [reconnectAttempts, setReconnectAttempts] = useState(0);
+    const [reconnectFailed, setReconnectFailed] = useState(false);
     // No loading animation here; handled in lobby
     const maxReconnectAttempts = 10;
     const isHost = getLocalPlayerId() && gameState.hostId && getLocalPlayerId() === gameState.hostId;
@@ -34,17 +35,21 @@ const GameParty = () => {
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
         const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`;
         let attempt = 0;
+        let isConnected = false;
 
         const connectWebSocket = () => {
             if (isUnmounted) return;
             setReconnecting(attempt > 0);
             setReconnectAttempts(attempt);
+            setReconnectFailed(false);
             websocket.current = new WebSocket(wsUrl);
             const ws = websocket.current;
 
             ws.onopen = () => {
                 setReconnecting(false);
+                setReconnectFailed(false);
                 attempt = 0;
+                isConnected = true;
                 console.log("WebSocket connected!");
                 const playerId = localStorage.getItem('player_id');
                 const playerName = localStorage.getItem('player_name');
@@ -86,13 +91,15 @@ const GameParty = () => {
                 console.log("WebSocket closed:", event.reason || "No reason provided");
                 console.log(`Socket closed with code: ${event.code}, reason: ${event.reason}`);
                 clearInterval(pingIntervalId);
+                isConnected = false;
                 if (!isUnmounted && attempt < maxReconnectAttempts) {
-                    const delay = attempt === 0 ? 0 : Math.min(5000 * Math.pow(2, attempt - 1), 30000);
+                    const delay = 10000; // 10 seconds for every attempt
                     attempt++;
                     console.log(`Reconnecting WebSocket in ${delay / 1000}s... (attempt ${attempt})`);
                     reconnectTimeoutId = setTimeout(connectWebSocket, delay);
                 } else if (!isUnmounted) {
                     setReconnecting(false);
+                    setReconnectFailed(true);
                 }
             };
         };
@@ -107,6 +114,16 @@ const GameParty = () => {
         }
 
         connectWebSocket();
+
+        // Auto-retry on visibility change (screen wake/unlock)
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible' && !isConnected && !reconnecting && !reconnectFailed) {
+                attempt = 0;
+                connectWebSocket();
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
         return () => {
             isUnmounted = true;
             if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
@@ -114,6 +131,7 @@ const GameParty = () => {
             }
             if (pingIntervalId) clearInterval(pingIntervalId);
             if (reconnectTimeoutId) clearTimeout(reconnectTimeoutId);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [partyId]);
 
@@ -133,9 +151,11 @@ const GameParty = () => {
 
     return (
         <div className="avalon-party">
-            {reconnecting && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', textAlign: 'center', color: 'orange', background: 'rgba(24,24,27,0.92)', zIndex: 2000, padding: '8px 0', fontWeight: 600, fontSize: 'clamp(16px, 4vw, 22px)' }}>
-                    Reconnecting... (attempt {reconnectAttempts})
+            {(reconnecting || reconnectFailed) && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', textAlign: 'center', color: reconnectFailed ? 'red' : 'orange', background: 'rgba(24,24,27,0.92)', zIndex: 2000, padding: '8px 0', fontWeight: 600, fontSize: 'clamp(16px, 4vw, 22px)' }}>
+                    {reconnectFailed
+                        ? 'Reconnecting failed. Please refresh the page.'
+                        : `Reconnecting... (attempt ${reconnectAttempts})`}
                 </div>
             )}
             {loading && isAvalon ? (
