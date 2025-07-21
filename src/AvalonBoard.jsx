@@ -16,7 +16,7 @@ const AvalonBoard = ({ players, hostId }) => {
     // const getCircleSize = () => Math.min(window.innerWidth, window.innerHeight) * 0.525;
     // const getCircleSize = () => Math.min(window.innerWidth, window.innerHeight) * 0.6;
     const getCircleSize = () => {
-        return window.innerHeight * 0.6;
+        return Math.min(window.innerHeight * 0.6, window.innerWidth * 0.95);
         // const isMobile = window.innerWidth <= 600; // or any breakpoint you prefer
         // return minDim * (isMobile ? 0.98 : 0.625); // 0.98 for mobile, 0.625 for desktop
       };
