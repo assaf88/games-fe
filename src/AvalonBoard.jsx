@@ -36,7 +36,7 @@ const AvalonBoard = ({ players, hostId }) => {
     const portraitWidth = circleSize / 8.2;
     const portraitHeight = portraitWidth * 1.31;
     const center = circleSize / 2;
-    const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * (isVertical ? 1.1 : 1.15);
+    const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * (isVertical ? 1.1 : 1.2);
 
     // Rotonda animation state
     const [progress, setProgress] = useState(0); // 0 to 1
@@ -123,7 +123,7 @@ const AvalonBoard = ({ players, hostId }) => {
                                     fontWeight: "bold",
                                     color2: "#ddbb53",
                                     boxShadow: showSelfStyle
-                                        ? `0 0 ${portraitHeight * 0.09}px ${portraitWidth * 0.09}px #DDBB53FF`
+                                        ? `0 0 ${portraitHeight * 0.1}px ${portraitWidth * 0.1}px #DDBB53FF`
                                         : "0 0 15px #111",
                                     // boxShadow: showSelfStyle ? "0 0 10px 8px #DDBB53FF" : "0 0 15px #111",
                                     zIndex: showSelfStyle ? 2 : 1,
