@@ -122,7 +122,10 @@ const AvalonBoard = ({ players, hostId }) => {
                                     justifyContent: "center",
                                     fontWeight: "bold",
                                     color2: "#ddbb53",
-                                    boxShadow: showSelfStyle ? "0 0 10px 8px #DDBB53FF" : "0 0 15px #111",
+                                    boxShadow: showSelfStyle
+                                        ? `0 0 ${portraitHeight * 0.09}px ${portraitWidth * 0.09}px #DDBB53FF`
+                                        : "0 0 15px #111",
+                                    // boxShadow: showSelfStyle ? "0 0 10px 8px #DDBB53FF" : "0 0 15px #111",
                                     zIndex: showSelfStyle ? 2 : 1,
                                     position: 'relative',
                                     //  transition: 'box-shadow 0.3s',
