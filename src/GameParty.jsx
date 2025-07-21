@@ -149,7 +149,8 @@ const GameParty = () => {
                             <div style={{textAlign:'center'}}>
                                 <h2>Players:</h2>
                                 <ul style={{
-                                    fontSize: '1.85rem',
+                                    // fontSize: '1.85rem',
+                                    fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)',
                                     fontFamily: 'Lancelot, Cinzel, serif',
                                     textTransform: 'none',
                                     color: 'var(--avalon-text-dark)',
@@ -158,7 +159,7 @@ const GameParty = () => {
                                 }}>
                                     {gameState.players.map((player, index) => (
                                         <li key={player.id} style={{
-                                            marginBottom: 8,
+                                            marginBottom: 6,
                                             listStyle: 'none',
                                             color: 'var(--avalon-text-dark)',
                                             WebkitTextTransform: 'none',
