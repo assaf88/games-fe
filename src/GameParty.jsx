@@ -133,6 +133,11 @@ const GameParty = () => {
 
     return (
         <div className="avalon-party">
+            {reconnecting && (
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', textAlign: 'center', color: 'orange', background: 'rgba(24,24,27,0.92)', zIndex: 2000, padding: '8px 0', fontWeight: 600, fontSize: 'clamp(16px, 4vw, 22px)' }}>
+                    Reconnecting... (attempt {reconnectAttempts})
+                </div>
+            )}
             {loading && isAvalon ? (
                 <div className="avalon-loading-container">
                     <StoneEmberProgressBar duration={3.0} />
@@ -141,9 +146,6 @@ const GameParty = () => {
             ) : (
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
                     <div style={{ flex: 1, maxWidth: "500px" }}>
-                        {reconnecting && (
-                            <div style={{ color: 'orange', margin: 8 }}>Reconnecting... (attempt {reconnectAttempts})</div>
-                        )}
                         {/* Show only gameState.players before game starts; show poker circle after */}
                         {!gameState.gameStarted ? (
                             <div style={{textAlign:'center'}}>
