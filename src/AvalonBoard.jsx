@@ -13,8 +13,14 @@ const AvalonBoard = ({ players, hostId }) => {
     const selfId = getLocalPlayerId();
     const numPlayers = players.length;
     // Responsive circle size
-    const getCircleSize = () => Math.min(window.innerWidth, window.innerHeight) * 0.525;
-    // const getCircleSize = () => Math.min(window.innerWidth, window.innerHeight) * 0.625;
+    // const getCircleSize = () => Math.min(window.innerWidth, window.innerHeight) * 0.525;
+    // const getCircleSize = () => Math.min(window.innerWidth, window.innerHeight) * 0.6;
+    const getCircleSize = () => {
+        return window.innerHeight * 0.6;
+        // const isMobile = window.innerWidth <= 600; // or any breakpoint you prefer
+        // return minDim * (isMobile ? 0.98 : 0.625); // 0.98 for mobile, 0.625 for desktop
+      };
+
     const [circleSize, setCircleSize] = useState(getCircleSize());
     useEffect(() => {
         const handleResize = () => setCircleSize(getCircleSize());
@@ -30,10 +36,8 @@ const AvalonBoard = ({ players, hostId }) => {
             ...players.slice(0, selfIndex)
         ];
     }
-    const portraitWidth = circleSize / 7;
-    const portraitHeight = portraitWidth * 1.5;
-    const selfPortraitWidth = portraitWidth * 1.1;
-    const selfPortraitHeight = portraitHeight * 1.1;
+    const portraitWidth = circleSize / 8;
+    const portraitHeight = portraitWidth * 1.3;
     const center = circleSize / 2;
     const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * 1.1;
 
@@ -112,7 +116,7 @@ const AvalonBoard = ({ players, hostId }) => {
                                     borderRadius: "50%",
                                     backgroundImage: `url(${oberonImg})`,
                                     backgroundSize: '140%',
-                                    backgroundPosition: '50% 60%',
+                                    backgroundPosition: '50% 10%',
                                     backgroundRepeat: "no-repeat",
                                     color: "#fff",
                                     display: "flex",

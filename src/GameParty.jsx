@@ -159,7 +159,7 @@ const GameParty = () => {
                                 }}>
                                     {gameState.players.map((player, index) => (
                                         <li key={player.id} style={{
-                                            marginBottom: 6,
+                                            marginBottom: 8,
                                             listStyle: 'none',
                                             color: 'var(--avalon-text-dark)',
                                             WebkitTextTransform: 'none',
