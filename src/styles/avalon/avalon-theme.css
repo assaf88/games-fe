@@ -74,8 +74,8 @@
 
 @media (max-width: 600px) {
   html, body {
-    /* position: fixed;*/
-    overflow: hidden;
+    position: fixed;
+    /* overflow: hidden; */
   }
   #root {
     min-height: 200vh;
