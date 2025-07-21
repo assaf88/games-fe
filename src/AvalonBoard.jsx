@@ -1,22 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import assassinImg from './styles/avalon/assassin.webp';
-import cardbackImg from './styles/avalon/cardback.jpg';
-
 import oberonImg from './styles/avalon/oberon20b.webp';
 import frame1bImg from './styles/avalon/frame1b.png';
-
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
 const AvalonBoard = ({ players, hostId }) => {
     const selfId = getLocalPlayerId();
     const numPlayers = players.length;
+    const isVertical = window.innerHeight > window.innerWidth;
     // Responsive circle size
     // const getCircleSize = () => Math.min(window.innerWidth, window.innerHeight) * 0.525;
     // const getCircleSize = () => Math.min(window.innerWidth, window.innerHeight) * 0.6;
     const getCircleSize = () => {
-        return Math.min(window.innerHeight * 0.6, window.innerWidth * 0.95);
+        return Math.min(window.innerHeight * 0.58, window.innerWidth * 0.90);
         // const isMobile = window.innerWidth <= 600; // or any breakpoint you prefer
         // return minDim * (isMobile ? 0.98 : 0.625); // 0.98 for mobile, 0.625 for desktop
       };
@@ -36,10 +33,10 @@ const AvalonBoard = ({ players, hostId }) => {
             ...players.slice(0, selfIndex)
         ];
     }
-    const portraitWidth = circleSize / 8;
-    const portraitHeight = portraitWidth * 1.3;
+    const portraitWidth = circleSize / 8.2;
+    const portraitHeight = portraitWidth * 1.31;
     const center = circleSize / 2;
-    const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * 1.1;
+    const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * (isVertical ? 1.1 : 1.15);
 
     // Rotonda animation state
     const [progress, setProgress] = useState(0); // 0 to 1
@@ -162,7 +159,7 @@ const AvalonBoard = ({ players, hostId }) => {
                                 transform: 'translateX(-50%)',
                                 color: showSelfStyle ? 'var(--avalon-text-main)' : 'var(--avalon-text-dark)',
                                 fontFamily: 'Lancelot, serif',
-                                fontSize: portraitWidth/3.3,
+                                fontSize: portraitWidth/3.4,
                                 textShadow: '0 0 4px #18181b',
                                 textAlign: 'center',
                                 whiteSpace: 'nowrap',
