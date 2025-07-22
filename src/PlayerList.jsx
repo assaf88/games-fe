@@ -24,14 +24,10 @@ export default function PlayerList({ players, selfId, hostId, isAvalon, onOrderC
     const reordered = sortedPlayers.map(p => ({ ...p }));
     const [removed] = reordered.splice(result.source.index, 1);
     reordered.splice(result.destination.index, 0, removed);
-    // Assign new order: 1,2,3... for visible players, keep 100+ for unsorted
+    // Assign new order: 1,2,3... for all players in the new order
     let order = 1;
     for (let p of reordered) {
-      if ((p.order ?? 100) < 100) {
-        p.order = order++;
-      } else {
-        p.order = 100;
-      }
+      p.order = order++;
     }
     onOrderChange(reordered);
   }
