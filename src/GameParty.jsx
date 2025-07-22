@@ -31,7 +31,6 @@ const GameParty = () => {
 
     useEffect(() => {
         let isUnmounted = false;
-        let pingIntervalId = null;
         let reconnectTimeoutId = null;
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
         const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`;
@@ -57,7 +56,6 @@ const GameParty = () => {
                 if (playerId && playerName) {
                     ws.send(JSON.stringify({ action: "register", id: playerId, name: playerName }));
                 }
-                startPing();
             };
 
             ws.onmessage = (event) => {
@@ -82,6 +80,9 @@ const GameParty = () => {
                         return newState;
                     });
                 }
+                if (messageData.action === 'ping') {
+                    ws.send(JSON.stringify({ action: 'pong' }));
+                }
             };
 
             ws.onerror = (err) => {
@@ -91,7 +92,6 @@ const GameParty = () => {
             ws.onclose = (event) => {
                 console.log("WebSocket closed:", event.reason || "No reason provided");
                 console.log(`Socket closed with code: ${event.code}, reason: ${event.reason}`);
-                clearInterval(pingIntervalId);
                 isConnected = false;
                 if (!isUnmounted && attempt < maxReconnectAttempts) {
                     const delay = 10000; // 10 seconds for every attempt
@@ -104,15 +104,6 @@ const GameParty = () => {
                 }
             };
         };
-
-        function startPing() {
-            if (pingIntervalId) clearInterval(pingIntervalId);
-            pingIntervalId = setInterval(() => {
-                if (websocket.current.readyState === WebSocket.OPEN) {
-                    websocket.current.send(JSON.stringify({ action: "ping" }));
-                }
-            }, 30000);
-        }
 
         connectWebSocket();
 
@@ -130,7 +121,6 @@ const GameParty = () => {
             if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
                 websocket.current.close();
             }
-            if (pingIntervalId) clearInterval(pingIntervalId);
             if (reconnectTimeoutId) clearTimeout(reconnectTimeoutId);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };

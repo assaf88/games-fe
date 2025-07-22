@@ -80,6 +80,9 @@ export default function PlayerList({ players, selfId, hostId, isAvalon, onOrderC
                         {/* Name and label */}
                         <div style={{ flex: 1, fontFamily: 'Lancelot, Cinzel, serif', fontSize: '1.18em', letterSpacing: 1, padding: '8px 0 8px 7px', display: 'flex', alignItems: 'center' }}>
                           {player.name || player.id}
+                          {player.connected === false && (
+                            <span style={{ marginLeft: 8, color: '#e57373', fontWeight: 700, fontSize: '1em' }}>(disconnected)</span>
+                          )}
                           <span style={{ marginLeft: 8, color: '#e0c97f', fontWeight: 700, fontSize: '1em' }}>{label}</span>
                         </div>
                       </div>
