@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import './styles/avalon/avalon-theme.css';
 import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
 import useWakeLock from './services/useWakeLock';
+import PlayerList from './PlayerList.jsx';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
@@ -149,6 +150,18 @@ const GameParty = () => {
         }
     }, [gameState.players]);
 
+    const selfId = getLocalPlayerId();
+
+    // Handler to update player order and send to backend
+    function handleOrderChange(newPlayers) {
+        setGameState(prev => ({ ...prev, players: newPlayers }));
+        if (isHost) {
+            if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
+                websocket.current.send(JSON.stringify({ action: 'update_order', players: newPlayers.map(p => ({ id: p.id, order: p.order })) }));
+            }
+        }
+    }
+
     return (
         <div className="avalon-party">
             {(reconnecting || reconnectFailed) && (
@@ -168,32 +181,14 @@ const GameParty = () => {
                     <div style={{ flex: 1, maxWidth: "500px" }}>
                         {/* Show only gameState.players before game starts; show poker circle after */}
                         {!gameState.gameStarted ? (
-                            <div style={{textAlign:'center'}}>
-                                <h2>Players:</h2>
-                                <ul style={{
-                                    // fontSize: '1.85rem',
-                                    fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)',
-                                    fontFamily: 'Lancelot, Cinzel, serif',
-                                    textTransform: 'none',
-                                    color: 'var(--avalon-text-dark)',
-                                    margin: 0,
-                                    padding: 0
-                                }}>
-                                    {gameState.players.map((player, index) => (
-                                        <li key={player.id} style={{
-                                            marginBottom: 8,
-                                            listStyle: 'none',
-                                            color: 'var(--avalon-text-dark)',
-                                            WebkitTextTransform: 'none',
-                                            MozTextTransform: 'none',
-                                            msTextTransform: 'none'
-                                        }}>
-                                            {/*<span style={{ fontFamily: 'Cormorant Garamond, Cinzel, serif', fontSize: '1.65rem' }} >{index + 1}. </span>*/}
-                                            {player.name}
-                                            {gameState.hostId === player.id ? ' (host)' : ''}
-                                        </li>
-                                    ))}
-                                </ul>
+                            <>
+                                <PlayerList
+                                    players={gameState.players}
+                                    selfId={selfId}
+                                    hostId={gameState.hostId}
+                                    isAvalon={isAvalon}
+                                    onOrderChange={handleOrderChange}
+                                />
                                 {isAvalon && gameState.players.length < avalonMinPlayers && (
                                     <div style={{marginTop: '1.7rem'}}>
                                         <h3>Avalon game requires {avalonMinPlayers}-{avalonMaxPlayers} players. Waiting for more...</h3>
@@ -212,7 +207,7 @@ const GameParty = () => {
                                     </div>
                                 )}
                                 <h3>Code: {partyId}</h3>
-                            </div>
+                            </>
                         ) : null}
                     </div>
                     <div className="poker-circle-container" style={{ flex: 1, display: gameState.gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center" }}>
