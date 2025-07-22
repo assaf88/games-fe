@@ -75,6 +75,7 @@ const GameParty = () => {
                             players: messageData.players || [],
                             hostId: messageData.hostId || null,
                             gameStarted: messageData.gameStarted || false,
+                            gameStarting: messageData.gameStarting || false,
                         };
                         console.log('Updated gameState:', newState);
                         return newState;
@@ -180,13 +181,13 @@ const GameParty = () => {
                                     onOrderChange={handleOrderChange}
                                 />
                                 {isAvalon && gameState.players.length < avalonMinPlayers && (
-                                    <div style={{marginTop: '1.7rem'}}>
-                                        <h3>Avalon game requires {avalonMinPlayers}-{avalonMaxPlayers} players. Waiting for more...</h3>
+                                    <div style={{marginTop: '1.7rem', color: '#e57373'}}>
+                                        <h3 style={{color: '#e57373'}}>The game Avalon requireth a company of {avalonMinPlayers} to {avalonMaxPlayers}</h3>
                                     </div>
                                 )}
                                 {!isHost && gameState.players.length >= avalonMinPlayers && (
-                                    <div style={{marginTop: '1.7rem'}}>
-                                        <h3>waiting for the host to start the game...</h3>
+                                    <div style={{marginTop: '1.7rem', color: '#e57373'}}>
+                                        <h3 style={{color: '#e57373'}}>Host quiet. Game not yet begun</h3>
                                     </div>
                                 )}
                                 {isHost && gameState.players.length >= avalonMinPlayers &&(
@@ -196,12 +197,12 @@ const GameParty = () => {
                                         </button>
                                     </div>
                                 )}
-                                <h3>Code: {partyId}</h3>
+                                <h3 style={{fontSize: '1.4rem'}}>Code: &nbsp;{partyId}</h3>
                             </>
                         ) : null}
                     </div>
                     <div className="poker-circle-container" style={{ flex: 1, display: gameState.gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center" }}>
-                        <AvalonBoard players={gameState.players} hostId={gameState.hostId} />
+                        <AvalonBoard players={gameState.players} hostId={gameState.hostId} gameStarting={gameState.gameStarting} />
                     </div>
                 </div>
             )}

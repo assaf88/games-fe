@@ -34,7 +34,7 @@ export default function PlayerList({ players, selfId, hostId, isAvalon, onOrderC
 
   return (
     <div className={isAvalon ? 'avalon-player-list' : 'player-list'} style={{ maxWidth: 420, margin: '0 auto', padding: 8 }}>
-      <DragDropContext onDragEnd={isHost ? handleDragEnd : undefined}>
+      <DragDropContext onDragEnd={isHost ? handleDragEnd : undefined} {...(window.matchMedia('(pointer: coarse)').matches ? { delayTouchStart: 0 } : {})}>
         <Droppable droppableId="player-list-droppable" isDropDisabled={!isHost}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
@@ -66,24 +66,31 @@ export default function PlayerList({ players, selfId, hostId, isAvalon, onOrderC
                           borderRadius: '10px',
                           color: isAvalon ? '#e0c97f' : '#232323',
                           fontFamily: isAvalon ? 'Lancelot, Cinzel, serif' : 'inherit',
+                          padding: '1.0rem 0 0 0',
                           ...provided.draggableProps.style,
                         }}
                       >
                         {/* Number column */}
-                        <div style={{ width: 32, textAlign: 'right', fontWeight: 700, fontSize: '1.2em', color: '#bfa76f', fontFamily: 'Cinzel, serif', userSelect: 'none' }}>
+                        <div style={{ width: 32, textAlign: 'right', fontWeight: 700, fontSize: 'clamp(1.15rem, 2.4vw, 1.5rem)', color: '#bfa76f', fontFamily: 'Cinzel, serif', userSelect: 'none' }}>
                           {idx + 1}
                         </div>
                         {/* Drag handle/arrows for host */}
-                        <div style={{ width: 32, textAlign: 'center', userSelect: 'none', opacity: isHost ? 1 : 0.2, fontSize: '1.2em', cursor: isHost ? 'grab' : 'default', color: isAvalon ? '#bfa76f' : '#888' }}>
-                          {isHost ? <span>▲<br />▼</span> : <span>&nbsp;</span>}
+                        <div style={{ width: 22, textAlign: 'center', userSelect: 'none', opacity: isHost ? 1 : 0.2, fontSize: '1.2em', cursor: isHost ? 'grab' : 'default', color: isAvalon ? '#e0c97f' : '#888', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                          {isHost ? (
+                            <svg width="1em" height="1.5em" viewBox="0 0 8 24" style={{verticalAlign: 'middle', display: 'block', margin: '0 auto'}}>
+                              <circle cx="4" cy="5" r="1.3" fill="currentColor"/>
+                              <circle cx="4" cy="11" r="1.3" fill="currentColor"/>
+                              <circle cx="4" cy="17" r="1.3" fill="currentColor"/>
+                            </svg>
+                          ) : <span>&nbsp;</span>}
                         </div>
                         {/* Name and label */}
-                        <div style={{ flex: 1, fontFamily: 'Lancelot, Cinzel, serif', fontSize: '1.18em', letterSpacing: 1, padding: '8px 0 8px 7px', display: 'flex', alignItems: 'center' }}>
+                        <div style={{ flex: 1, fontFamily: 'Lancelot, Cinzel, serif', fontSize: 'clamp(1.15rem, 2.4vw, 1.8rem)', letterSpacing: 1,  display: 'flex', alignItems: 'center', marginLeft: '0.5rem' }}>
                           {player.name || player.id}
                           {player.connected === false && (
-                            <span style={{ marginLeft: 8, color: '#e57373', fontWeight: 700, fontSize: '1em' }}>(disconnected)</span>
+                            <span style={{ marginLeft: 8, color: '#e57373', fontWeight: 700, fontSize: 'clamp(0.95rem, 1.7vw, 1.6rem)' }}>(disconnected)</span>
                           )}
-                          <span style={{ marginLeft: 8, color: '#e0c97f', fontWeight: 700, fontSize: '1em' }}>{label}</span>
+                          <span style={{ marginLeft: 8, color: '#e0c97f', fontWeight: 700, fontSize: 'clamp(0.95rem, 1.7vw, 1.5rem)' }}>{label}</span>
                         </div>
                       </div>
                     )}

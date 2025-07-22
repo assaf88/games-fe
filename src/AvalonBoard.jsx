@@ -5,7 +5,7 @@ import frame1bImg from './styles/avalon/frame1b.png';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
-const AvalonBoard = ({ players, hostId }) => {
+const AvalonBoard = ({ players, hostId, gameStarting }) => {
     const selfId = getLocalPlayerId();
     const numPlayers = players.length;
     const isVertical = window.innerHeight > window.innerWidth;
@@ -42,24 +42,26 @@ const AvalonBoard = ({ players, hostId }) => {
     const [progress, setProgress] = useState(0); // 0 to 1
     const animRef = useRef();
     useEffect(() => {
-        let start = null;
-        const duration = 5000; 
-        function easeOut(t) {
-            return 1 - Math.pow(1 - t, 2); // quadratic ease-out
-        }
-        function animate(ts) {
-            if (!start) start = ts;
-            let t = (ts - start) / duration;
-            if (t > 1) t = 1;
-            setProgress(easeOut(t));
-            if (t < 1) {
-                animRef.current = requestAnimationFrame(animate);
+        if (gameStarting) {
+            let start = null;
+            const duration = 5000;
+            function easeOut(t) {
+                return 1 - Math.pow(1 - t, 2); // quadratic ease-out
             }
+            function animate(ts) {
+                if (!start) start = ts;
+                let t = (ts - start) / duration;
+                if (t > 1) t = 1;
+                setProgress(easeOut(t));
+                if (t < 1) {
+                    animRef.current = requestAnimationFrame(animate);
+                }
+            }
+            setProgress(0);
+            animRef.current = requestAnimationFrame(animate);
+            return () => cancelAnimationFrame(animRef.current);
         }
-        setProgress(0);
-        animRef.current = requestAnimationFrame(animate);
-        return () => cancelAnimationFrame(animRef.current);
-    }, [players.length]);
+    }, [gameStarting]);
 
     return (
         <div

@@ -67,10 +67,11 @@ const GamesList = () => {
       if (isMounted) {
         import('./GameParty.jsx');
         import('./AvalonBoard.jsx');
+        // Preload images using static paths
         const imagesToPreload = [
-          require('./styles/avalon/desktop-bg80cr.webp'),
-          require('./styles/avalon/oberon20b.webp'),
-          require('./styles/avalon/frame1b.png'),
+          '/src/styles/avalon/desktop-bg80cr.webp',
+          '/src/styles/avalon/oberon20b.webp',
+          '/src/styles/avalon/frame1b.png',
         ];
         imagesToPreload.forEach(src => {
           const img = new window.Image();
