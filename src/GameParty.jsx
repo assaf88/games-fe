@@ -173,41 +173,38 @@ const GameParty = () => {
                         {/* Show only gameState.players before game starts; show poker circle after */}
                         {!gameState.gameStarted ? (
                             <>
-                                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1.2rem 0' }}>
-                                    {/* SVG Frame */}
-                                    <svg
-                                        width="100%"
-                                        height="100%"
-                                        viewBox="0 0 340 260"
-                                        style={{
-                                            position: 'absolute',
-                                            top: 0, left: 0, right: 0, bottom: 0,
-                                            zIndex: 0,
-                                            pointerEvents: 'none'
-                                        }}
-                                        preserveAspectRatio="none"
-                                    >
-                                        {/* Ornate border */}
-                                        <rect x="8" y="8" width="324" height="244" rx="28" fill="none" stroke="#7c5a1a" strokeWidth="8" />
-                                        {/* Decorative corners */}
-                                        <circle cx="28" cy="28" r="8" fill="#bfa76f" />
-                                        <circle cx="312" cy="28" r="8" fill="#bfa76f" />
-                                        <circle cx="28" cy="232" r="8" fill="#bfa76f" />
-                                        <circle cx="312" cy="232" r="8" fill="#bfa76f" />
-                                    </svg>
+                                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '96vw', maxWidth: 430, minWidth: 220 }}>
+                                    {/* Golden frame with border radius */}
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 3, left: 3, right: 3, bottom: 3,
+                                        border: '7px solid #7c5a1a',
+                                        borderRadius: 39,
+                                        boxSizing: 'border-box',
+                                        zIndex: 0,
+                                        pointerEvents: 'none',
+                                    }}>
+                                        {/* Corner dots */}
+                                        <div style={{ position: 'absolute', top: 12, left: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
+                                        <div style={{ position: 'absolute', top: 12, right: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
+                                        <div style={{ position: 'absolute', bottom: 12, left: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
+                                        <div style={{ position: 'absolute', bottom: 12, right: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
+                                    </div>
                                     {/* PlayerList content */}
                                     <div style={{
                                         position: 'relative',
                                         zIndex: 1,
-                                        width: '96vw',
-                                        maxWidth: 340,
-                                        minWidth: 220,
-                                        padding: '1.5rem 1rem',
+                                        width: '100%',
+                                        padding: '0.5rem 1.0rem 1.0rem 0rem',
                                         background: 'rgba(27,22,21,0.93)',
                                         borderRadius: 39,
-                                        // boxShadow: '0 0 18px #3a2c0f88',
-                                        boxShadow: '0 0 22px rgba(27,22,21,0.93)',
-                                        color: '#e0c97f'
+                                        boxShadow: '0 0 12px 6px rgba(41, 31, 25, 0.93)',
+                                        
+                                        color: '#e0c97f',
+                                        boxSizing: 'border-box',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
                                     }}>
                                         <PlayerList
                                             players={gameState.players}
@@ -235,7 +232,7 @@ const GameParty = () => {
                                         </button>
                                     </div>
                                 )}
-                                <h3 style={{fontSize: '1.4rem'}}>Code: &nbsp;{partyId}</h3>
+                                <h3 style={{fontSize: '1.4rem'}}>Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyId}</span></h3>
                             </>
                         ) : null}
                     </div>
