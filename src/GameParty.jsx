@@ -4,6 +4,7 @@ import './styles/avalon/avalon-theme.css';
 import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
 import useWakeLock from './services/useWakeLock';
 import PlayerList from './PlayerList.jsx';
+import PlayerNameModal from './PlayerNameModal.jsx';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
@@ -26,10 +27,22 @@ const GameParty = () => {
     const isAvalon = gameName === 'avalon' || gameName === '';
     const avalonMinPlayers = 3;
     const avalonMaxPlayers = 10;
+    const [showNameModal, setShowNameModal] = useState(!localStorage.getItem('player_name')); //for users that came directly to the party page
+    const [pendingName, setPendingName] = useState('');
     
     useWakeLock();
 
+    // Handler for name submit
+    const handleNameSubmit = (name) => {
+        const id = generateGUID();
+        localStorage.setItem('player_id', id);
+        localStorage.setItem('player_name', name);
+        setShowNameModal(false);
+    };
+
+    // Only connect if name is set
     useEffect(() => {
+        if (showNameModal) return;
         let isUnmounted = false;
         let reconnectTimeoutId = null;
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
@@ -125,7 +138,7 @@ const GameParty = () => {
             if (reconnectTimeoutId) clearTimeout(reconnectTimeoutId);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, [partyId]);
+    }, [partyId, showNameModal]);
 
     const sendStartGame = () => {
         if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
@@ -155,6 +168,13 @@ const GameParty = () => {
 
     return (
         <div className="avalon-party">
+            <PlayerNameModal
+                visible={showNameModal}
+                onSubmit={handleNameSubmit}
+                initialButton="Join"
+                onCancel={null}
+                gameName={gameName}
+            />
             {(reconnecting || reconnectFailed) && (
                 <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', textAlign: 'center', color: reconnectFailed ? 'red' : 'orange', background: 'rgba(24,24,27,0.92)', zIndex: 2000, padding: '8px 0', fontWeight: 600, fontSize: 'clamp(16px, 4vw, 22px)' }}>
                     {reconnectFailed

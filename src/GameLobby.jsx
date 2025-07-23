@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
 import './styles/avalon/avalon-theme.css';
+import PlayerNameModal from './PlayerNameModal.jsx';
 
 function generateGUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -9,38 +10,6 @@ function generateGUID() {
     return v.toString(16);
   });
 }
-
-const PlayerNameModal = ({ visible, onSubmit, initialButton, onCancel, gameName }) => {
-  const [name, setName] = useState('');
-  const maxLen = 10;
-  if (!visible) return null;
-  return (
-    <div className='modal'>
-      <div className={gameName + '-modal-bg'} style={{ boxShadow: '0 6px 36px #18181bcc, 0 0 12px 2px #3a90e2cc', background: 'linear-gradient(120deg, #232323 0%, #23233a 100%)', filter: 'brightness(1.08) saturate(1.12)' }}>
-        <div className={gameName + '-modal-title'} style={{ color: '#e0c97f', fontSize: '1.3rem', marginBottom: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#e0c97f" style={{marginRight: 4}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
-          Enter your name
-        </div>
-        <input
-          type="text"
-          value={name}
-          maxLength={maxLen}
-          onChange={e => setName(e.target.value)}
-          onKeyDown={e => { if (e.key === 'Enter' && name.trim()) onSubmit(name.trim()); }}
-          placeholder="Your name"
-          className={gameName + '-modal-input'}
-        />
-        <div className={gameName + '-modal-hint'} style={{ fontFamily: 'Lancelot, Cinzel, serif', fontSize: '1.05rem', color: '#e0c97f', textTransform: 'capitalize' }}>
-          Max {maxLen} characters
-        </div>
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 12 }}>
-          <button className={gameName ? 'button' : ''} style={{ width: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => { if (name.trim()) onSubmit(name.trim()); }}>{initialButton}</button>
-          {onCancel && <button className={gameName ? 'button' : ''} style={{ width: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={onCancel}>Cancel</button>}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const JoinPartyModal = ({ visible, onSubmit, onCancel, isAvalon, gameName }) => {
   const [code, setCode] = useState('');
@@ -187,7 +156,7 @@ const GameLobby = () => {
         <>
           <h1 className={gameName + '-heading'}>{gameName.charAt(0).toUpperCase() + gameName.slice(1)}</h1>
           <div className={gameName + '-lobby-intro'}>
-          Brave souls are sent forth on quests, one by one. 
+          Brave souls are sent forth on quests, one by one. <br />
           Each folk bears a secret part—some true, some false. 
           Words are weighed and glances kept to find false hearts. 
           The game turns on trust, guile, and wise counsel. 
