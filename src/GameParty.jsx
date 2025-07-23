@@ -173,13 +173,51 @@ const GameParty = () => {
                         {/* Show only gameState.players before game starts; show poker circle after */}
                         {!gameState.gameStarted ? (
                             <>
-                                <PlayerList
-                                    players={gameState.players}
-                                    selfId={selfId}
-                                    hostId={gameState.hostId}
-                                    isAvalon={isAvalon}
-                                    onOrderChange={handleOrderChange}
-                                />
+                                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1.2rem 0' }}>
+                                    {/* SVG Frame */}
+                                    <svg
+                                        width="100%"
+                                        height="100%"
+                                        viewBox="0 0 340 260"
+                                        style={{
+                                            position: 'absolute',
+                                            top: 0, left: 0, right: 0, bottom: 0,
+                                            zIndex: 0,
+                                            pointerEvents: 'none'
+                                        }}
+                                        preserveAspectRatio="none"
+                                    >
+                                        {/* Ornate border */}
+                                        <rect x="8" y="8" width="324" height="244" rx="28" fill="none" stroke="#7c5a1a" strokeWidth="8" />
+                                        {/* Decorative corners */}
+                                        <circle cx="28" cy="28" r="8" fill="#bfa76f" />
+                                        <circle cx="312" cy="28" r="8" fill="#bfa76f" />
+                                        <circle cx="28" cy="232" r="8" fill="#bfa76f" />
+                                        <circle cx="312" cy="232" r="8" fill="#bfa76f" />
+                                    </svg>
+                                    {/* PlayerList content */}
+                                    <div style={{
+                                        position: 'relative',
+                                        zIndex: 1,
+                                        width: '96vw',
+                                        maxWidth: 340,
+                                        minWidth: 220,
+                                        padding: '1.5rem 1rem',
+                                        background: 'rgba(27,22,21,0.93)',
+                                        borderRadius: 39,
+                                        // boxShadow: '0 0 18px #3a2c0f88',
+                                        boxShadow: '0 0 22px rgba(27,22,21,0.93)',
+                                        color: '#e0c97f'
+                                    }}>
+                                        <PlayerList
+                                            players={gameState.players}
+                                            selfId={selfId}
+                                            hostId={gameState.hostId}
+                                            isAvalon={isAvalon}
+                                            onOrderChange={handleOrderChange}
+                                        />
+                                    </div>
+                                </div>
                                 {isAvalon && gameState.players.length < avalonMinPlayers && (
                                     <div style={{marginTop: '1.7rem', color: '#e57373'}}>
                                         <h3 style={{color: '#e57373'}}>The game Avalon requireth a company of {avalonMinPlayers} to {avalonMaxPlayers}</h3>

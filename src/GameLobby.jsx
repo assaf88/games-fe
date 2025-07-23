@@ -185,8 +185,11 @@ const GameLobby = () => {
         <>
           <h1 className={gameName + '-heading'}>{gameName.charAt(0).toUpperCase() + gameName.slice(1)}</h1>
           <div className={gameName + '-lobby-intro'}>
-            Consectetur adipiscing elit. Consectetur adipiscing elit. Donec ultricies est at dolor tempus finibus. 12345674890
-            Nulla dapibus sed eros eget mollis. Vestibulum vitae lorem quis mauris commodo sagittis at nec lacus.
+          Brave souls are sent forth on quests, one by one. 
+          Each folk bears a secret part—some true, some false. 
+          Words are weighed and glances kept to find false hearts. 
+          The game turns on trust, guile, and wise counsel. 
+          Godspeed, may good fortune favor thy journey.
           </div>
           <div className={gameName + '-lobby-buttons'}>
             {/*todo: in the next game styling we add- put all styles to css and find their class by gameName + the rest of the class name like above*/}

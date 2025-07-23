@@ -88,12 +88,12 @@ const GamesList = () => {
             <Routes>
                 <Route exact path="/" element={<GamesListPage />} />
                 <Route path="/avalon" element={
-                  <Suspense fallback={<div>Loading lobby...</div>}>
+                  <Suspense fallback={<div></div>}>
                     <GameLobby />
                   </Suspense>
                 } />
                 <Route path="/avalon/party/:id" element={
-                  <Suspense fallback={<div>Loading party...</div>}>
+                  <Suspense fallback={<div></div>}>
                     <GameParty />
                   </Suspense>
                 } />
