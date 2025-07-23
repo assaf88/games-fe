@@ -78,9 +78,9 @@
   }
   .avalon-lobby-intro {
     font-size: 1.02rem;
-    width: 82vw;
+    width: 84vw;
     line-height: 1.35;
-    transform: translateY(-23vh);
+    transform: translateY(-24vh);
   }
   .avalon-lobby-buttons {
     transform: translateY(14vh);
