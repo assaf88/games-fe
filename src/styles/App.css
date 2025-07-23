@@ -48,17 +48,17 @@ html, body, #root {
   padding: 0;
 }
 
-/* Optimize background image for lightweight: use compressed JPG/WEBP, set background-attachment: fixed for performance, and avoid large images. */
-
-/* Poker circle layout */
-.poker-circle-container {
-
-}
-.poker-circle {
-
-}
-.poker-portrait {
-
+.modal { 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 
@@ -75,5 +75,8 @@ html, body, #root {
     border-radius: 50% / 60%;
     width: unset;
     height: unset;
+  }
+  .modal {
+    transform: translateY(-25vh);
   }
 }
