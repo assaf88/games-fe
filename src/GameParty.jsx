@@ -86,9 +86,17 @@ const GameParty = () => {
                 } catch (err) {
                     console.error("Failed to parse WebSocket message:", rawData, err);
                 }
-                if (messageData && messageData.action === 'error' && messageData.reason === 'party_not_found') {
-                    navigate('/avalon', { state: { partyError: 'Party not found.' } });
-                    return;
+                if (messageData && messageData.action === 'error') {
+                    if (messageData.reason === 'party_not_found') {
+                        navigate('/avalon', { state: { partyError: 'Party not found.' } });
+                        hasRedirected = true;
+                        return;
+                    }
+                    if (messageData.reason === 'game_started') {
+                        navigate('/avalon', { state: { partyError: 'The game has already started.' } });
+                        hasRedirected = true;
+                        return;
+                    }
                 }
                 if (messageData.action === "update_state") {
                     setGameState(prev => {
@@ -117,6 +125,7 @@ const GameParty = () => {
                 console.log("WebSocket closed:", event.reason || "No reason provided");
                 console.log(`Socket closed with code: ${event.code}, reason: ${event.reason}`);
                 isConnected = false;
+                if (hasRedirected) return; // Prevent reconnect if redirected due to error
                 if (event.code === 1005 && !event.reason) {
                     setDisconnected(true);
                 }
