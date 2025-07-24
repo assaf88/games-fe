@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
 import './styles/avalon/avalon-theme.css';
 import PlayerNameModal from './PlayerNameModal.jsx';
+import ErrorBanner from './ErrorBanner.jsx';
 
 function generateGUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -43,9 +44,17 @@ const GameLobby = () => {
   const [showNameModal, setShowNameModal] = useState(false);
   const [pendingAction, setPendingAction] = useState(null); // 'create' or 'join'
   const [showJoinModal, setShowJoinModal] = useState(false);
-  const [error, setError] = useState(null);
-  const [joinError, setJoinError] = useState(null);
+  const [bannerError, setBannerError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [partyError, setPartyError] = useState(null); // for redirect error
+
+  useEffect(() => {
+    if (location.state && location.state.partyError) {
+      setBannerError(location.state.partyError);
+      // Clear the state so it doesn't persist
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   // Check if player info exists
   const getPlayerInfo = () => {
@@ -64,7 +73,7 @@ const GameLobby = () => {
       setShowNameModal(true);
       return;
     }
-    setError(null);
+    setBannerError(null);
     setLoading(true);
     try {
       const player = getPlayerInfo();
@@ -73,16 +82,23 @@ const GameLobby = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: player.id, name: player.name })
       });
-      const data = await res.json();
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {}
       if (!res.ok || !data.partyId) {
-        setError(data.error || 'Failed to create party.');
+        if (res.status === 502) {
+          setBannerError('Disconnected. Please try again.');
+        } else {
+          setBannerError(data.error || 'Failed to create party.');
+        }
         setLoading(false);
         return;
       }
+      setBannerError(null);
       navigate(`${location.pathname.replace(/\/$/, '')}/party/${data.partyId}`);
-
     } catch (e) {
-      setError('Failed to create party.');
+      setBannerError('Disconnected');
       setLoading(false);
     }
   };
@@ -107,13 +123,13 @@ const GameLobby = () => {
 
   const handleJoinCodeSubmit = async (code) => {
     setShowJoinModal(false);
-    setJoinError(null);
+    setBannerError(null);
     // Retry logic
     const retryKey = 'join_retries';
     const now = Date.now();
     let retries = JSON.parse(localStorage.getItem(retryKey) || '[]').filter(ts => now - ts < 60 * 60 * 1000);
     if (retries.length >= 10) {
-      setJoinError('Too many join attempts. Please try again later.');
+      setBannerError('Too many join attempts. Please try again later.');
       return;
     }
     // Try to open a WebSocket connection to check if party exists
@@ -127,19 +143,27 @@ const GameLobby = () => {
         ws.close();
         if (!didNavigate) {
           didNavigate = true;
-          // Save retry timestamps
           retries.push(now);
           localStorage.setItem(retryKey, JSON.stringify(retries));
+          setBannerError(null);
           navigate(`${location.pathname.replace(/\/$/, '')}/party/${code}`);
         }
       };
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data && data.action === 'error' && data.reason === 'party_not_found') {
+            setBannerError('Party not found.');
+          }
+        } catch {}
+      };
       ws.onerror = () => {
-        setJoinError('Party not found.');
+        setBannerError('Disconnected or party not found. Please try again.');
         retries.push(now);
         localStorage.setItem(retryKey, JSON.stringify(retries));
       };
     } catch (e) {
-      setJoinError('Party not found.');
+      setBannerError('Disconnected');
       retries.push(now);
       localStorage.setItem(retryKey, JSON.stringify(retries));
     }
@@ -147,6 +171,7 @@ const GameLobby = () => {
 
   return (
     <div className="avalon-lobby">
+      {bannerError && <ErrorBanner message={bannerError} color="red" />}
       {loading && isAvalon ? (
         <div className="avalon-loading-container">
           <StoneEmberProgressBar duration={3.0} />
@@ -167,7 +192,7 @@ const GameLobby = () => {
             <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}} onClick={handleCreate}>Create</button>
             <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' } : { marginLeft: 12 }} onClick={handleJoin}>Join</button>
           </div>
-          {error && <div style={{ color: 'red', margin: 8 }}>{error}</div>}
+          {/* Remove all inline error divs, all errors are now in the banner */}
           <PlayerNameModal
             visible={showNameModal}
             onSubmit={handleNameSubmit}

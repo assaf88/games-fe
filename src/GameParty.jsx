@@ -1,15 +1,17 @@
 import { useRef, useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './styles/avalon/avalon-theme.css';
 import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
 import useWakeLock from './services/useWakeLock';
 import PlayerList from './PlayerList.jsx';
 import PlayerNameModal from './PlayerNameModal.jsx';
+import ErrorBanner from './ErrorBanner.jsx';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
 const GameParty = () => {
     const { id: partyId } = useParams();
+    const navigate = useNavigate();
     const websocket = useRef(null);
     const [gameState, setGameState] = useState({
         players: [],
@@ -29,6 +31,7 @@ const GameParty = () => {
     const avalonMaxPlayers = 10;
     const [showNameModal, setShowNameModal] = useState(!localStorage.getItem('player_name')); //for users that came directly to the party page
     const [pendingName, setPendingName] = useState('');
+    const [disconnected, setDisconnected] = useState(false);
     
     useWakeLock();
 
@@ -49,9 +52,10 @@ const GameParty = () => {
         const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`;
         let attempt = 0;
         let isConnected = false;
+        let hasRedirected = false;
 
         const connectWebSocket = () => {
-            if (isUnmounted) return;
+            if (isUnmounted || hasRedirected) return;
             setReconnecting(attempt > 0);
             setReconnectAttempts(attempt);
             setReconnectFailed(false);
@@ -61,6 +65,8 @@ const GameParty = () => {
             ws.onopen = () => {
                 setReconnecting(false);
                 setReconnectFailed(false);
+                setReconnectAttempts(0); // Reset attempts on successful connect
+                setDisconnected(false); // Remove disconnected banner on connect
                 attempt = 0;
                 isConnected = true;
                 console.log("WebSocket connected!");
@@ -79,6 +85,10 @@ const GameParty = () => {
                     messageData = JSON.parse(rawData);
                 } catch (err) {
                     console.error("Failed to parse WebSocket message:", rawData, err);
+                }
+                if (messageData && messageData.action === 'error' && messageData.reason === 'party_not_found') {
+                    navigate('/avalon', { state: { partyError: 'Party not found.' } });
+                    return;
                 }
                 if (messageData.action === "update_state") {
                     setGameState(prev => {
@@ -107,6 +117,9 @@ const GameParty = () => {
                 console.log("WebSocket closed:", event.reason || "No reason provided");
                 console.log(`Socket closed with code: ${event.code}, reason: ${event.reason}`);
                 isConnected = false;
+                if (event.code === 1005 && !event.reason) {
+                    setDisconnected(true);
+                }
                 if (!isUnmounted && attempt < maxReconnectAttempts) {
                     const delay = 10000; // 10 seconds for every attempt
                     attempt++;
@@ -175,12 +188,23 @@ const GameParty = () => {
                 onCancel={null}
                 gameName={gameName}
             />
-            {(reconnecting || reconnectFailed) && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', textAlign: 'center', color: reconnectFailed ? 'red' : 'orange', background: 'rgba(24,24,27,0.92)', zIndex: 2000, padding: '8px 0', fontWeight: 600, fontSize: 'clamp(16px, 4vw, 22px)' }}>
-                    {reconnectFailed
-                        ? 'Reconnecting failed. Please refresh the page.'
-                        : `Reconnecting... (attempt ${reconnectAttempts})`}
-                </div>
+            {reconnectAttempts > 0 && !reconnectFailed && (
+                <ErrorBanner
+                    message={`Reconnecting... (attempt ${reconnectAttempts})`}
+                    color="orange"
+                />
+            )}
+            {reconnectFailed && (
+                <ErrorBanner
+                    message="Connection lost. Please refresh the page."
+                    color="red"
+                />
+            )}
+            {disconnected && (
+                <ErrorBanner
+                    message="Disconnected"
+                    color="red"
+                />
             )}
             {loading && isAvalon ? (
                 <div className="avalon-loading-container">

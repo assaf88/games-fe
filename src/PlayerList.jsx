@@ -75,12 +75,12 @@ export default function PlayerList({ players, selfId, hostId, isAvalon, onOrderC
                           {idx + 1}.
                         </div>
                         {/* Name and label */}
-                        <div style={{ flex: 1, fontFamily: 'Lancelot, Cinzel, serif', fontSize: 'clamp(1.455rem, 2.4vw, 1.7rem)', letterSpacing: 1,  display: 'flex', alignItems: 'center', marginLeft: '0.5rem' }}>
+                        <div style={{ flex: 1, fontFamily: 'Lancelot, Cinzel, serif', fontSize: 'clamp(1.6rem, 4vw, 1.7rem)', letterSpacing: 1,  display: 'flex', alignItems: 'center', marginLeft: '0.5rem' }}>
                           {player.name || player.id}
                           {player.connected === false && (
                             <span style={{ marginLeft: 6, color: '#e57373', fontWeight: 700, fontSize: 'clamp(1.2rem, 1.7vw, 1.6rem)' }}>(disconnected)</span>
                           )}
-                          <span style={{ marginLeft: 3, color: '#e0c97f', fontWeight: 700, fontSize: 'clamp(1.2rem, 1.7vw, 1.5rem)' }}>{label}</span>
+                          <span style={{ marginLeft: 3, marginTop: 3, color: '#e0c97f', fontWeight: 700, fontSize: 'clamp(1.2rem, 1.7vw, 1.5rem)' }}>{label}</span>
                         </div>
                         {/* Drag handle/arrows for host */}
                         <div style={{ width: 22, textAlign: 'center', userSelect: 'none', opacity: isHost ? 1 : 0.2, fontSize: '1.2em', cursor: isHost ? 'grab' : 'default', color: isAvalon ? '#6C5F35FF' : '#888', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
