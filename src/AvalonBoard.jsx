@@ -5,7 +5,7 @@ import frame1bImg from './styles/avalon/frame1b.png';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
-const AvalonBoard = ({ players, hostId, gameStarting }) => {
+const AvalonBoard = ({ players, hostId, gameStarting, gameStarted }) => {
     const selfId = getLocalPlayerId();
     const numPlayers = players.length;
     const isVertical = window.innerHeight > window.innerWidth;
@@ -38,10 +38,11 @@ const AvalonBoard = ({ players, hostId, gameStarting }) => {
     const center = circleSize / 2;
     const radius = (center - Math.max(portraitWidth, portraitHeight) / 2) * (isVertical ? 1.1 : 1.2);
 
-    // Rotonda animation state
+    // Animation and in-game UI logic
     const [progress, setProgress] = useState(0); // 0 to 1
     const animRef = useRef();
     useEffect(() => {
+        // console.log('AvalonBoard effect:', { gameStarting, gameStarted });
         if (gameStarting) {
             let start = null;
             const duration = 5000;
@@ -60,8 +61,14 @@ const AvalonBoard = ({ players, hostId, gameStarting }) => {
             setProgress(0);
             animRef.current = requestAnimationFrame(animate);
             return () => cancelAnimationFrame(animRef.current);
+        } else if (gameStarted) {
+            setProgress(1);
+        } else {
+            setProgress(0);
         }
-    }, [gameStarting]);
+    }, [gameStarting, gameStarted]);
+
+    // console.log('AvalonBoard render:', { gameStarted, progress });
 
     return (
         <div
@@ -83,7 +90,7 @@ const AvalonBoard = ({ players, hostId, gameStarting }) => {
                 zIndex: 10,
             }}
         >
-            {rotatedPlayers.map((player, i) => {
+            {gameStarted && rotatedPlayers.map((player, i) => {
                 const finalAngle = ((i) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
                 // Animate from +360deg offset (one full circle ahead)
                 const angle = finalAngle + (1 - progress) * 2 * Math.PI;
@@ -97,10 +104,8 @@ const AvalonBoard = ({ players, hostId, gameStarting }) => {
                 // Final name position (after animation)
                 const nameX = center + radius * Math.cos(finalAngle) - width / 2;
                 const nameY = center + radius * Math.sin(finalAngle) - height / 2;
-                
                 const boxShadowWidth = portraitWidth * 0.1;
                 const boxShadowHeight = portraitHeight * 0.1;
-
                 return (
                     <React.Fragment key={player.id}>
                         <div style={{
@@ -131,10 +136,8 @@ const AvalonBoard = ({ players, hostId, gameStarting }) => {
                                     boxShadow: showSelfStyle
                                         ? `0 0 ${boxShadowHeight}px ${boxShadowWidth}px #DDBB53FF`
                                         : "0 0 15px #111",
-                                    // boxShadow: showSelfStyle ? "0 0 10px 8px #DDBB53FF" : "0 0 15px #111",
                                     zIndex: showSelfStyle ? 2 : 1,
                                     position: 'relative',
-                                    //  transition: 'box-shadow 0.3s',
                                     transformOrigin: 'center',
                                     transform: showSelfStyle ? 'scale(1.1)' : 'scale(1)',
                                     transition: 'transform 2.7s, box-shadow 2.7s, z-index 2.7s',
@@ -160,15 +163,14 @@ const AvalonBoard = ({ players, hostId, gameStarting }) => {
                                 />
                             </div>
                         </div>
+                        {/* Names and in-game UI: only if progress >= 1 */}
                         {progress >= 1 && (
                             <div style={{
                                 position: 'absolute',
                                 left: nameX + width / 2,
                                 top: nameY + height + (isSelf ? boxShadowHeight * 1.05 : 0) + (isVertical ? -0 : 4),
-                                // top: (nameY + height + (isSelf ? boxShadowHeight * 1.055 : 0)) * (isVertical ? 1 : 1.01),
-                                // top: nameY + height + (isSelf ? Math.max(15, height * 0.08) : 7),
                                 transform: 'translateX(-50%)',
-                                color: showSelfStyle ? 'var(--avalon-text-main)' : 'var(--avalon-text-dark)',
+                                color: player.connected === false ? '#e57373' : (showSelfStyle ? 'var(--avalon-text-main)' : 'var(--avalon-text-dark)'),
                                 fontFamily: 'Lancelot, serif',
                                 fontSize: isVertical ? portraitWidth/3 : portraitWidth/3.8,
                                 textShadow: '0 0 4px #18181b',
@@ -176,11 +178,9 @@ const AvalonBoard = ({ players, hostId, gameStarting }) => {
                                 whiteSpace: 'nowrap',
                                 pointerEvents: 'none',
                                 fontWeight: showSelfStyle ? 'bold' : 'normal',
-                                // opacity: 3,
-                                // transition: 'opacity 0.3s',
                                 transition: 'opacity 5.2s',
                             }}>
-                                {player.name}{isHost ? ' (h)' : ''}
+                                {player.name}{isHost ? ' (h)' : ''}{player.connected === false ? ' (left)' : ''}
                             </div>
                         )}
                     </React.Fragment>
