@@ -93,7 +93,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted }) => {
             {gameStarted && rotatedPlayers.map((player, i) => {
                 const finalAngle = ((i) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
                 // Animate from +360deg offset (one full circle ahead)
-                const angle = finalAngle + (1 - progress) * 2 * Math.PI;
+                const angle = finalAngle - (1 - progress) * 2 * Math.PI;
                 const isSelf = player.id === selfId;
                 const isHost = player.id === hostId;
                 const showSelfStyle = isSelf && progress >= 1;
