@@ -4,7 +4,7 @@ import './styles/avalon/avalon-theme.css';
 import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
 import useWakeLock from './services/useWakeLock';
 import PlayerList from './PlayerList.jsx';
-import PlayerNameModal from './PlayerNameModal.jsx';
+import { PlayerNameModal } from './Modals';
 import ErrorBanner from './ErrorBanner.jsx';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');

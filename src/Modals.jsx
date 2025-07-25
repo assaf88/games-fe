@@ -32,4 +32,30 @@ const PlayerNameModal = ({ visible, onSubmit, initialButton, onCancel, gameName 
   );
 };
 
-export default PlayerNameModal; 
+const JoinPartyModal = ({ visible, onSubmit, onCancel, isAvalon, gameName }) => {
+  const [code, setCode] = useState('');
+  if (!visible) return null;
+  return (
+    <div className='modal'>
+      <div className={gameName + '-modal-bg'}>
+        <div className={gameName + '-modal-title'}>Enter 4-digit Party Code</div>
+        <input
+          type="text"
+          value={code}
+          maxLength={4}
+          onChange={e => setCode(e.target.value.replace(/[^0-9]/g, ''))}
+          onKeyDown={e => { if (e.key === 'Enter' && code.length === 4) onSubmit(code); }} 
+          placeholder="1234"
+          className={gameName + '-modal-input'}
+          style={{ fontSize: 18, padding: 8, width: '80%', letterSpacing: 4, textAlign: 'center' }}
+        />
+        <div style={isAvalon ? { display: 'flex', gap: 12, justifyContent: 'center', marginTop: 12 } : {}}>
+          <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' } : { margin: 8 }} onClick={() => { if (code.length === 4) onSubmit(code); }}>Join</button>
+          {onCancel && <button className={isAvalon ? 'button' : ''} style={isAvalon ? { width: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' } : { margin: 8 }} onClick={onCancel}>Cancel</button>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export { PlayerNameModal, JoinPartyModal }; 
