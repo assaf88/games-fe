@@ -60,7 +60,7 @@ const GameLobby = () => {
       try {
         data = await res.json();
       } catch {}
-      if (!res.ok || !data.partyId) {
+      if (!res.ok || !data.partyCode) {
         if (res.status === 502) {
           setBannerError('Disconnected. Please try again.');
         } else {
@@ -70,7 +70,7 @@ const GameLobby = () => {
         return;
       }
       setBannerError(null);
-      navigate(`${location.pathname.replace(/\/$/, '')}/party/${data.partyId}`);
+      navigate(`${location.pathname.replace(/\/$/, '')}/party/${data.partyCode}`);
     } catch (e) {
       setBannerError('Disconnected');
       setLoading(false);

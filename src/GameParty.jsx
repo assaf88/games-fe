@@ -10,7 +10,7 @@ import ErrorBanner from './ErrorBanner.jsx';
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
 const GameParty = () => {
-    const { id: partyId } = useParams();
+    const { id: partyCode } = useParams();
     const navigate = useNavigate();
     const websocket = useRef(null);
     const [gameState, setGameState] = useState({
@@ -49,7 +49,7 @@ const GameParty = () => {
         let isUnmounted = false;
         let reconnectTimeoutId = null;
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-        const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyId)}`;
+        const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyCode)}`;
         let attempt = 0;
         let isConnected = false;
         let hasRedirected = false;
@@ -160,7 +160,7 @@ const GameParty = () => {
             if (reconnectTimeoutId) clearTimeout(reconnectTimeoutId);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, [partyId, showNameModal]);
+    }, [partyCode, showNameModal]);
 
     const sendStartGame = () => {
         if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
@@ -285,7 +285,7 @@ const GameParty = () => {
                                         </button>
                                     </div>
                                 )}
-                                <h3 style={{fontSize: '1.4rem'}}>Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyId}</span></h3>
+                                <h3 style={{fontSize: '1.4rem'}}>Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyCode}</span></h3>
                             </>
                         ) : null}
                     </div>
