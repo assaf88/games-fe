@@ -1,0 +1,81 @@
+/*
+ * avalon.css - Avalon game-specific layout and component styles
+ * 
+ * This file contains styles for Avalon game components that are not theme-related.
+ * It includes layout styles for the game board, player portraits, and game-specific
+ * UI elements. These styles are separated from avalon-theme.css to keep theme
+ * (colors, fonts, visual effects) separate from layout and structure.
+ */
+
+.avalon-circle {
+  width: 90vw;
+  height: 90vw;
+  min-width: 180px;
+  min-height: 180px;
+  /* width and height are set inline via circleSize, but these are defaults */
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  border-radius: 50%;
+  background: none;
+  box-shadow: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.avalon-portrait {
+  font-size: 0.5rem;
+  border-radius: 50%;
+  width: unset;
+  height: unset;
+  background-repeat: no-repeat;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  /* color2 is not a valid CSS property, so omitted */
+  position: relative;
+  transform-origin: center;
+  transition: transform 2.7s, box-shadow 2.7s, z-index 2.7s;
+}
+
+.avalon-portrait.self {
+  z-index: 2;
+  transform: scale(1.1);
+}
+
+.avalon-portrait-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: url('./frame1c.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 3;
+  transform: scale(1.15);
+  transform-origin: center;
+}
+
+/* Spinning animation for the circle during game transitions */
+.avalon-circle.spinning {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} 

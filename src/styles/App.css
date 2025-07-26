@@ -64,18 +64,6 @@ html, body, #root {
 
 /* Mobile-first adjustments */
 @media (max-width: 600px) {
-  .poker-circle {
-    width: 90vw;
-    height: 90vw;
-    min-width: 180px;
-    min-height: 180px;
-  }
-  .poker-portrait {
-    font-size: 0.5rem;
-    border-radius: 50% / 60%;
-    width: unset;
-    height: unset;
-  }
   .modal {
     transform: translateY(-25vh);
   }

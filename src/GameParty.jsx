@@ -289,14 +289,12 @@ const GameParty = () => {
                             </>
                         ) : null}
                     </div>
-                    <div className="poker-circle-container" style={{ flex: 1, display: gameState.gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center" }}>
-                        <AvalonBoard
-                            players={gameState.players}
-                            hostId={gameState.hostId}
-                            gameStarted={!!gameState.gameStarted}
-                            gameStarting={!!gameState.gameStarting}
-                        />
-                    </div>
+                    <AvalonBoard
+                        players={gameState.players}
+                        hostId={gameState.hostId}
+                        gameStarted={!!gameState.gameStarted}
+                        gameStarting={!!gameState.gameStarting}
+                    />
                 </div>
             )}
         </div>
