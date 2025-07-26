@@ -64,7 +64,7 @@ const GameLobby = () => {
         if (res.status === 502) {
           setBannerError('Disconnected. Please try again.');
         } else {
-          setBannerError(data.error || 'Failed to create party.');
+          setBannerError(data.error || 'Failed to create party');
         }
         setLoading(false);
         return;
