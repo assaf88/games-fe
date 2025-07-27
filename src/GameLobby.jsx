@@ -51,7 +51,7 @@ const GameLobby = () => {
     setLoading(true);
     try {
       const player = getPlayerInfo();
-      const res = await fetch('/game/create-party', {
+      const res = await fetch(`/game/${gameName}/create-party`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: player.id, name: player.name })
@@ -108,7 +108,7 @@ const GameLobby = () => {
     }
     // Try to open a WebSocket connection to check if party exists
     const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(code)}`;
+    const wsUrl = `${wsProtocol}://${window.location.host}/game/${gameName}/party/${encodeURIComponent(code)}`;
     let ws;
     let didNavigate = false;
     try {

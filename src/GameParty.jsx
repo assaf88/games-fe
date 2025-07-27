@@ -49,7 +49,7 @@ const GameParty = () => {
         let isUnmounted = false;
         let reconnectTimeoutId = null;
         const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-        const wsUrl = `${wsProtocol}://${window.location.host}/game/party/${encodeURIComponent(partyCode)}`;
+        const wsUrl = `${wsProtocol}://${window.location.host}/game/${gameName}/party/${encodeURIComponent(partyCode)}`;
         let attempt = 0;
         let isConnected = false;
         let hasRedirected = false;
