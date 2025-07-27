@@ -6,6 +6,7 @@ import useWakeLock from './services/useWakeLock';
 import PlayerList from './PlayerList.jsx';
 import { PlayerNameModal } from './Modals';
 import ErrorBanner from './ErrorBanner.jsx';
+import { generateGUID } from './utils.js';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
@@ -200,7 +201,7 @@ const GameParty = () => {
                 visible={showNameModal}
                 onSubmit={handleNameSubmit}
                 initialButton="Join"
-                onCancel={null}
+                onCancel={() => navigate('/avalon')}
                 gameName={gameName}
             />
             {reconnectAttempts > 0 && !reconnectFailed && (
