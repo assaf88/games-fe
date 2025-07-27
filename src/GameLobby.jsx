@@ -129,6 +129,9 @@ const GameLobby = () => {
           if (data && data.action === 'error' && data.reason === 'party_not_found') {
             setBannerError('Party not found.');
           }
+          if (data && data.action === 'error' && data.reason === 'connection_replaced') {
+            setBannerError('A newer tab has connected to this party. You can close this page.');
+          }
         } catch {}
       };
       ws.onerror = () => {

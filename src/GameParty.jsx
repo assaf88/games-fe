@@ -32,6 +32,7 @@ const GameParty = () => {
     const [showNameModal, setShowNameModal] = useState(!localStorage.getItem('player_name')); //for users that came directly to the party page
     const [pendingName, setPendingName] = useState('');
     const [disconnected, setDisconnected] = useState(false);
+    const [duplicateConnection, setDuplicateConnection] = useState(false);
     
     useWakeLock();
 
@@ -94,6 +95,11 @@ const GameParty = () => {
                     }
                     if (messageData.reason === 'game_started') {
                         navigate('/avalon', { state: { partyError: 'The game has already started.' } });
+                        hasRedirected = true;
+                        return;
+                    }
+                    if (messageData.reason === 'connection_replaced') {
+                        setDuplicateConnection(true);
                         hasRedirected = true;
                         return;
                     }
@@ -213,6 +219,12 @@ const GameParty = () => {
                 <ErrorBanner
                     message="Disconnected"
                     color="red"
+                />
+            )}
+            {duplicateConnection && (
+                <ErrorBanner
+                    message="A newer tab has connected to this party. You can close this page."
+                    color="orange"
                 />
             )}
             {loading && isAvalon ? (
