@@ -14,3 +14,16 @@ export const generateTabId = () => {
     }
     return tabId;
 }; 
+
+export const getGamePlayerLimits = (gameName) => {
+  switch (gameName) {
+    case 'avalon':
+      return { minPlayers: 3, maxPlayers: 10 };
+    case 'codenames':
+      return { minPlayers: 4, maxPlayers: 20 };
+    case 'ddakji':
+      return { minPlayers: 2, maxPlayers: 2 };
+    default:
+      return { minPlayers: -1, maxPlayers: -1 };
+  }
+};

@@ -6,7 +6,7 @@ import useWakeLock from './services/useWakeLock';
 import PlayerList from './PlayerList.jsx';
 import { PlayerNameModal } from './Modals';
 import ErrorBanner from './ErrorBanner.jsx';
-import { generateGUID, generateTabId } from './utils.js';
+import { generateGUID, generateTabId, getGamePlayerLimits } from './utils.js';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
@@ -28,8 +28,7 @@ const GameParty = () => {
     const location = window.location;
     const gameName = location.pathname.split('/')[1];
     const isAvalon = gameName === 'avalon' || gameName === '';
-    const avalonMinPlayers = 3;
-    const avalonMaxPlayers = 10;
+    const { minPlayers, maxPlayers } = getGamePlayerLimits(gameName);
     const [showNameModal, setShowNameModal] = useState(!localStorage.getItem('player_name')); //for users that came directly to the party page
     const [pendingName, setPendingName] = useState('');
     const [disconnected, setDisconnected] = useState(false);
@@ -196,6 +195,9 @@ const GameParty = () => {
         }
     }
 
+    const connectedPlayers = gameState.players.filter(p => p.connected).length;
+    const rightAmountOfPlayers = connectedPlayers >= minPlayers && connectedPlayers <= maxPlayers;
+
     return (
         <div className="avalon-party">
             <PlayerNameModal
@@ -282,23 +284,31 @@ const GameParty = () => {
                                         />
                                     </div>
                                 </div>
-                                {isAvalon && gameState.players.length < avalonMinPlayers && (
+
+                                {rightAmountOfPlayers ? (
+                                    <>
+                                        {isHost ? (
+                                        <div style={{display: 'flex', justifyContent: 'center', marginTop: '1.5rem'}}>
+                                            <button className={isAvalon ? 'button' : ''} onClick={sendStartGame}>Start Game</button>
+                                        </div>
+                                        ) : (
+                                        <div style={{marginTop: '1.7rem', color: '#e57373'}}>
+                                            <h3 style={{color: '#e57373'}}>
+                                            {isAvalon ? `Host quiet. Game not yet begun` : `Waiting for the host to start the game`}
+                                            </h3>
+                                        </div>
+                                        )}
+                                    </>
+                                    ) : (
                                     <div style={{marginTop: '1.7rem', color: '#e57373'}}>
-                                        <h3 style={{color: '#e57373'}}>The game Avalon requireth a company of {avalonMinPlayers} to {avalonMaxPlayers}</h3>
+                                        <h3 style={{color: '#e57373'}}>
+                                        {isAvalon ? `The game Avalon requireth a company of ` : `The game ${gameName[0].toUpperCase() + gameName.slice(1)} requires `}
+                                        {minPlayers} to {maxPlayers}
+                                        {!isAvalon && ` people`}
+                                        </h3>    
                                     </div>
                                 )}
-                                {!isHost && gameState.players.length >= avalonMinPlayers && (
-                                    <div style={{marginTop: '1.7rem', color: '#e57373'}}>
-                                        <h3 style={{color: '#e57373'}}>Host quiet. Game not yet begun</h3>
-                                    </div>
-                                )}
-                                {isHost && gameState.players.length >= avalonMinPlayers &&(
-                                    <div style={{display: 'flex', justifyContent: 'center', marginTop: '1.5rem'}}>
-                                        <button className={isAvalon ? 'button' : ''} onClick={sendStartGame}>Start
-                                            Game
-                                        </button>
-                                    </div>
-                                )}
+
                                 <h3 style={{fontSize: '1.4rem'}}>Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyCode}</span></h3>
                             </>
                         ) : null}
