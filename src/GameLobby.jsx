@@ -15,6 +15,7 @@ const GameLobby = () => {
   const [bannerError, setBannerError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [partyError, setPartyError] = useState(null); // for redirect error
+  const [lastEnteredCode, setLastEnteredCode] = useState('');
 
   useEffect(() => {
     if (location.state && location.state.partyError) {
@@ -90,6 +91,7 @@ const GameLobby = () => {
   };
 
   const handleJoinCodeSubmit = async (code) => {
+    setLastEnteredCode(code);
     setShowJoinModal(false);
     setBannerError(null);
     // Retry logic
@@ -122,6 +124,8 @@ const GameLobby = () => {
           const data = JSON.parse(event.data);
           if (data && data.action === 'error' && data.reason === 'party_not_found') {
             setBannerError('Party not found.');
+            // Reopen modal with the wrong code
+            setShowJoinModal(true);
           }
           if (data && data.action === 'error' && data.reason === 'connection_replaced') {
             setBannerError('A newer tab has connected to this party. You can close this page.');
@@ -132,11 +136,15 @@ const GameLobby = () => {
         setBannerError('Disconnected or party not found. Please try again.');
         retries.push(now);
         localStorage.setItem(retryKey, JSON.stringify(retries));
+        // Reopen modal with the wrong code
+        setShowJoinModal(true);
       };
     } catch (e) {
       setBannerError('Disconnected');
       retries.push(now);
       localStorage.setItem(retryKey, JSON.stringify(retries));
+      // Reopen modal with the wrong code
+      setShowJoinModal(true);
     }
   };
 
@@ -177,6 +185,7 @@ const GameLobby = () => {
             onCancel={() => setShowJoinModal(false)}
             isAvalon={isAvalon}
             gameName={gameName}
+            initialCode={lastEnteredCode}
           />
         </>
       )}

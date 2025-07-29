@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PlayerNameModal = ({ visible, onSubmit, initialButton, onCancel, gameName }) => {
   const [name, setName] = useState('');
@@ -32,8 +32,14 @@ const PlayerNameModal = ({ visible, onSubmit, initialButton, onCancel, gameName 
   );
 };
 
-const JoinPartyModal = ({ visible, onSubmit, onCancel, isAvalon, gameName }) => {
-  const [code, setCode] = useState('');
+const JoinPartyModal = ({ visible, onSubmit, onCancel, isAvalon, gameName, initialCode = '' }) => {
+  const [code, setCode] = useState(initialCode);
+  
+  // Update code when initialCode changes (for reopening with wrong code)
+  useEffect(() => {
+    setCode(initialCode);
+  }, [initialCode]);
+  
   if (!visible) return null;
   return (
     <div className='modal'>
