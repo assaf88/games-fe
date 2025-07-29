@@ -6,7 +6,7 @@ import useWakeLock from './services/useWakeLock';
 import PlayerList from './PlayerList.jsx';
 import { PlayerNameModal } from './Modals';
 import ErrorBanner from './ErrorBanner.jsx';
-import { generateGUID } from './utils.js';
+import { generateGUID, generateTabId } from './utils.js';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
@@ -75,7 +75,8 @@ const GameParty = () => {
                 const playerId = localStorage.getItem('player_id');
                 const playerName = localStorage.getItem('player_name');
                 if (playerId && playerName) {
-                    ws.send(JSON.stringify({ action: "register", id: playerId, name: playerName }));
+                    const tabId = generateTabId();
+                    ws.send(JSON.stringify({ action: "register", id: playerId, name: playerName, tabId: tabId }));
                 }
             };
 
