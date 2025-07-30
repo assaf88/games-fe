@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import ErrorBanner from './ErrorBanner.jsx';
+import { PlayerNameModal, JoinPartyModal } from './Modals';
 import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
 import './styles/avalon/avalon-theme.css';
-import { PlayerNameModal, JoinPartyModal } from './Modals';
-import ErrorBanner from './ErrorBanner.jsx';
 import { generateGUID } from './utils.js';
+
 
 const GameLobby = () => {
   const navigate = useNavigate();
@@ -14,14 +17,18 @@ const GameLobby = () => {
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [bannerError, setBannerError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [partyError, setPartyError] = useState(null); // for redirect error
+  // const [partyError, setPartyError] = useState(null); // for redirect error
   const [lastEnteredCode, setLastEnteredCode] = useState('');
 
   useEffect(() => {
-    if (location.state && location.state.partyError) {
+    if (location.state?.partyError) {
       setBannerError(location.state.partyError);
-      // Clear the state so it doesn't persist
-      navigate(location.pathname, { replace: true, state: {} });
+      setLastEnteredCode(location.state.partyCode);
+      setShowJoinModal(true);
+      // Clear the state so it doesn't persist, 50 ms delay to ensure the modal is open
+      setTimeout(() => {
+        navigate(location.pathname, { replace: true, state: {} });
+      }, 50);
     }
   }, [location, navigate]);
 
@@ -119,19 +126,19 @@ const GameLobby = () => {
           navigate(`${location.pathname.replace(/\/$/, '')}/party/${code}`);
         }
       };
-      ws.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          if (data && data.action === 'error' && data.reason === 'party_not_found') {
-            setBannerError('Party not found.');
-            // Reopen modal with the wrong code
-            setShowJoinModal(true);
-          }
-          if (data && data.action === 'error' && data.reason === 'connection_replaced') {
-            setBannerError('A newer tab has connected to this party. You can close this page.');
-          }
-        } catch {}
-      };
+      // ws.onmessage = (event) => {
+      //   try {
+      //     const data = JSON.parse(event.data);
+      //     // if (data && data.action === 'error' && data.reason === 'party_not_found') {
+      //     //   setBannerError('Party not found.');
+      //     //   // Reopen modal with the wrong code
+      //     //   setShowJoinModal(true);
+      //     // }
+      //     if (data && data.action === 'error' && data.reason === 'connection_replaced') {
+      //       setBannerError('A newer tab has connected to this party. You can close this page.');
+      //     }
+      //   } catch {}
+      // };
       ws.onerror = () => {
         setBannerError('Disconnected or party not found. Please try again.');
         retries.push(now);

@@ -90,7 +90,7 @@ const GameParty = () => {
                 }
                 if (messageData && messageData.action === 'error') {
                     if (messageData.reason === 'party_not_found') {
-                        navigate('/avalon', { state: { partyError: 'Party not found.' } });
+                        navigate('/avalon', { state: { partyError: 'Party not found.', partyCode: partyCode } });
                         hasRedirected = true;
                         return;
                     }
