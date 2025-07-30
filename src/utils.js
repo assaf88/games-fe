@@ -7,12 +7,10 @@ export function generateGUID() {
 
 // Generate or retrieve tab ID from session storage
 export const generateTabId = () => {
-    let tabId = sessionStorage.getItem('tabId');
-    if (!tabId) {
-        tabId = `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
-        sessionStorage.setItem('tabId', tabId);
-    }
-    return tabId;
+  if (!window.name) {
+    window.name = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+  }
+  return window.name;
 }; 
 
 export const getGamePlayerLimits = (gameName) => {
