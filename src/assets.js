@@ -1,14 +1,12 @@
-const BASE_AVALON_PATH = '/styles/images/avalon/';
+const BASE_AVALON_PATH = '/images/avalon/';
 
 const avalonImages = {
-  background: BASE_AVALON_PATH + 'desktop-bg80cr.webp',
   frame: BASE_AVALON_PATH + 'frame1b.png',
 
   oberon: BASE_AVALON_PATH + 'oberon20b.webp',
 };
 
 const codenamesImages = [
-  // ...
 ];
 
 export function getGameImages(gameName) {
@@ -18,3 +16,7 @@ export function getGameImages(gameName) {
     default: return [];
   }
 }
+
+export const backgroundImages = [
+  BASE_AVALON_PATH + 'desktop-bg80cr.webp',
+];

@@ -20,7 +20,8 @@ const GameLobby = () => {
 
     const links = gameImages.map(src => {
       const link = document.createElement('link');
-      link.rel = 'preload';
+      link.rel = 'prefetch'; //lower priority preload without warnings
+      // link.rel = 'preload';
       link.as = 'image';
       link.href = src;
       document.head.appendChild(link);

@@ -1,6 +1,7 @@
 import {BrowserRouter as Router, Link, Route, Routes, useLocation} from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
 import './styles/GamesList.css';
+import { backgroundImages } from './assets';
 
 const faviconMap = {
     avalon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23333' stroke='%23ddbb53' stroke-width='4'/%3E%3Cpath d='M44 50 Q38 38 54 24 Q44 28 42 18 Q40 10 50 12 Q46 12 42 16 Q38 20 38 28 Q38 38 26 44 Q32 52 44 50 Z' fill='%23ddbb53' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E",
@@ -68,16 +69,11 @@ const GamesList = () => {
         //importing components for warmup
         import('./GameParty.jsx');
         import('./AvalonBoard.jsx');
-        // Preload images using static paths. MOVED TO LOBBY PAGE. TEMPORARILY DO NOT REMOVE
-        // const imagesToPreload = [
-        //   './styles/avalon/desktop-bg80cr.webp',
-        //   './styles/avalon/oberon20b.webp',
-        //   './styles/avalon/frame1b.png',
-        // ];
-        // imagesToPreload.forEach(src => {
-        //   const img = new Image();
-        //   img.src = src;
-        // });
+
+        backgroundImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
       }
     });
     return () => { isMounted = false; };
