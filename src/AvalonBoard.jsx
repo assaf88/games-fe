@@ -6,6 +6,20 @@ import oberonImg from './styles/avalon/oberon20b.webp';
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
 const AvalonBoard = ({ players, hostId, gameStarting, gameStarted }) => {
+    //loading images before rendering
+    useEffect(() => {
+        const images = [oberonImg];
+        const links = images.map(src => {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = src;
+          document.head.appendChild(link);
+          return link;
+        });
+        return () => links.forEach(link => document.head.removeChild(link));
+      }, []);
+
     const selfId = getLocalPlayerId();
     const numPlayers = players.length;
     const isVertical = window.innerHeight > window.innerWidth;

@@ -65,16 +65,17 @@ const GamesList = () => {
     let isMounted = true;
     import('./GameLobby.jsx').then(() => {
       if (isMounted) {
+        //importing components for warmup
         import('./GameParty.jsx');
         import('./AvalonBoard.jsx');
         // Preload images using static paths
         const imagesToPreload = [
-          '/src/styles/avalon/desktop-bg80cr.webp',
-          '/src/styles/avalon/oberon20b.webp',
-          '/src/styles/avalon/frame1b.png',
+          './styles/avalon/desktop-bg80cr.webp',
+          './styles/avalon/oberon20b.webp',
+          './styles/avalon/frame1b.png',
         ];
         imagesToPreload.forEach(src => {
-          const img = new window.Image();
+          const img = new Image();
           img.src = src;
         });
       }
