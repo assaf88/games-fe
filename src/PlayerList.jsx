@@ -12,7 +12,15 @@ function sortPlayers(players) {
   });
 }
 
-export default function PlayerList({ players, selfId, hostId, isAvalon, onOrderChange }) {
+export default function PlayerList({ 
+  players, 
+  selfId, 
+  hostId, 
+  isAvalon, 
+  onOrderChange,
+  firstPlayerFlagActive,
+  onFlagToggle
+}) {
   const isHost = selfId === hostId;
   // Defensive: assign order 100 if missing
   const safePlayers = players.map(p => ({ ...p, order: typeof p.order === 'number' ? p.order : 100 }));
@@ -81,6 +89,45 @@ export default function PlayerList({ players, selfId, hostId, isAvalon, onOrderC
                             <span style={{ marginLeft: 6, color: '#e57373', fontWeight: 700, fontSize: 'clamp(1.2rem, 1.7vw, 1.6rem)' }}>(disconnected)</span>
                           )}
                           <span style={{ marginLeft: 3, marginTop: 3, color: '#e0c97f', fontWeight: 700, fontSize: 'clamp(1.2rem, 1.7vw, 1.5rem)' }}>{label}</span>
+                          
+                          {/* Flag for first player (Avalon only) */}
+                          {isAvalon && idx === 0 && (
+                            <div 
+                              onClick={() => isHost && onFlagToggle && onFlagToggle()}
+                              style={{
+                                marginLeft: '0.4rem',
+                                marginTop: '0.1rem',
+                                cursor: isHost ? 'pointer' : 'default',
+                                opacity: firstPlayerFlagActive ? 1 : 0.3,
+                                transition: 'opacity 0.2s ease',
+                                fontSize: '0.8em',
+                                userSelect: 'none',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                position: 'relative',
+                                ...(snapshot.isDragging && {
+                                  opacity: 0,
+                                  pointerEvents: 'none',
+                                }),
+                              }}
+                            >
+                              <span style={{ fontSize: '1em' }}>🏁</span>
+                              {!firstPlayerFlagActive && (
+                                <div style={{
+                                  position: 'absolute',
+                                  top: '50%',
+                                  left: '50%',
+                                  transform: 'translate(-50%, -50%)',
+                                  fontSize: '1.5em',
+                                  color: '#622',
+                                  fontWeight: 'bold',
+                                  pointerEvents: 'none'
+                                }}>
+                                  ✕
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                         {/* Drag handle/arrows for host */}
                         <div style={{ width: 22, textAlign: 'center', userSelect: 'none', opacity: isHost ? 1 : 0.2, fontSize: '1.2em', cursor: isHost ? 'grab' : 'default', color: isAvalon ? '#6C5F35FF' : '#888', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>

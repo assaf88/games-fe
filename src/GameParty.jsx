@@ -15,6 +15,159 @@ import ErrorBanner from './ErrorBanner.jsx';
 import { generateGUID, generateTabId, getGamePlayerLimits } from './utils.js';
 import { getGameImages } from "./assets.js";
 
+const AvalonPreGameSetup = ({ 
+    isHost, 
+    selectedCharacters, 
+    setSelectedCharacters, 
+    firstPlayerFlagActive, 
+    setFirstPlayerFlagActive, 
+    gameImages 
+}) => {
+    // Special characters for Avalon
+    const AVALON_CHARACTERS = [
+        { id: 'merlin',   name: 'Merlin',   background: '50% 50% / 120% no-repeat', borderColor: '#317c9c' },
+        { id: 'assassin', name: 'Assassin', background: '50% 35% / 120% no-repeat', borderColor: '#712a10' },
+        { id: 'percival', name: 'Percival', background: '55% 15% / 110% no-repeat', borderColor: '#317c9c' },
+        { id: 'morgana',  name: 'Morgana',  background: '40% 0% / 100% no-repeat', borderColor: '#712a10' },
+        { id: 'mordred',  name: 'Mordred',  background: '50% 50% / 100% no-repeat', borderColor: '#712a10' },
+        { id: 'oberon',   name: 'Oberon',   background: '50% 30% / 130% no-repeat', borderColor: '#712a10' },
+    ];
+    const handleCharacterToggle = (characterId) => {
+        // First 2 characters (merlin, assassin) cannot be toggled
+        if (characterId === 'merlin' || characterId === 'assassin') {
+            return;
+        }
+        
+        setSelectedCharacters(prev => {
+            if (prev.includes(characterId)) {
+                return prev.filter(id => id !== characterId);
+            } else {
+                return [...prev, characterId];
+            }
+        });
+    };
+
+    const handleFlagToggle = () => {
+        setFirstPlayerFlagActive(prev => !prev);
+    };
+
+    return (
+        <div style={{ marginBottom: '1.5rem' }}>
+            {/* Host Rules Section */}
+            {isHost && (
+                <div style={{ 
+                    marginBottom: '1rem', 
+                    padding: '1rem', 
+                    background: 'rgba(27,22,21,0.8)', 
+                    borderRadius: '10px',
+                    border: '1px solid #7c5a1a',
+                    color: '#e0c97f',
+                    // fontSize: 'clamp(0.85rem, 2.3vw, 1rem)',
+                    fontSize: 'clamp(0.80rem, 2.0vw, 0.95rem)',
+                    lineHeight: 1.4
+                }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: '#bfa76f', textAlign: 'left' }}>
+                        As a host, you may:
+                    </div>
+                    <div style={{ textAlign: 'left' }}>• Select additional special characters (Merlin and Assassin are always included)</div>
+                    <div style={{ textAlign: 'left', marginTop: '0.3rem' }}>• Sort players by seating and play order</div>
+                    <div style={{ textAlign: 'left', marginTop: '0.3rem' }}>• Uncheck the flag next to Player 1 to randomly assign the first mission leader</div>
+                </div>
+            )}
+
+            {/* Special Characters Grid */}
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                width: '100%',
+                maxWidth: '500px',
+                margin: '0 auto 1rem auto',
+                padding: '0 1rem',
+                boxSizing: 'border-box'
+            }}>
+                {AVALON_CHARACTERS.map((character, index) => {
+                    const isSelected = selectedCharacters.includes(character.id);
+                    const isLocked = character.id === 'merlin' || character.id === 'assassin';
+                    const characterImage = gameImages[character.id]; //|| gameImages.oberon; // fallback to oberon
+                    
+                    return (
+                        <div
+                            key={character.id}
+                            onClick={() => isHost && !isLocked && handleCharacterToggle(character.id)}
+                            style={{
+                                position: 'relative',
+                                width: '14.5%',
+                                aspectRatio: '1',
+                                borderRadius: '50%',
+                                // border: '2px solid #555',
+                                border: `2px solid ${character.borderColor}`,
+                                background: `url(${characterImage}) ${character.background}`, //center/cover
+                                // backgroundSize: '70%',
+                                // backgroundPosition: '50% 0',
+                                // backgroundRepeat: 'no-repeat',
+                                backgroundColor: 'rgba(72,43,39,0.93)',
+                                
+                                cursor: isHost && !isLocked ? 'pointer' : 'default',
+                                opacity: isHost ? 1 : 0.7,
+                                transition: 'all 0.2s ease',
+                                ...(isHost && !isLocked && {
+                                    ':hover': {
+                                        borderColor: '#bfa76f',
+                                        transform: 'scale(1.05)'
+                                    }
+                                })
+                            }}
+                        >
+                            {/* Selection indicator */}
+                            {isSelected && (
+                                <div style={{
+                                    position: 'absolute',
+                                    bottom: '-5px',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    width: '20px',
+                                    height: '20px',
+                                    background: '#4CAF50',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '12px',
+                                    fontWeight: 'bold',
+                                    border: '2px solid #fff'
+                                }}>
+                                    ✓
+                                </div>
+                            )}
+                            
+                            {/* Locked indicator for first 2 characters */}
+                            {isLocked && (
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '-5px',
+                                    right: '-5px',
+                                    width: '16px',
+                                    height: '16px',
+                                    background: '#bfa76f',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '10px',
+                                    color: '#1b1615'
+                                }}>
+                                    🔒
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
@@ -42,6 +195,10 @@ const GameParty = () => {
     const [pendingName, setPendingName] = useState('');
     const [disconnected, setDisconnected] = useState(false);
     const [duplicateConnection, setDuplicateConnection] = useState(false);
+    
+    // Avalon pre-game setup state
+    const [selectedCharacters, setSelectedCharacters] = useState(['merlin', 'assassin']); // First 2 always selected
+    const [firstPlayerFlagActive, setFirstPlayerFlagActive] = useState(true);
     
     useWakeLock();
 
@@ -127,6 +284,22 @@ const GameParty = () => {
                         console.log('Updated gameState:', newState);
                         return newState;
                     });
+                    
+                    // Sync Avalon pre-game setup state for non-host players
+                    if (isAvalon && !isHost && messageData.selectedCharacters) {
+                        setSelectedCharacters(messageData.selectedCharacters);
+                    }
+                    if (isAvalon && !isHost && messageData.firstPlayerFlagActive !== undefined) {
+                        setFirstPlayerFlagActive(messageData.firstPlayerFlagActive);
+                    }
+                }
+                if (messageData.action === "avalon_setup_update" && !isHost) {
+                    if (messageData.selectedCharacters) {
+                        setSelectedCharacters(messageData.selectedCharacters);
+                    }
+                    if (messageData.firstPlayerFlagActive !== undefined) {
+                        setFirstPlayerFlagActive(messageData.firstPlayerFlagActive);
+                    }
                 }
                 if (messageData.action === 'ping') {
                     ws.send(JSON.stringify({ action: 'pong' }));
@@ -178,9 +351,35 @@ const GameParty = () => {
         };
     }, [partyCode, showNameModal]);
 
+    // Send Avalon setup updates when host changes settings
+    useEffect(() => {
+        if (isHost && isAvalon && !gameState.gameStarted) {
+            sendAvalonSetupUpdate();
+        }
+    }, [selectedCharacters, firstPlayerFlagActive, isHost, isAvalon, gameState.gameStarted]);
+
     const sendStartGame = () => {
         if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
-            websocket.current.send(JSON.stringify({ action: "start_game" }));
+            const startGameData = {
+                action: "start_game"
+            };
+            
+            if (isAvalon) {
+                startGameData.selectedCharacters = selectedCharacters;
+                startGameData.firstPlayerFlagActive = firstPlayerFlagActive;
+            }
+            
+            websocket.current.send(JSON.stringify(startGameData));
+        }
+    };
+
+    const sendAvalonSetupUpdate = () => {
+        if (websocket.current && websocket.current.readyState === WebSocket.OPEN && isHost) {
+            websocket.current.send(JSON.stringify({
+                action: "avalon_setup_update",
+                selectedCharacters: selectedCharacters,
+                firstPlayerFlagActive: firstPlayerFlagActive
+            }));
         }
     };
 
@@ -261,7 +460,19 @@ const GameParty = () => {
                         {/* Show only gameState.players before game starts; show poker circle after */}
                         {!gameState.gameStarted ? (
                             <>
-                                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '96vw', maxWidth: 430, minWidth: 220 }}>
+                                {/* Avalon Pre-Game Setup */}
+                                {isAvalon && !gameState.gameStarted && (
+                                    <AvalonPreGameSetup
+                                        isHost={isHost}
+                                        selectedCharacters={selectedCharacters}
+                                        setSelectedCharacters={setSelectedCharacters}
+                                        firstPlayerFlagActive={firstPlayerFlagActive}
+                                        setFirstPlayerFlagActive={setFirstPlayerFlagActive}
+                                        gameImages={gameImages}
+                                    />
+                                )}
+
+                                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: 500, minWidth: 220 }}>
                                     {/* Golden frame with border radius */}
                                     <div style={{
                                         position: 'absolute',
@@ -300,6 +511,8 @@ const GameParty = () => {
                                             hostId={gameState.hostId}
                                             isAvalon={isAvalon}
                                             onOrderChange={handleOrderChange}
+                                            firstPlayerFlagActive={firstPlayerFlagActive}
+                                            onFlagToggle={() => setFirstPlayerFlagActive(prev => !prev)}
                                         />
                                     </div>
                                 </div>
