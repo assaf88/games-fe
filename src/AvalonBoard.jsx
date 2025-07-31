@@ -1,24 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './styles/avalon/avalon.css';
 
-import oberonImg from './styles/avalon/oberon20b.webp';
-
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
-const AvalonBoard = ({ players, hostId, gameStarting, gameStarted }) => {
-    //loading images before rendering
-    useEffect(() => {
-        const images = [oberonImg];
-        const links = images.map(src => {
-          const link = document.createElement('link');
-          link.rel = 'preload';
-          link.as = 'image';
-          link.href = src;
-          document.head.appendChild(link);
-          return link;
-        });
-        return () => links.forEach(link => document.head.removeChild(link));
-      }, []);
+const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images }) => {
+    //loading images before rendering - NOT CRITICAL NOW, BUT DO NOT REMOVE
+    // useEffect(() => {
+    //     const img = new Image();
+    //     img.src = '/styles/images/avalon/oberon20b.webp';
+    //     img.onload = () => setLoaded(true);
+    // }, []);
 
     const selfId = getLocalPlayerId();
     const numPlayers = players.length;
@@ -120,7 +111,8 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted }) => {
                                     style={{
                                         width: width,
                                         height: height,
-                                        backgroundImage: `url(${oberonImg})`,
+                                        backgroundImage: `url(${images.oberon})`,
+                                        // backgroundImage: `url(/styles/images/avalon/oberon20b.webp)`,
                                         backgroundSize: '140%',
                                         backgroundPosition: '50% 10%',
                                         boxShadow: showSelfStyle

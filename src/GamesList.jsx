@@ -68,16 +68,16 @@ const GamesList = () => {
         //importing components for warmup
         import('./GameParty.jsx');
         import('./AvalonBoard.jsx');
-        // Preload images using static paths
-        const imagesToPreload = [
-          './styles/avalon/desktop-bg80cr.webp',
-          './styles/avalon/oberon20b.webp',
-          './styles/avalon/frame1b.png',
-        ];
-        imagesToPreload.forEach(src => {
-          const img = new Image();
-          img.src = src;
-        });
+        // Preload images using static paths. MOVED TO LOBBY PAGE. TEMPORARILY DO NOT REMOVE
+        // const imagesToPreload = [
+        //   './styles/avalon/desktop-bg80cr.webp',
+        //   './styles/avalon/oberon20b.webp',
+        //   './styles/avalon/frame1b.png',
+        // ];
+        // imagesToPreload.forEach(src => {
+        //   const img = new Image();
+        //   img.src = src;
+        // });
       }
     });
     return () => { isMounted = false; };

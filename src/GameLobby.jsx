@@ -8,10 +8,28 @@ import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
 import './styles/avalon/avalon-theme.css';
 import { generateGUID } from './utils.js';
 
+import { getGameImages } from './assets';
 
 const GameLobby = () => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const gameName = location.pathname.split('/')[1];
+  const isAvalon = gameName === 'avalon' || gameName === '';
+
+  useEffect(() => {
+    const gameImages = Object.values(getGameImages(gameName));
+
+    const links = gameImages.map(src => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+      return link;
+    });
+    return () => links.forEach(link => document.head.removeChild(link));
+  }, []);
+
+  const navigate = useNavigate();
   const [showNameModal, setShowNameModal] = useState(false);
   const [pendingAction, setPendingAction] = useState(null); // 'create' or 'join'
   const [showJoinModal, setShowJoinModal] = useState(false);
@@ -40,8 +58,6 @@ const GameLobby = () => {
   };
 
   // const isAvalon = location.pathname.includes('avalon') || location.pathname === '/';
-  const gameName = location.pathname.split('/')[1];
-  const isAvalon = gameName === 'avalon' || gameName === '';
 
   const handleCreate = async () => {
     if (!getPlayerInfo()) {

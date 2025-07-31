@@ -1,12 +1,20 @@
 import { useRef, useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
+
 import './styles/avalon/avalon-theme.css';
+
 import StoneEmberProgressBar from './styles/avalon/GlowingRuneProgressBar';
+
 import useWakeLock from './services/useWakeLock';
+
+import AvalonBoard from './AvalonBoard.jsx';
 import PlayerList from './PlayerList.jsx';
 import { PlayerNameModal } from './Modals';
 import ErrorBanner from './ErrorBanner.jsx';
+
 import { generateGUID, generateTabId, getGamePlayerLimits } from './utils.js';
+import { getGameImages } from "./assets.js";
+
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
@@ -27,6 +35,7 @@ const GameParty = () => {
     const isHost = getLocalPlayerId() && gameState.hostId && getLocalPlayerId() === gameState.hostId;
     const location = window.location;
     const gameName = location.pathname.split('/')[1];
+    const gameImages = getGameImages(gameName);
     const isAvalon = gameName === 'avalon' || gameName === '';
     const { minPlayers, maxPlayers } = getGamePlayerLimits(gameName);
     const [showNameModal, setShowNameModal] = useState(!localStorage.getItem('player_name')); //for users that came directly to the party page
@@ -318,13 +327,12 @@ const GameParty = () => {
                         hostId={gameState.hostId}
                         gameStarted={!!gameState.gameStarted}
                         gameStarting={!!gameState.gameStarting}
+                        images={gameImages}
                     />
                 </div>
             )}
         </div>
     );
 };
-
-import AvalonBoard from './AvalonBoard.jsx';
 
 export default GameParty; 
