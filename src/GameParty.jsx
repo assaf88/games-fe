@@ -194,6 +194,10 @@ const GameParty = () => {
 
     const selfId = getLocalPlayerId();
 
+    // Check if current user is disconnected
+    // const selfPlayer = gameState.players.find(p => p.id === selfId);
+    // const isSelfDisconnected = selfPlayer && selfPlayer.connected === false;
+
     // Handler to update player order and send to backend
     function handleOrderChange(newPlayers) {
         setGameState(prev => ({ ...prev, players: newPlayers }));
@@ -240,6 +244,12 @@ const GameParty = () => {
                     color="orange"
                 />
             )}
+            {/* {isSelfDisconnected && (
+                <ErrorBanner
+                    message="You are disconnected. Please refresh the page."
+                    color="red"
+                />
+            )} */}
             {loading && isAvalon ? (
                 <div className="avalon-loading-container">
                     <StoneEmberProgressBar duration={3.0} />
