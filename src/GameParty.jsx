@@ -320,6 +320,7 @@ const GameParty = () => {
                                             firstPlayerFlagActive={firstPlayerFlagActive}
                                             setFirstPlayerFlagActive={setFirstPlayerFlagActive}
                                             gameImages={gameImages}
+                                            isVertical={isVertical}
                                         />
                                     )}
 
@@ -369,7 +370,7 @@ const GameParty = () => {
                                     </div>
                                 </div>
 
-                                <div style={{marginTop: '13%'}}>
+                                <div style={{marginTop: '13%', fontSize: '1.2rem'}}>
                                     {rightAmountOfPlayers ? (
                                         <>
                                             {isHost ? (
@@ -380,7 +381,7 @@ const GameParty = () => {
                                                 ) : (
                                                 // <div style={{marginTop: '1.7rem', color: '#e57373'}}>
                                                 // <div style={{color: '#e57373'}}>
-                                                <h3 style={{color: '#e57373', fontSize: '1.3rem'}}>
+                                                <h3 style={{color: '#e57373'}}>
                                                     {isAvalon ? `Host quiet. Game not yet begun` : `Waiting for the host to start the game`}
                                                 </h3>
                                                 // </div>

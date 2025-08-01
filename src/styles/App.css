@@ -73,11 +73,11 @@ html, body, #root {
   /* min-width: 450px; */
   flex: 1; 
   /* max-Width: 500px */
-  width: 470PX
+  width: 450px
 }
 
-@media (max-width: 500px) {
+@media (max-width: 400px) {
   .party-pre-game-start {
-    width: 95%;
+    width: 100%;
   }
 }
