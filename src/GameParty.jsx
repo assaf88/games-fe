@@ -25,12 +25,12 @@ const AvalonPreGameSetup = ({
 }) => {
     // Special characters for Avalon
     const AVALON_CHARACTERS = [
-        { id: 'merlin',   name: 'Merlin',   background: '50% 50% / 120% no-repeat', borderColor: '#317c9c' },
-        { id: 'assassin', name: 'Assassin', background: '50% 35% / 120% no-repeat', borderColor: '#712a10' },
-        { id: 'percival', name: 'Percival', background: '55% 15% / 110% no-repeat', borderColor: '#317c9c' },
-        { id: 'morgana',  name: 'Morgana',  background: '40% 0% / 100% no-repeat', borderColor: '#712a10' },
-        { id: 'mordred',  name: 'Mordred',  background: '50% 50% / 100% no-repeat', borderColor: '#712a10' },
-        { id: 'oberon',   name: 'Oberon',   background: '50% 30% / 130% no-repeat', borderColor: '#712a10' },
+        { id: 'merlin',   name: 'Merlin',   background: '50% 50% / 120%', borderColor: '#317c9c' },
+        { id: 'assassin', name: 'Assassin', background: '50% 35% / 120%', borderColor: '#712a10' },
+        { id: 'percival', name: 'Percival', background: '55% 15% / 110%', borderColor: '#317c9c' },
+        { id: 'morgana',  name: 'Morgana',  background: '40%  0% / 100%', borderColor: '#712a10' },
+        { id: 'mordred',  name: 'Mordred',  background: '50% 50% / 100%', borderColor: '#712a10' },
+        { id: 'oberon',   name: 'Oberon',   background: '50% 30% / 130%', borderColor: '#712a10' },
     ];
     const handleCharacterToggle = (characterId) => {
         // First 2 characters (merlin, assassin) cannot be toggled
@@ -103,7 +103,7 @@ const AvalonPreGameSetup = ({
                                 borderRadius: '50%',
                                 // border: '2px solid #555',
                                 border: `2px solid ${character.borderColor}`,
-                                background: `url(${characterImage}) ${character.background}`, //center/cover
+                                background: `url(${characterImage}) ${character.background} no-repeat`, //center/cover
                                 // backgroundSize: '70%',
                                 // backgroundPosition: '50% 0',
                                 // backgroundRepeat: 'no-repeat',
@@ -125,7 +125,8 @@ const AvalonPreGameSetup = ({
                                 position: 'absolute',
                                 // bottom: '-1.2rem',
                                 left: '50%',
-                                transform: 'translateX(-50%) translateY(4.17rem)',
+                                bottom: '0',
+                                transform: 'translateX(-50%) translateY(97%)',
                                 fontSize: 'clamp(1.1rem, 2vw, 1rem)',
                                 color: '#222',
                                 background: 'rgba(224, 201, 127, 0.8)',
