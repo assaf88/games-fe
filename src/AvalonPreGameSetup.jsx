@@ -54,7 +54,7 @@ const AvalonPreGameSetup = ({
                     borderRadius: '10px',
                     border: '1px solid #7c5a1a',
                     color: '#e0c97f',
-                    fontSize: 'clamp(0.62rem, 1.8vw, 0.95rem)',
+                    fontSize: 'clamp(0.65rem, 1.8vw, 0.95rem)',
                     // fontSize: 'clamp(0.40rem, 1.8vw, 0.75rem)',
                     lineHeight: 1.4
                 }}>

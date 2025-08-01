@@ -319,6 +319,7 @@ const GameParty = () => {
                                     firstPlayerFlagActive={firstPlayerFlagActive}
                                     setFirstPlayerFlagActive={setFirstPlayerFlagActive}
                                     gameImages={gameImages}
+                                    isVertical={isVertical}
                                 />
                             )}
 
@@ -371,7 +372,7 @@ const GameParty = () => {
                                 {rightAmountOfPlayers ? (
                                     <>
                                         {isHost ? (
-                                        <div style={{display: 'flex', justifyContent: 'center', marginTop: '1.5rem'}}>
+                                        <div style={{display: 'flex', justifyContent: 'center', marginTop: `${isVertical ? '1.15rem' : '1.5rem'}`}}>
                                             <button className={isAvalon ? 'button' : ''} onClick={sendStartGame}>Start Game</button>
                                         </div>
                                         ) : (
