@@ -45,14 +45,17 @@ const AvalonPreGameSetup = ({
             {isHost && (
                 <div style={{ 
                     marginBottom: '1rem', 
+                    maxWidth: '510px',
                     // padding: '1rem', 
                     // padding: '0.6rem 0.5rem 0.6rem 0.8rem', 
-                    padding: `${isVertical ? '0.6rem 0.5rem 0.6rem 0.8rem' : '0.7rem 0.8rem 1rem 1.3rem'}`, 
+                    padding: `${isVertical ? '1.5% 1.5% 1.5% 2%' : '2.5% 3% 3% 4%'}`, 
+                    // padding: `${isVertical ? '0.6rem 0.5rem 0.6rem 0.8rem' : '0.7rem 0.8rem 1rem 1.3rem'}`, 
                     background: 'rgba(27,22,21,0.8)', 
                     borderRadius: '10px',
                     border: '1px solid #7c5a1a',
                     color: '#e0c97f',
-                    fontSize: 'clamp(0.40rem, 1.8vw, 0.75rem)',
+                    fontSize: 'clamp(0.6rem, 1.8vw, 0.95rem)',
+                    // fontSize: 'clamp(0.40rem, 1.8vw, 0.75rem)',
                     lineHeight: 1.4
                 }}>
                     <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: '#bfa76f', textAlign: 'left' }}>
@@ -70,9 +73,11 @@ const AvalonPreGameSetup = ({
                 justifyContent: 'space-between', 
                 alignItems: 'center',
                 width: '100%',
-                maxWidth: '500px',
-                margin: '0 auto 1rem auto',
-                padding: '0 1rem',
+                maxWidth: '510px',
+                margin: '0 0 1.5rem 0',
+                // margin: '0 auto 2rem auto',
+                padding: '0',
+                // padding: '0 1rem',
                 boxSizing: 'border-box'
             }}>
                 {AVALON_CHARACTERS.map((character, index) => {
