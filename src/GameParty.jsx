@@ -306,7 +306,7 @@ const GameParty = () => {
                 </div>
             ) : (
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
-                    <div className="party-pre-game-start">
+                    <div className="party-pre-game-start" style={{width: `${isVertical ? window.innerWidth : '100%'}`}}>
                         {/* Show only gameState.players before game starts; show poker circle after */}
                         {!gameState.gameStarted ? (
                             <>

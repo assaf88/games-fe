@@ -76,6 +76,7 @@ html, body, #root {
 
 @media (max-width: 500px) {
   .party-pre-game-start {
+    min-width: 0px;
     width: 100vw;
     max-width: 100vw;
     box-sizing: border-box;
