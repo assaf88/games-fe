@@ -48,7 +48,7 @@ const AvalonPreGameSetup = ({
                     maxWidth: '510px',
                     // padding: '1rem', 
                     // padding: '0.6rem 0.5rem 0.6rem 0.8rem', 
-                    padding: `${isVertical ? '1.5% 1.2% 1.1% 1.5%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
+                    padding: `${isVertical ? '1.2% 1% 0.7% 1.1%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
                     // padding: `${isVertical ? '0.6rem 0.5rem 0.6rem 0.8rem' : '0.7rem 0.8rem 1rem 1.3rem'}`, 
                     background: 'rgba(27,22,21,0.8)', 
                     borderRadius: '10px',
