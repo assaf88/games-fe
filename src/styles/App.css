@@ -61,10 +61,23 @@ html, body, #root {
   z-index: 1000;
 }
 
-
 /* Mobile-first adjustments */
 @media (max-width: 600px) {
   .modal {
     transform: translateY(-25vh);
+  }
+  
+}
+
+.party-pre-game-start {
+  /* min-width: 450px; */
+  flex: 1; 
+  /* max-Width: 500px */
+  width: 470PX
+}
+
+@media (max-width: 500px) {
+  .party-pre-game-start {
+    width: 95%;
   }
 }

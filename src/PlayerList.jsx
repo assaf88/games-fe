@@ -98,7 +98,7 @@ export default function PlayerList({
                                 marginLeft: '0.4rem',
                                 marginTop: '0.2rem',
                                 cursor: isHost ? 'pointer' : 'default',
-                                opacity: firstPlayerFlagActive ? 0.85 : 0.3,
+                                opacity: firstPlayerFlagActive ? 0.9 : 0.3,
                                 transition: 'opacity 0.15s ease',
                                 fontSize: '0.8em',
                                 userSelect: 'none',

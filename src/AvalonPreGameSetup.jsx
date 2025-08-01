@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 // Special characters for Avalon
 const AVALON_CHARACTERS = [
     { id: 'merlin',   name: 'Merlin',   background: '50% 50% / 120%', borderColor: '#317c9c' },
@@ -16,7 +17,8 @@ const AvalonPreGameSetup = ({
     setSelectedCharacters, 
     firstPlayerFlagActive, 
     setFirstPlayerFlagActive, 
-    gameImages 
+    gameImages,
+    isVertical
 }) => {
     const handleCharacterToggle = (characterId) => {
         // First 2 characters (merlin, assassin) cannot be toggled
@@ -43,7 +45,9 @@ const AvalonPreGameSetup = ({
             {isHost && (
                 <div style={{ 
                     marginBottom: '1rem', 
-                    padding: '1rem', 
+                    // padding: '1rem', 
+                    // padding: '0.6rem 0.5rem 0.6rem 0.8rem', 
+                    padding: `${isVertical ? '0.6rem 0.5rem 0.6rem 0.8rem' : '0.7rem 0.8rem 1rem 1.3rem'}`, 
                     background: 'rgba(27,22,21,0.8)', 
                     borderRadius: '10px',
                     border: '1px solid #7c5a1a',
@@ -54,9 +58,9 @@ const AvalonPreGameSetup = ({
                     <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: '#bfa76f', textAlign: 'left' }}>
                         As a host, you may:
                     </div>
-                    <div style={{ textAlign: 'left', marginLeft:5, textIndent: '-2.5%' }}>• Select additional special characters (Merlin and Assassin are always included)</div>
+                    <div style={{ textAlign: 'left', marginLeft:5, textIndent: '-2.5%' }}>• Select {isVertical ? 'more' : 'additional'} special characters (Merlin {isVertical ? '&' : 'and'} Assassin are always included)</div>
                     <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent:'-1.5%' }}>• Sort players by seating and play order</div>
-                    <div style={{ textAlign: 'left', marginTop: '0.28rem', marginLeft:5, textIndent: '-2.5%' }}>• Uncheck the flag next to Player 1 to randomly assign the first mission leader</div>
+                    <div style={{ textAlign: 'left', marginTop: '0.28rem', marginLeft:5, textIndent: '-2.5%' }}>• Uncheck the {isVertical ? '1st player flag' : 'flag next to Player 1'}  to randomly assign the first mission leader</div>
                 </div>
             )}
 
@@ -89,7 +93,7 @@ const AvalonPreGameSetup = ({
                                 border: `2px solid ${character.borderColor}`,
                                 background: `url(${characterImage}) ${character.background} no-repeat`,
                                 cursor: isHost && !isLocked ? 'pointer' : 'default',
-                                opacity: isHost ? 1 : 0.7,
+                                opacity: isHost ? 1 : 0.88,
                                 transition: 'all 0.2s ease',
                                 ...(isHost && !isLocked && {
                                     ':hover': {

@@ -36,6 +36,7 @@ const GameParty = () => {
     const maxReconnectAttempts = 10;
     const isHost = getLocalPlayerId() && gameState.hostId && getLocalPlayerId() === gameState.hostId;
     const location = window.location;
+    const isVertical = window.innerHeight > window.innerWidth; 
     const gameName = location.pathname.split('/')[1];
     const gameImages = getGameImages(gameName);
     const isAvalon = gameName === 'avalon' || gameName === '';
@@ -305,92 +306,101 @@ const GameParty = () => {
                 </div>
             ) : (
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "center" }}>
-                    <div style={{ flex: 1, maxWidth: "500px" }}>
+                    <div className="party-pre-game-start">
                         {/* Show only gameState.players before game starts; show poker circle after */}
                         {!gameState.gameStarted ? (
                             <>
-                                {/* Avalon Pre-Game Setup */}
-                                {isAvalon && !gameState.gameStarted && (
-                                    <AvalonPreGameSetup
-                                        isHost={isHost}
-                                        selectedCharacters={selectedCharacters}
-                                        setSelectedCharacters={setSelectedCharacters}
-                                        firstPlayerFlagActive={firstPlayerFlagActive}
-                                        setFirstPlayerFlagActive={setFirstPlayerFlagActive}
-                                        gameImages={gameImages}
-                                    />
-                                )}
-
-                                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: 500, minWidth: 220 }}>
-                                    {/* Golden frame with border radius */}
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: 3, left: 3, right: 3, bottom: 3,
-                                        border: '7px solid #7c5a1a',
-                                        borderRadius: 39,
-                                        boxSizing: 'border-box',
-                                        zIndex: 0,
-                                        pointerEvents: 'none',
-                                    }}>
-                                        {/* Corner dots */}
-                                        <div style={{ position: 'absolute', top: 12, left: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
-                                        <div style={{ position: 'absolute', top: 12, right: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
-                                        <div style={{ position: 'absolute', bottom: 12, left: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
-                                        <div style={{ position: 'absolute', bottom: 12, right: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
-                                    </div>
-                                    {/* PlayerList content */}
-                                    <div style={{
-                                        position: 'relative',
-                                        zIndex: 1,
-                                        width: '100%',
-                                        padding: '0.5rem 1.0rem 1.0rem 0rem',
-                                        background: 'rgba(27,22,21,0.93)',
-                                        borderRadius: 39,
-                                        boxShadow: '0 0 12px 6px rgba(41, 31, 25, 0.93)',
-                                        
-                                        color: '#e0c97f',
-                                        boxSizing: 'border-box',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        justifyContent: 'center',
-                                    }}>
-                                        <PlayerList
-                                            players={gameState.players}
-                                            selfId={selfId}
-                                            hostId={gameState.hostId}
-                                            isAvalon={isAvalon}
-                                            onOrderChange={handleOrderChange}
+                                <div style={{scale: `${isVertical ? '1' : '1.15'}`}}>
+                                    {/* Avalon Pre-Game Setup */}
+                                    {isAvalon && !gameState.gameStarted && (
+                                        <AvalonPreGameSetup
+                                            isHost={isHost}
+                                            selectedCharacters={selectedCharacters}
+                                            setSelectedCharacters={setSelectedCharacters}
                                             firstPlayerFlagActive={firstPlayerFlagActive}
-                                            onFlagToggle={() => setFirstPlayerFlagActive(prev => !prev)}
+                                            setFirstPlayerFlagActive={setFirstPlayerFlagActive}
+                                            gameImages={gameImages}
                                         />
+                                    )}
+
+                                    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', minWidth: 220 }}>
+                                        {/* Golden frame with border radius */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 3, left: 3, right: 3, bottom: 3,
+                                            border: '7px solid #7c5a1a',
+                                            borderRadius: 39,
+                                            boxSizing: 'border-box',
+                                            zIndex: 0,
+                                            pointerEvents: 'none',
+                                        }}>
+                                            {/* Corner dots */}
+                                            <div style={{ position: 'absolute', top: 12, left: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
+                                            <div style={{ position: 'absolute', top: 12, right: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
+                                            <div style={{ position: 'absolute', bottom: 12, left: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
+                                            <div style={{ position: 'absolute', bottom: 12, right: 12, width: 16, height: 16, background: '#bfa76f', borderRadius: '50%' }} />
+                                        </div>
+                                        {/* PlayerList content */}
+                                        <div style={{
+                                            position: 'relative',
+                                            zIndex: 1,
+                                            width: '100%',
+                                            padding: '0.5rem 1.0rem 1.0rem 0rem',
+                                            background: 'rgba(27,22,21,0.93)',
+                                            borderRadius: 39,
+                                            boxShadow: '0 0 12px 6px rgba(41, 31, 25, 0.93)',
+                                            
+                                            color: '#e0c97f',
+                                            boxSizing: 'border-box',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                        }}>
+                                            <PlayerList
+                                                players={gameState.players}
+                                                selfId={selfId}
+                                                hostId={gameState.hostId}
+                                                isAvalon={isAvalon}
+                                                onOrderChange={handleOrderChange}
+                                                firstPlayerFlagActive={firstPlayerFlagActive}
+                                                onFlagToggle={() => setFirstPlayerFlagActive(prev => !prev)}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
-                                {rightAmountOfPlayers ? (
-                                    <>
-                                        {isHost ? (
-                                        <div style={{display: 'flex', justifyContent: 'center', marginTop: '1.5rem'}}>
-                                            <button className={isAvalon ? 'button' : ''} onClick={sendStartGame}>Start Game</button>
-                                        </div>
+                                <div style={{marginTop: '13%'}}>
+                                    {rightAmountOfPlayers ? (
+                                        <>
+                                            {isHost ? (
+                                                // <div style={{display: 'flex', justifyContent: 'center', marginTop: '1.5rem'}}>
+                                                <div style={{display: 'flex', justifyContent: 'center'}}>
+                                                    <button className={isAvalon ? 'button' : ''} onClick={sendStartGame}>Start Game</button>
+                                                </div>
+                                                ) : (
+                                                // <div style={{marginTop: '1.7rem', color: '#e57373'}}>
+                                                // <div style={{color: '#e57373'}}>
+                                                <h3 style={{color: '#e57373', fontSize: '1.3rem'}}>
+                                                    {isAvalon ? `Host quiet. Game not yet begun` : `Waiting for the host to start the game`}
+                                                </h3>
+                                                // </div>
+                                            )}
+                                        </>
                                         ) : (
-                                        <div style={{marginTop: '1.7rem', color: '#e57373'}}>
+                                        // <div style={{marginTop: '1.7rem', color: '#e57373'}}>
+                                        <div style={{color: '#e57373'}}>
                                             <h3 style={{color: '#e57373'}}>
-                                            {isAvalon ? `Host quiet. Game not yet begun` : `Waiting for the host to start the game`}
-                                            </h3>
+                                            {isAvalon ? `The game Avalon requireth a company of ` : `The game ${gameName[0].toUpperCase() + gameName.slice(1)} requires `}
+                                            {minPlayers} to {maxPlayers}
+                                            {!isAvalon && ` people`}
+                                            </h3>    
                                         </div>
-                                        )}
-                                    </>
-                                    ) : (
-                                    <div style={{marginTop: '1.7rem', color: '#e57373'}}>
-                                        <h3 style={{color: '#e57373'}}>
-                                        {isAvalon ? `The game Avalon requireth a company of ` : `The game ${gameName[0].toUpperCase() + gameName.slice(1)} requires `}
-                                        {minPlayers} to {maxPlayers}
-                                        {!isAvalon && ` people`}
-                                        </h3>    
-                                    </div>
-                                )}
+                                    )}
 
-                                <h3 style={{fontSize: '1.4rem'}}>Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyCode}</span></h3>
+                                    <h3 style={{fontSize: '1.4rem', marginTop: '2%'}}>
+                                        Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyCode}</span>
+                                    </h3>
+                                </div>
                             </>
                         ) : null}
                     </div>
