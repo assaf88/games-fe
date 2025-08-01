@@ -52,7 +52,7 @@ const AvalonPreGameSetup = ({
                     borderRadius: '10px',
                     border: '1px solid #7c5a1a',
                     color: '#e0c97f',
-                    fontSize: 'clamp(0.80rem, 2.0vw, 0.95rem)',
+                    fontSize: 'clamp(0.40rem, 1.8vw, 0.75rem)',
                     lineHeight: 1.4
                 }}>
                     <div style={{ fontWeight: 'bold', marginBottom: '0.5rem', color: '#bfa76f', textAlign: 'left' }}>
@@ -109,7 +109,7 @@ const AvalonPreGameSetup = ({
                                 left: '50%',
                                 bottom: '0',
                                 transform: 'translateX(-50%) translateY(97%)',
-                                fontSize: 'clamp(1.1rem, 2vw, 1rem)',
+                                fontSize: 'clamp(1.0rem, 1.5vw, 1.1rem)',
                                 color: '#222',
                                 background: 'rgba(224, 201, 127, 0.8)',
                                 zIndex: -1,
