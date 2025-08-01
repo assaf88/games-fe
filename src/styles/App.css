@@ -74,9 +74,9 @@ html, body, #root {
   min-width: 510px
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
   .party-pre-game-start {
-    min-width: 0; 
-    max-width: 100%;
+    width: 100vw;
+    box-sizing: border-box;
   }
 }
