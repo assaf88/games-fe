@@ -96,7 +96,7 @@ export default function PlayerList({
                               onClick={() => isHost && onFlagToggle && onFlagToggle()}
                               style={{
                                 marginLeft: '0.4rem',
-                                marginTop: '0.1rem',
+                                marginTop: '0.2rem',
                                 cursor: isHost ? 'pointer' : 'default',
                                 opacity: firstPlayerFlagActive ? 1 : 0.3,
                                 transition: 'opacity 0.2s ease',

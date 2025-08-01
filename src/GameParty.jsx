@@ -97,6 +97,7 @@ const AvalonPreGameSetup = ({
                             onClick={() => isHost && !isLocked && handleCharacterToggle(character.id)}
                             style={{
                                 position: 'relative',
+                                marginTop: '-0.2rem',
                                 width: '14.5%',
                                 aspectRatio: '1',
                                 borderRadius: '50%',
@@ -106,7 +107,7 @@ const AvalonPreGameSetup = ({
                                 // backgroundSize: '70%',
                                 // backgroundPosition: '50% 0',
                                 // backgroundRepeat: 'no-repeat',
-                                backgroundColor: 'rgba(72,43,39,0.93)',
+                                // backgroundColor: 'rgba(72,43,39,0.93)',
                                 
                                 cursor: isHost && !isLocked ? 'pointer' : 'default',
                                 opacity: isHost ? 1 : 0.7,
@@ -119,6 +120,27 @@ const AvalonPreGameSetup = ({
                                 })
                             }}
                         >
+                            {/* Character name */}
+                            <div style={{
+                                position: 'absolute',
+                                // bottom: '-1.2rem',
+                                left: '50%',
+                                transform: 'translateX(-50%) translateY(4.17rem)',
+                                fontSize: 'clamp(1.1rem, 2vw, 1rem)',
+                                color: '#222',
+                                background: 'rgba(224, 201, 127, 0.8)',
+                                zIndex: -1,
+                                lineHeight: 1.1,
+                                padding: '0rem 0.3rem',
+                                borderRadius: '10px',
+                                fontFamily: 'Lancelot, Cinzel, serif',
+                                textAlign: 'center',
+                                whiteSpace: 'nowrap',
+                                textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                            }}>
+                                {character.name}
+                            </div>
+                            
                             {/* Selection indicator */}
                             {isSelected && (
                                 <div style={{
@@ -126,17 +148,18 @@ const AvalonPreGameSetup = ({
                                     bottom: '-5px',
                                     left: '50%',
                                     transform: 'translateX(-50%)',
-                                    width: '20px',
-                                    height: '20px',
+                                    width: 'clamp(16px, 3vw, 18px)',
+                                    height: 'clamp(16px, 3vw, 18px)',
                                     background: '#4CAF50',
                                     borderRadius: '50%',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     color: 'white',
-                                    fontSize: '12px',
+                                    fontSize: 'clamp(10px, 2vw, 11px)',
                                     fontWeight: 'bold',
-                                    border: '2px solid #fff'
+                                    border: '1px solid #fff',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
                                 }}>
                                     ✓
                                 </div>
