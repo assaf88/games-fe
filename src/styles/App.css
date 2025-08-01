@@ -70,14 +70,13 @@ html, body, #root {
 }
 
 .party-pre-game-start {
-  /* min-width: 450px; */
   flex: 1; 
-  /* max-Width: 500px */
   min-width: 510px
 }
 
 @media (max-width: 400px) {
   .party-pre-game-start {
+    min-width: 0; 
     max-width: 100%;
   }
 }
