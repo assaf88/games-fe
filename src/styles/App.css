@@ -76,7 +76,7 @@ html, body, #root {
   min-width: 510px
 }
 
-@media (max-width: 600px) {
+@media (max-width: 500px) {
   .party-pre-game-start {
     max-width: 100%;
   }
