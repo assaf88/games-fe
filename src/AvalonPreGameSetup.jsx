@@ -98,6 +98,11 @@ const AvalonPreGameSetup = ({
                                 cursor: isHost && !isLocked ? 'pointer' : 'default',
                                 opacity: isHost ? 1 : 0.88,
                                 transition: 'all 0.2s ease',
+                                userSelect: 'none',
+                                WebkitUserSelect: 'none',
+                                MozUserSelect: 'none',
+                                msUserSelect: 'none',
+                                WebkitTapHighlightColor: 'transparent',
                                 ...(isHost && !isLocked && {
                                     ':hover': {
                                         borderColor: '#bfa76f',
