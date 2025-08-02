@@ -75,16 +75,16 @@ export default function PlayerList({
                           borderRadius: '10px',
                           color: isAvalon ? '#e0c97f' : '#232323',
                           fontFamily: isAvalon ? 'Lancelot, Cinzel, serif' : 'inherit',
-                          padding: `${isVertical ? '0.4rem' : '0.8rem'} 0 0 0`,
+                          padding: `${isVertical ? '0.33rem' : '0.8rem'} 0 0 0`,
                           ...provided.draggableProps.style,
                         }}
                       >
                         {/* Number column */}
-                        <div style={{ width: 32, textAlign: 'right', fontWeight: 700, fontSize: 'clamp(1.3rem, 2.4vw, 1.5rem)', color: '#bfa76f', fontFamily: 'Cinzel, serif', userSelect: 'none' }}>
+                        <div style={{ width: 32, textAlign: 'right', fontWeight: 700, fontSize: 'clamp(1.15rem, 2.4vw, 1.5rem)', color: '#bfa76f', fontFamily: 'Cinzel, serif', userSelect: 'none' }}>
                           {idx + 1}.
                         </div>
                         {/* Name and label */}
-                        <div style={{ flex: 1, fontFamily: 'Lancelot, Cinzel, serif', fontSize: 'clamp(1.5rem, 4vw, 1.7rem)', letterSpacing: 1,  display: 'flex', alignItems: 'center', marginLeft: '0.5rem' }}>
+                        <div style={{ flex: 1, fontFamily: 'Lancelot, Cinzel, serif', fontSize: 'clamp(1.4rem, 4vw, 1.7rem)', letterSpacing: 1,  display: 'flex', alignItems: 'center', marginLeft: '0.5rem' }}>
                           {player.name || player.id}
                           {player.connected === false && (
                             <span style={{ marginLeft: 6, color: '#e57373', fontWeight: 700, fontSize: 'clamp(1.2rem, 1.7vw, 1.6rem)' }}>(disconnected)</span>
