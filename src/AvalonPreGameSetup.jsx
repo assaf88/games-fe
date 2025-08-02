@@ -48,23 +48,23 @@ const AvalonPreGameSetup = ({
                     maxWidth: '510px',
                     // padding: '1rem', 
                     // padding: '0.6rem 0.5rem 0.6rem 0.8rem', 
-                    padding: `${isVertical ? '1.7% 1.4% 1.3% 1.85%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
+                    padding: `${isVertical ? '1.8% 1.4% 1.5% 2%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
                     // padding: `${isVertical ? '1.2% 1% 0.7% 1.1%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
                     // padding: `${isVertical ? '0.6rem 0.5rem 0.6rem 0.8rem' : '0.7rem 0.8rem 1rem 1.3rem'}`, 
                     background: 'rgba(27,22,21,0.8)', 
                     borderRadius: '10px',
                     border: '1px solid #7c5a1a',
                     color: '#e0c97f',
-                    fontSize: 'clamp(0.65rem, 1.8vw, 0.95rem)',
+                    fontSize: 'clamp(0.68rem, 1.8vw, 0.95rem)',
                     // fontSize: 'clamp(0.40rem, 1.8vw, 0.75rem)',
                     lineHeight: 1.4
                 }}>
                     <div style={{ fontWeight: 'bold', marginBottom: '0.4rem', color: '#bfa76f', textAlign: 'left' }}>
                         As a host, you may:
                     </div>
-                    <div style={{ textAlign: 'left', marginLeft:5, textIndent: '-2.5%' }}>• Select {isVertical ? 'more' : 'additional'} special characters (Merlin {isVertical ? '&' : 'and'} Assassin are always included)</div>
-                    <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent:'-1.5%' }}>• Sort players by seating and play order</div>
-                    <div style={{ textAlign: 'left', marginTop: '0.28rem', marginLeft:5, textIndent: '-2.5%' }}>• Uncheck the {isVertical ? '1st player flag' : 'flag next to Player 1'}  to randomly assign the first mission leader</div>
+                    <div style={{ textAlign: 'left', textIndent: '-0.5rem' }}>• Select {isVertical ? 'more' : 'additional'} special characters (Merlin {isVertical ? '&' : 'and'} Assassin are always included)</div>
+                    <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent: '-0.5rem'/*textIndent:'-2.5%',*/  }}>• Sort players by seating and play order</div>
+                    <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent: '-0.5rem' }}>• Uncheck the {isVertical ? '1st player flag' : 'flag next to Player 1'}  to randomly assign the first mission leader</div>
                 </div>
             )}
 
