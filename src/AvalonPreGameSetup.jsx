@@ -48,18 +48,15 @@ const AvalonPreGameSetup = ({
                     maxWidth: '510px',
                     // padding: '1rem', 
                     // padding: '0.6rem 0.5rem 0.6rem 0.8rem', 
-                    padding: `${isVertical ? '1.85% 1.4% 1.6% 4%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
-                    // padding: `${isVertical ? '1.2% 1% 0.7% 1.1%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
-                    // padding: `${isVertical ? '0.6rem 0.5rem 0.6rem 0.8rem' : '0.7rem 0.8rem 1rem 1.3rem'}`, 
+                    padding: `${isVertical ? '1.85% 1.4% 1.6% 3.8%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
                     background: 'rgba(27,22,21,0.8)', 
                     borderRadius: '10px',
                     border: '1px solid #7c5a1a',
                     color: '#e0c97f',
                     fontSize: 'clamp(0.68rem, 1.8vw, 0.95rem)',
-                    // fontSize: 'clamp(0.40rem, 1.8vw, 0.75rem)',
                     lineHeight: 1.4
                 }}>
-                    <div style={{ fontWeight: 'bold', marginBottom: '0.4rem', color: '#bfa76f', textAlign: 'left', fontSize: 'clamp(0.7rem, 1.8vw, 1.0rem)', }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: '0.4rem', color: '#bfa76f', textAlign: 'left', fontSize: 'clamp(0.72rem, 1.8vw, 1.0rem)', }}>
                         As a host, you may:
                     </div>
                     <div style={{ textAlign: 'left',                       textIndent: '-0.5rem' }}>• Select {isVertical ? 'more' : 'additional'} special characters (Merlin {isVertical ? '&' : 'and'} Assassin are always included)</div>
