@@ -48,7 +48,7 @@ const AvalonPreGameSetup = ({
                     maxWidth: '510px',
                     // padding: '1rem', 
                     // padding: '0.6rem 0.5rem 0.6rem 0.8rem', 
-                    padding: `${isVertical ? '1.85% 1.4% 1.6% 3.8%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
+                    padding: `${isVertical ? '1.85% 1.4% 1.6% 4.25%' : '2.5% 3% 3% 4%'}`, //top, right, bottom, left
                     background: 'rgba(27,22,21,0.8)', 
                     borderRadius: '10px',
                     border: '1px solid #7c5a1a',
@@ -59,9 +59,9 @@ const AvalonPreGameSetup = ({
                     <div style={{ fontWeight: 'bold', marginBottom: '0.4rem', color: '#bfa76f', textAlign: 'left', fontSize: 'clamp(0.72rem, 1.8vw, 1.0rem)', }}>
                         As a host, you may:
                     </div>
-                    <div style={{ textAlign: 'left',                       textIndent: '-0.5rem' }}>• Select {isVertical ? 'more' : 'additional'} special characters (Merlin {isVertical ? '&' : 'and'} Assassin are always included)</div>
-                    <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent: '-0.5rem' }}>• Sort players by seating and play order</div>
-                    <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent: '-0.5rem' }}>• Uncheck the {isVertical ? '1st player flag' : 'flag next to Player 1'}  to randomly assign the first mission leader</div>
+                    <div style={{ textAlign: 'left',                       textIndent: '-0.6rem' }}>• Select {isVertical ? 'more' : 'additional'} special characters (Merlin {isVertical ? '&' : 'and'} Assassin are always included)</div>
+                    <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent: '-0.6rem' }}>• Sort players by seating and play order</div>
+                    <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent: '-0.6rem' }}>• Uncheck the {isVertical ? '1st player flag' : 'flag next to Player 1'}  to randomly assign the first mission leader</div>
                 </div>
             )}
 
