@@ -75,7 +75,7 @@ export default function PlayerList({
                           borderRadius: '10px',
                           color: isAvalon ? '#e0c97f' : '#232323',
                           fontFamily: isAvalon ? 'Lancelot, Cinzel, serif' : 'inherit',
-                          padding: `${isVertical ? '0.3rem' : '0.6rem'} 0 0 0`,
+                          padding: `${isVertical ? '0.28rem' : '0.6rem'} 0 0 0`,
                           ...provided.draggableProps.style,
                         }}
                       >
