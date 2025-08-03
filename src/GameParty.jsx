@@ -393,7 +393,7 @@ const GameParty = () => {
                                     </div>
                                 )}
 
-                                <h3 style={{...(isVertical && gameState.players.length > 9 && isHost ? {fontSize: '1.4rem', scale: '0.6', marginTop: '-1rem'} : {fontSize: '1.4rem', marginTop: '0', scale: `${isVertical ? '0.9' : '1'}` })}}>
+                                <h3 style={{...((isVertical && gameState.players.length > 9 && isHost) ? {fontSize: '1.4rem', scale: '0.6', marginTop: '-1rem'} : {fontSize: '1.4rem', marginTop: '0', scale: `${isVertical ? '0.9' : '1'}` })}}>
                                     Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyCode}</span>
                                 </h3>
                             </div>
