@@ -46,9 +46,10 @@ const GameParty = () => {
     const [disconnected, setDisconnected] = useState(false);
     const [duplicateConnection, setDuplicateConnection] = useState(false);
     
-    // Avalon pre-game setup state
-    const [selectedCharacters, setSelectedCharacters] = useState(['merlin', 'assassin']); // First 2 always selected
-    const [firstPlayerFlagActive, setFirstPlayerFlagActive] = useState(true);
+    // Avalon pre-game setup state - derived from gameState.state
+    const avalonState = gameState.state;
+    const selectedCharacters = avalonState?.specialIds || ['merlin', 'assassin'];
+    const firstPlayerFlagActive = avalonState?.isPlayer1Lead1st ?? true;
     
     useWakeLock();
 
@@ -134,23 +135,8 @@ const GameParty = () => {
                         console.log('Updated gameState:', newState);
                         return newState;
                     });
-                    
-                    // Sync Avalon pre-game setup state for non-host players
-                    if (isAvalon && !isHost && messageData.selectedCharacters) {
-                        setSelectedCharacters(messageData.selectedCharacters);
-                    }
-                    if (isAvalon && !isHost && messageData.firstPlayerFlagActive !== undefined) {
-                        setFirstPlayerFlagActive(messageData.firstPlayerFlagActive);
-                    }
                 }
-                if (messageData.action === "avalon_setup_update" && !isHost) {
-                    if (messageData.selectedCharacters) {
-                        setSelectedCharacters(messageData.selectedCharacters);
-                    }
-                    if (messageData.firstPlayerFlagActive !== undefined) {
-                        setFirstPlayerFlagActive(messageData.firstPlayerFlagActive);
-                    }
-                }
+
                 if (messageData.action === 'ping') {
                     ws.send(JSON.stringify({ action: 'pong' }));
                 }
@@ -201,12 +187,6 @@ const GameParty = () => {
         };
     }, [partyCode, showNameModal]);
 
-    // Send Avalon setup updates when host changes settings
-    useEffect(() => {
-        if (isHost && isAvalon && !gameState.gameStarted) {
-            sendAvalonSetupUpdate();
-        }
-    }, [selectedCharacters, firstPlayerFlagActive, isHost, isAvalon, gameState.gameStarted]);
 
     const sendStartGame = () => {
         if (websocket.current && websocket.current.readyState === WebSocket.OPEN) {
@@ -223,12 +203,22 @@ const GameParty = () => {
         }
     };
 
-    const sendAvalonSetupUpdate = () => {
+    const updateSelectedCharacters = (newSelectedCharacters) => {
+        if (websocket.current && websocket.current.readyState === WebSocket.OPEN && isHost) {
+            websocket.current.send(JSON.stringify({
+                action: "avalon_setup_update",
+                selectedCharacters: newSelectedCharacters,
+                firstPlayerFlagActive: firstPlayerFlagActive
+            }));
+        }
+    };
+
+    const updateFirstPlayerFlag = (newFlagState) => {
         if (websocket.current && websocket.current.readyState === WebSocket.OPEN && isHost) {
             websocket.current.send(JSON.stringify({
                 action: "avalon_setup_update",
                 selectedCharacters: selectedCharacters,
-                firstPlayerFlagActive: firstPlayerFlagActive
+                firstPlayerFlagActive: newFlagState
             }));
         }
     };
@@ -315,9 +305,9 @@ const GameParty = () => {
                                 <AvalonPreGameSetup
                                     isHost={isHost}
                                     selectedCharacters={selectedCharacters}
-                                    setSelectedCharacters={setSelectedCharacters}
+                                    onCharacterToggle={updateSelectedCharacters}
                                     firstPlayerFlagActive={firstPlayerFlagActive}
-                                    setFirstPlayerFlagActive={setFirstPlayerFlagActive}
+                                    onFlagToggle={updateFirstPlayerFlag}
                                     gameImages={gameImages}
                                     isVertical={isVertical}
                                 />
@@ -363,7 +353,7 @@ const GameParty = () => {
                                         isAvalon={isAvalon}
                                         onOrderChange={handleOrderChange}
                                         firstPlayerFlagActive={firstPlayerFlagActive}
-                                        onFlagToggle={() => setFirstPlayerFlagActive(prev => !prev)}
+                                        onFlagToggle={updateFirstPlayerFlag}
                                     />
                                 </div>
                             </div>
@@ -393,14 +383,9 @@ const GameParty = () => {
                                     </div>
                                 )}
 
-                                {/* <h3 style={{...((isVertical && gameState.players.length > 9 && isHost) ? {fontSize: '1.4rem', scale: '0.6', marginTop: '-1rem'} : {fontSize: '1.4rem', marginTop: '0', scale: `${isVertical ? '0.9' : '1'}` })}}> */}
-                                {/* <h3 style={{...((isVertical && gameState.players.length > 9 && isHost) ? {fontSize: '1.4rem', scale: '0.6', position: 'absolute', bottom: '2rem', right: '2rem'} : {fontSize: '1.4rem', marginTop: '0', scale: `${isVertical ? '0.9' : '1'}` })}}> */}
-                                {/* <div style={{}}> */}
-                                {/* <h3 style={{...((isVertical && gameState.players.length > 9 && isHost) ? {fontSize: '1.4rem', scale: '0.6'} : {fontSize: '1.4rem', marginTop: `${isVertical ? '0' : '0.5rem'}`, scale: `${isVertical ? '0.9' : '1'}` })}}> */}
-                                <h3 style={{...((isVertical && gameState.players.length > 9 && isHost) ? {fontSize: '1.4rem', scale: '0.59', marginTop: '-1.25rem', paddingBottom: '1rem'} : {fontSize: '1.4rem', marginTop: `${isVertical ? '-0.1rem' : '1rem'}`, scale: `${isVertical ? '0.9' : '1'}` })}}>
+                                <h3 style={{...((isVertical && gameState.players.length > 9 && isHost) ? {fontSize: '1.4rem', scale: '0.59', marginTop: '-1.25rem', paddingBottom: '1.2rem'} : {fontSize: '1.4rem', marginTop: `${isVertical ? '-0.1rem' : '1rem'}`, scale: `${isVertical ? '0.9' : '1'}` })}}>
                                     Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyCode}</span>
                                 </h3>
-                                {/* </div> */}
                             </div>
                         </>
                         ) : null}

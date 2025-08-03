@@ -94,7 +94,7 @@ export default function PlayerList({
                           {/* Flag for first player (Avalon only) */}
                           {isAvalon && idx === 0 && (
                             <div 
-                              onClick={() => isHost && onFlagToggle && onFlagToggle()}
+                              onClick={() => isHost && onFlagToggle && onFlagToggle(!firstPlayerFlagActive)}
                               style={{
                                 marginLeft: '0.4rem',
                                 marginTop: '0.2rem',

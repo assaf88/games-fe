@@ -14,9 +14,9 @@ const AVALON_CHARACTERS = [
 const AvalonPreGameSetup = ({ 
     isHost, 
     selectedCharacters, 
-    setSelectedCharacters, 
+    onCharacterToggle, 
     firstPlayerFlagActive, 
-    setFirstPlayerFlagActive, 
+    onFlagToggle, 
     gameImages,
     isVertical
 }) => {
@@ -26,17 +26,15 @@ const AvalonPreGameSetup = ({
             return;
         }
         
-        setSelectedCharacters(prev => {
-            if (prev.includes(characterId)) {
-                return prev.filter(id => id !== characterId);
-            } else {
-                return [...prev, characterId];
-            }
-        });
+        const newSelectedCharacters = selectedCharacters.includes(characterId)
+            ? selectedCharacters.filter(id => id !== characterId)
+            : [...selectedCharacters, characterId];
+        
+        onCharacterToggle(newSelectedCharacters);
     };
 
     const handleFlagToggle = () => {
-        setFirstPlayerFlagActive(prev => !prev);
+        onFlagToggle(!firstPlayerFlagActive);
     };
 
     return (
