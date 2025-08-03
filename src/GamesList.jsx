@@ -44,10 +44,10 @@ const DynamicTitleAndFavicon = () => {
 
 const GamesListPage = () => {
     return (
-        <div className="game-list-rpg-bg">
+        <div className="game-list-rpg-bg" >
             {/* <div className="game-list-rpg-container"> */}
                 <Link to="/avalon" className="game-list-rpg-link">
-                    <button className="game-list-rpg-btn">Avalon</button>
+                    <button className="game-list-rpg-btn" style={{fontFamily: 'serif'}}>AVALON</button>
                 </Link>
                 {/* <Link to="/avalon2" className="game-list-rpg-link">
                     <button className="game-list-rpg-btn">TBA..</button>
