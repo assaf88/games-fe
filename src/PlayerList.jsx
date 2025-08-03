@@ -75,12 +75,12 @@ export default function PlayerList({
                           borderRadius: '10px',
                           color: isAvalon ? '#e0c97f' : '#232323',
                           fontFamily: isAvalon ? 'Lancelot, Cinzel, serif' : 'inherit',
-                          padding: `${isVertical ? '0.3rem' : '0.8rem'} 0 0 0`,
+                          padding: `${isVertical ? '0.3rem' : '0.7rem'} 0 0 0`,
                           ...provided.draggableProps.style,
                         }}
                       >
                         {/* Number column */}
-                        <div style={{ width: 32, textAlign: 'right', fontWeight: 700, fontSize: 'clamp(1.1rem, 2.4vw, 1.5rem)', color: '#bfa76f', fontFamily: 'Cinzel, serif', userSelect: 'none' }}>
+                        <div style={{ width: 32, textAlign: 'right', fontWeight: 700, fontSize: 'clamp(1.1rem, 2.4vw, 1.4rem)', color: '#bfa76f', fontFamily: 'Cinzel, serif', userSelect: 'none' }}>
                           {idx + 1}.
                         </div>
                         {/* Name and label */}
