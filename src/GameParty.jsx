@@ -374,7 +374,6 @@ const GameParty = () => {
                                         {isHost ? (
                                         <div style={{display: 'flex', justifyContent: 'center', marginTop: `${isVertical ? '0.3rem' : '1.5rem'}`, scale: `${isVertical ? '0.90' : '1'}`}}>
                                             <button className={isAvalon ? 'button' : ''} onClick={sendStartGame}>Start Game</button>
-                                            {/* <h3 style={{marginTop: '0', position: 'fixed', fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyCode}</h3> */}
                                         </div>
                                         ) : (
                                         <div style={{marginTop: '1.1rem', color: '#e57373', }}>
@@ -394,9 +393,9 @@ const GameParty = () => {
                                     </div>
                                 )}
 
-                                <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    <h3 style={{...(isVertical && gameState.players.length > 9 ? {fontSize: '1.4rem', scale: '0.6', marginTop: '-1rem'} : {fontSize: '1.4rem', scale: `${isVertical ? '0.9' : '1'}` })}}>Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyCode}</span></h3>
-                                </div>
+                                <h3 style={{...(isVertical && gameState.players.length > 9 ? {fontSize: '1.4rem', scale: '0.6', marginTop: '-1rem'} : {fontSize: '1.4rem', marginTop: '0', scale: `${isVertical ? '0.9' : '1'}` })}}>
+                                    Code: &nbsp; <span style={{fontFamily: 'Cinzel, serif', fontSize: '1.25rem'}}>{partyCode}</span>
+                                </h3>
                             </div>
                         </>
                         ) : null}
