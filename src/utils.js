@@ -5,7 +5,6 @@ export function generateGUID() {
   });
 }
 
-// Generate or retrieve tab ID from session storage
 export const generateTabId = () => {
   if (!window.name) {
     window.name = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -19,9 +18,38 @@ export const getGamePlayerLimits = (gameName) => {
       return { minPlayers: 3, maxPlayers: 10 };
     case 'codenames':
       return { minPlayers: 4, maxPlayers: 20 };
-    case 'ddakji':
-      return { minPlayers: 2, maxPlayers: 2 };
     default:
       return { minPlayers: -1, maxPlayers: -1 };
   }
+};
+
+// Version management functions
+export const getCurrentVersion = () => {
+  return sessionStorage.getItem('app_version') || null;
+};
+
+export const setCurrentVersion = (version) => {
+  sessionStorage.setItem('app_version', version);
+};
+
+export const shouldRestartForVersion = (newVersion) => {
+  const currentVersion = getCurrentVersion();
+  
+  setCurrentVersion(newVersion);
+  
+  // If no stored version, this is first connection - no restart needed
+  if (!currentVersion) {
+    return false;
+  }
+  
+  // Compare only first two digits (major.minor)
+  const getMajorMinor = (version) => {
+    const parts = version.split('.');
+    return `${parts[0]}.${parts[1]}`;
+  };
+  
+  const currentMajorMinor = getMajorMinor(currentVersion);
+  const newMajorMinor = getMajorMinor(newVersion);
+  
+  return currentMajorMinor !== newMajorMinor;
 };

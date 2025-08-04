@@ -13,7 +13,7 @@ import { PlayerNameModal } from './Modals';
 import ErrorBanner from './ErrorBanner.jsx';
 import AvalonPreGameSetup from './AvalonPreGameSetup.jsx';
 
-import { generateGUID, generateTabId, getGamePlayerLimits } from './utils.js';
+import { generateGUID, generateTabId, getGamePlayerLimits, shouldRestartForVersion } from './utils.js';
 import { getGameImages } from "./assets.js";
 
 
@@ -45,6 +45,8 @@ const GameParty = () => {
     const [pendingName, setPendingName] = useState('');
     const [disconnected, setDisconnected] = useState(false);
     const [duplicateConnection, setDuplicateConnection] = useState(false);
+    const [needsUpdate, setNeedsUpdate] = useState(false);
+    const [updateCountdown, setUpdateCountdown] = useState(0);
     
     // Avalon pre-game setup state - derived from gameState.state
     const avalonState = gameState.state;
@@ -139,6 +141,16 @@ const GameParty = () => {
 
                 if (messageData.action === 'ping') {
                     ws.send(JSON.stringify({ action: 'pong' }));
+                    
+                    if (messageData.appVersion) {
+                        const shouldRestart = shouldRestartForVersion(messageData.appVersion);
+                        if (shouldRestart) {
+                            setNeedsUpdate(true);
+                            if (updateCountdown === 0) {
+                                setUpdateCountdown(30);
+                            }
+                        }
+                    }
                 }
             };
 
@@ -186,6 +198,22 @@ const GameParty = () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [partyCode, showNameModal]);
+
+    // Auto-refresh countdown effect
+    useEffect(() => {
+        if (updateCountdown > 0) {
+            const timer = setTimeout(() => {
+                if (updateCountdown === 1) {
+                    console.log('Auto-refreshing page due to version update');
+                    window.location.reload();
+                } else {
+                    setUpdateCountdown(updateCountdown - 1);
+                }
+            }, 1000);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [updateCountdown]);
 
 
     const sendStartGame = () => {
@@ -265,13 +293,13 @@ const GameParty = () => {
                     color="orange"
                 />
             )}
-            {reconnectFailed && (
+            {reconnectFailed && !duplicateConnection && (
                 <ErrorBanner
                     message="Connection lost. Please refresh the page."
                     color="red"
                 />
             )}
-            {disconnected && (
+            {disconnected && !duplicateConnection && (
                 <ErrorBanner
                     message="Disconnected"
                     color="red"
@@ -281,6 +309,12 @@ const GameParty = () => {
                 <ErrorBanner
                     message="A newer tab has connected to this party. You can close this page."
                     color="orange"
+                />
+            )}
+            {needsUpdate && (
+                <ErrorBanner
+                    message={`Update ready. Auto refresh in ${updateCountdown}s (you won't be kicked)`}
+                    color="blue"
                 />
             )}
             {/* {isSelfDisconnected && (
