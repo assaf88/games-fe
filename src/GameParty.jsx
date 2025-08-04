@@ -225,6 +225,7 @@ const GameParty = () => {
             if (isAvalon) {
                 startGameData.selectedCharacters = selectedCharacters;
                 startGameData.firstPlayerFlagActive = firstPlayerFlagActive;
+                startGameData.players = gameState.players.map(p => ({ id: p.id, order: p.order }));
             }
             
             websocket.current.send(JSON.stringify(startGameData));
