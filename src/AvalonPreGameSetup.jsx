@@ -59,7 +59,7 @@ const AvalonPreGameSetup = ({
                     </div>
                     <div style={{ textAlign: 'left',                       textIndent: '-0.6rem' }}>• Select {isVertical ? 'more' : 'additional'} special characters (Merlin {isVertical ? '&' : 'and'} Assassin are always included)</div>
                     <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent: '-0.6rem' }}>• Sort players by seating and play order</div>
-                    <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent: '-0.6rem' }}>• Uncheck the {isVertical ? '1st player flag' : 'flag next to Player 1'}  to randomly assign the first mission leader</div>
+                    <div style={{ textAlign: 'left', marginTop: '0.28rem', textIndent: '-0.6rem' }}>• Uncheck the {isVertical ? '1st player flag' : 'flag next to Player 1'}  to randomly assign the first quest leader</div>
                 </div>
             )}
 
