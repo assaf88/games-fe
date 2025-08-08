@@ -431,6 +431,7 @@ const GameParty = () => {
                         gameStarted={!!gameState.gameStarted}
                         gameStarting={!!gameState.gameStarting}
                         images={gameImages}
+                        questLeader={gameState.state && 'questLeader' in gameState.state ? gameState.state.questLeader : null}
                     />
                 </div>
             )}

@@ -79,3 +79,43 @@
     transform: rotate(360deg);
   }
 } 
+
+.quest-vote-card {
+  width: calc(var(--portrait-width) * 0.25);
+  height: calc(var(--portrait-width) * 0.33);
+  background: linear-gradient(to bottom, rgb(225, 208, 182), rgb(198, 173, 143));
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transform: rotate(180deg);
+}
+
+.quest-decision-card {
+  width: calc(var(--portrait-width) * 0.25);
+  height: calc(var(--portrait-width) * 0.33);
+  background: linear-gradient(to bottom, rgb(78, 82, 81), rgb(35, 35, 33));
+  border: 1px solid #707070;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  position: relative;
+  transform: rotate(180deg);
+}
+
+.quest-team-token {
+  width: calc(var(--portrait-width) * 0.25);
+  height: calc(var(--portrait-width) * 0.33);
+  background: linear-gradient(to bottom, rgb(194, 139, 44), rgb(75, 48, 21));
+  border: 1px solid rgb(156, 105, 35);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transform: rotate(180deg);
+}

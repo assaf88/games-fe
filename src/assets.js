@@ -2,6 +2,7 @@ const BASE_AVALON_PATH = '/images/avalon/';
 
 const avalonImages = {
   frame: BASE_AVALON_PATH + 'avalon-frame.png',
+  unknown: BASE_AVALON_PATH + 'unknown.png',
 
   merlin: BASE_AVALON_PATH + 'merlin.webp',
   assassin: BASE_AVALON_PATH + 'assassin.webp',

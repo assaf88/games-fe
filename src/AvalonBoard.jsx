@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { QuestTeamToken, QuestVote, CrownIcon, DecisionSword } from './AvalonTokens';
 import './styles/avalon/avalon.css';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
 
-const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images }) => {
+const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, questLeader }) => {
     //loading images before rendering - NOT CRITICAL NOW, BUT DO NOT REMOVE
     // useEffect(() => {
     //     const img = new Image();
@@ -96,6 +97,8 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images }) => 
                     const nameY = center + radius * Math.sin(finalAngle) - height / 2;
                     const boxShadowWidth = portraitWidth * 0.1;
                     const boxShadowHeight = portraitHeight * 0.1;
+                    const bgImage = (isSelf && player.specialId && images[player.specialId]) ? images[player.specialId] : images.unknown;
+                    const isLeader = questLeader && player.id === questLeader;
                     return (
                         <React.Fragment key={player.id}>
                             <div style={{
@@ -111,7 +114,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images }) => 
                                     style={{
                                         width: width,
                                         height: height,
-                                        backgroundImage: `url(${images.oberon})`,
+                                        backgroundImage: `url(${bgImage})`,
                                         // backgroundImage: `url(/styles/images/avalon/oberon20b.webp)`,
                                         backgroundSize: '140%',
                                         backgroundPosition: '50% 10%',
@@ -123,6 +126,39 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images }) => 
                                     <div
                                         className="avalon-portrait-frame"
                                     />
+                                    {(!isSelf || progress < 1) && (
+                                      <div style={{
+                                        position: 'absolute',
+                                        inset: 0,
+                                        borderRadius: '50%',
+                                        background: 'radial-gradient(ellipse at center, rgba(60,60,60,0.9) 0%, rgba(20,20,20,0.95) 70%)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        zIndex: 2,
+                                      }}>
+                                        <div style={{
+                                          color: '#cfcfcf',
+                                          fontFamily: 'Cinzel, serif',
+                                          fontSize: Math.max(18, portraitWidth * 0.45),
+                                          textShadow: '0 0 6px rgba(0,0,0,0.8)',
+                                        }}>?</div>
+                                      </div>
+                                    )}
+                                    {/* Crown + tokens: vertical orientation, positioned in front of portrait */}
+                                    {progress >= 1 && (
+                                      <div style={{
+                                        position: 'absolute',
+                                        left: '48%',
+                                        // top: '-6%',
+                                        top: `${isSelf ? '-6%' : '-7%'}`,
+                                        transform: 'translate(-50%, -50%)',
+                                        pointerEvents: 'none',
+                                        zIndex: 3,
+                                      }}>    
+                                        <CrownIcon size={Math.max(16, portraitWidth * 0.38)} isLeader={isLeader} />
+                                    </div>
+                                    )}
                                 </div>
                             </div>
                             {/* Names and in-game UI: only if progress >= 1 */}
@@ -130,22 +166,133 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images }) => 
                                 <div style={{
                                     position: 'absolute',
                                     left: nameX + width / 2,
-                                    top: nameY + height + (isSelf ? boxShadowHeight * 1.05 : 0) + (isVertical ? -0 : 4),
+                                    // top: nameY + height + (isSelf ? boxShadowHeight * 1.05 : 0) + (isVertical ? -0 : 4),
+                                    top: nameY + height*0.85 + (isSelf ? boxShadowHeight * 1.05 : 0) + (isVertical ? -0 : 4),
                                     transform: 'translateX(-50%)',
                                     color: player.connected === false ? '#e57373' : (showSelfStyle ? 'var(--avalon-text-main)' : 'var(--avalon-text-dark)'),
                                     fontFamily: 'Lancelot, serif',
-                                    fontSize: isVertical ? portraitWidth/3 : portraitWidth/3.8,
+                                    fontSize: isVertical ? portraitWidth/3.2 : portraitWidth/4.1,
                                     textShadow: '0 0 4px #18181b',
                                     textAlign: 'center',
                                     whiteSpace: 'nowrap',
                                     pointerEvents: 'none',
                                     fontWeight: showSelfStyle ? 'bold' : 'normal',
                                     transition: 'opacity 5.2s',
+                                    padding: '0px 4px',
+                                    borderRadius: '6px',
+                                    background: 'linear-gradient(135deg, rgba(20,20,20,0.95) 0%, rgba(40,40,40,0.9) 50%, rgba(20,20,20,0.95) 100%)',
+                                    border: '2px solid rgba(61, 56, 0, 0.8)',
+                                    boxShadow: '0 2px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1)',
+                                    backdropFilter: 'blur(2px)',
+                                    zIndex: 3,
+                                    lineHeight: '1.05',
                                 }}>
                                     {player.name}{isHost ? ' (h)' : ''}{player.connected === false ? ' (left)' : ''}
                                 </div>
                             )}
                         </React.Fragment>
+                    );
+                })}
+                
+                {/* Tokens positioned independently in inner circle */}
+                {progress >= 1 && rotatedPlayers.map((player, i) => {
+                    const finalAngle = ((i) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
+                    const tokenRadius = radius * 0.71;
+                    const tokenX = center + tokenRadius*1.12 * Math.cos(finalAngle) - (portraitWidth * 0.25) / 2 - (portraitWidth * 0.16);
+                    const tokenY = center + tokenRadius*1 * Math.sin(finalAngle) - (portraitWidth * 0.25) / 2 - (portraitHeight * 0.0);
+                    const isSelf = player.id === getLocalPlayerId();
+                    
+                    const isTeam = true;
+                    const isVoting = false;
+                    const hasVoted = true;
+                    const isDeciding = true;
+                    const hasDecided = true;
+                    
+                    return (
+                        <div key={`tokens-${player.id}`} style={{
+                            position: 'absolute',
+                            left: tokenX,
+                            top: tokenY,
+                            display: 'flex',
+                            gap: portraitWidth * 0.01,
+                            transform: `rotate(${(finalAngle + Math.PI/2) * 180/Math.PI}deg)`,
+                            pointerEvents: 'none',
+                            zIndex: 4,
+                            direction: 'rtl'
+                        }}>
+                            {/* <div style={{ width: portraitWidth * 0.1 }} /> */}
+
+                            {/* Team token */}
+                            <div className='quest-team-token'
+                                style={{  '--portrait-width': `${portraitWidth}px`,
+                                    position: 'absolute',
+                                    left: 15,
+                                    top: 40
+                                    // display: 'none' 
+                                }}>
+                                <QuestTeamToken portraitWidth={portraitWidth} />
+                            </div>
+                            
+                            {/* Purple token cards */}
+                            <div id='vote1' className='quest-vote-card'
+                                 style={{ 
+                                    '--portrait-width': `${portraitWidth}px`,
+                                    display: `${isDeciding? 'none' : 'inherit'}`, //not a bug!
+                                    visibility: `${isVoting? 'visible' : 'hidden'}`,
+                                 }}>
+                                <QuestVote portraitWidth={portraitWidth} />
+                            </div>
+                            <div id='vote2' className='quest-vote-card'
+                                 style={{ 
+                                    '--portrait-width': `${portraitWidth}px`,
+                                    display: `${isDeciding? 'none' : 'inherit'}`,
+                                    visibility: `${isVoting && !hasVoted ? 'visible' : 'hidden'}`,
+                                 }}>
+                                <QuestVote portraitWidth={portraitWidth} />
+                            </div>
+                            <div id='vote3' className='quest-vote-card'
+                                 style={{ 
+                                    '--portrait-width': `${portraitWidth}px` ,
+                                    position: 'absolute',
+                                    // left: `calc(${portraitWidth * 0.25 + 2}px)`,
+                                    // top: '260px',
+                                    left: '15px',
+                                    zIndex: 5,
+                                    display: `${isDeciding? 'none' : 'inherit'}`,
+                                    visibility: `${isVoting && hasVoted ? 'visible' : 'hidden'}`,
+                            }}>
+                                <QuestVote portraitWidth={portraitWidth} />
+                            </div>
+                            
+                            {/* Shield and sword cards */}
+                            <div id='result1' className='quest-decision-card'
+                                 style={{ 
+                                    '--portrait-width': `${portraitWidth}px`,
+                                    display: `${isDeciding? 'inherit' : 'none'}`, //not a bug!
+                                    visibility: `${isDeciding? 'visible' : 'hidden'}`,
+                                }}>
+                                <DecisionSword size={200} angle={30} isShiny />
+                            </div>
+                            <div id='result2' className='quest-decision-card'
+                                 style={{ 
+                                    '--portrait-width': `${portraitWidth}px`,
+                                    display: `${isDeciding? 'inherit' : 'none'}`,
+                                    visibility: `${isDeciding && !hasDecided ? 'visible' : 'hidden'}`,
+                                }}>
+                                <DecisionSword size={200} angle={30} isShiny />
+                            </div>
+                            <div id='result3' className='quest-decision-card'
+                                 style={{ 
+                                    '--portrait-width': `${portraitWidth}px` ,
+                                    position: 'absolute',
+                                    top: '270px',
+                                    zIndex: 5,
+                                    display: `${isDeciding? 'inherit' : 'none'}`,
+                                    visibility: `${isDeciding && hasDecided ? 'visible' : 'hidden'}`,
+                            }}>
+                                <DecisionSword size={200} angle={30} isShiny />
+                            </div>
+                        </div>
                     );
                 })}
             </div>
