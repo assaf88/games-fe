@@ -14,7 +14,7 @@ export const QuestTeamToken = ({ portraitWidth, isVertical }) => (
             color: '#fff',
             textShadow: '0 1px 2px rgba(0,0,0,0.5)',
             // transform: `${isVertical ? 'rotate(180deg)' : 'rotate(90deg)'}`
-            transform: isVertical ? 'rotate(180deg)' : 'rotate(90deg)'
+            transform: isVertical ? '' : 'rotate(90deg)'
         }}>🗡️</div>
     </>
 );
