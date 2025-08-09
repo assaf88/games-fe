@@ -203,10 +203,10 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                     const isSelf = player.id === getLocalPlayerId();
                     
                     const isTeam = true;
-                    const isVoting = false;
+                    const isVoting = true;
                     const hasVoted = true;
-                    const isDeciding = true;
-                    const hasDecided = true;
+                    const isDeciding = false;
+                    const hasDecided = false;
                     
                     return (
                         <div key={`tokens-${player.id}`} style={{
@@ -218,7 +218,8 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                             transform: `rotate(${(finalAngle + Math.PI/2) * 180/Math.PI}deg)`,
                             pointerEvents: 'none',
                             zIndex: 4,
-                            direction: 'rtl'
+                            direction: 'rtl',
+                            // scale: 1.02 ?? doesnt work?
                         }}>
                             {/* <div style={{ width: portraitWidth * 0.1 }} /> */}
 
@@ -226,12 +227,10 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                             <div className='quest-team-token'
                                 style={{  '--portrait-width': `${portraitWidth}px`,
                                     position: 'absolute',
-                                    // left: 15,
-                                    // left: '0.9vw',
-                                    left: `${isVertical ? '1.9vw' : '0.9vw'}`, //increasing will take it left
-                                    // top: `${isVertical ? '15' : '40'}`,
-                                    top: `${isVertical ? '4.8vw' : '2.4vw'}`,//increasing will take it to circle center
-                                    // top: 40
+                                    // left: `${isVertical ? '1.9vw' : '0.6vw'}`, //increasing will take it left
+                                    // top: `${isVertical ? '4.8vw' : '1.6vw'}`,//increasing will take it to circle center
+                                    left: `${isVertical ? '25%' : '25%'}`, //increasing will take it left
+                                    top: `${isVertical ? '120%' : '120%'}`,//increasing will take it to circle center
                                     // display: 'none'
                                 }}>
                                 {/*{!isVertical2 + " sdgf"}*/}
@@ -259,10 +258,8 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                  style={{ 
                                     '--portrait-width': `${portraitWidth}px` ,
                                     position: 'absolute',
-                                    // left: `calc(${portraitWidth * 0.25 + 2}px)`,
-                                    // top: '260px',
-                                    // left: '15px',
-                                    left: '0.9vw',
+                                    // left: '0.9vw',
+                                    left: `${isVertical ? '25%' : '25%'}`,
                                     zIndex: 5,
                                     display: `${isDeciding? 'none' : 'inherit'}`,
                                     visibility: `${isVoting && hasVoted ? 'visible' : 'hidden'}`,
@@ -291,7 +288,8 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                  style={{ 
                                     '--portrait-width': `${portraitWidth}px` ,
                                     position: 'absolute',
-                                    top: `${isVertical ? '26vw' : '17vw'}`, //increasing will shrink
+                                    // top: `${isVertical ? '26vw' : '800%'}`, //increasing will shrink
+                                    top: `${isVertical ? '800%' : '800%'}`, //increasing will shrink
                                     // top: '270px',
                                     zIndex: 5,
                                     display: `${isDeciding? 'inherit' : 'none'}`,
