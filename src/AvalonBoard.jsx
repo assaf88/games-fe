@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { QuestTeamToken, QuestVote, CrownIcon, DecisionSword } from './AvalonTokens';
+import { QuestTeamToken, QuestVote, CrownIcon, DecisionSword, EyeIcon } from './AvalonTokens';
 import './styles/avalon/avalon.css';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
@@ -14,7 +14,8 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
 
     const selfId = getLocalPlayerId();
     const numPlayers = players.length;
-    const isVertical = window.innerHeight > window.innerWidth;
+    const isVertical = window.innerWidth < window.innerHeight;
+    const [showImages, setShowImages] = useState(false); // Toggle for image visibility
 
     const getCircleSize = () => {
         return Math.min(window.innerHeight * 0.58, window.innerWidth * 0.90);
@@ -74,7 +75,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
     // console.log('AvalonBoard render:', { gameStarted, progress });
 
     return (
-        <div className="avalon-circle-container" style={{ flex: 1, display: gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center" }}>
+        <div className="avalon-circle-container" style={{ flex: 1, display: gameStarted ? "flex" : "none", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
             <div
                 className="avalon-circle"
                 style={{
@@ -103,8 +104,8 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                     let bgImage = images.unknown;
                     let isEvilPlayer = false;
                     
-                    if (progress >= 1) {
-                        // After animation: show actual character images
+                    if (progress >= 1 && showImages) {
+                        // After animation AND toggle is ON: show actual character images
                         if (player.specialId === 'servant' && player.characterSex) {
                             bgImage = images[`servant-${player.characterSex}`] || images.unknown;
                         } else if (player.specialId === 'minion') {
@@ -120,7 +121,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                             bgImage = images[player.specialId];
                         }
                     } else {
-                        // During animation: show unknown for all players
+                        // During animation OR toggle is OFF: show unknown for all players
                         bgImage = images.unknown;
                     }
                     
@@ -152,7 +153,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                     <div
                                         className="avalon-portrait-frame"
                                     />
-                                    {(!isSelf || progress < 1) && (
+                                    {(!isSelf || progress < 1 || !showImages) && (
                                       <div style={{
                                         position: 'absolute',
                                         inset: 0,
@@ -183,7 +184,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                         {isLeader && (
                                           <CrownIcon size={Math.max(16, portraitWidth * 0.38)} isLeader={isLeader} />
                                         )}
-                                    </div>
+                                      </div>
                                     )}
                                 </div>
                             </div>
@@ -326,6 +327,27 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                         </div>
                     );
                 })}
+            </div>
+            {/* Eye toggle button */}
+            <div
+                style={{
+                    position: 'fixed',
+                    // bottom: '20px',
+                    // left: '50%',
+                    bottom: '10%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    // left: '50%',
+                    // transform: 'translateX(-50%)',
+                    zIndex: 10,
+                    // direction: 'ltr',
+                }}
+            >
+                <EyeIcon
+                    size={portraitWidth * 0.45}
+                    isActive={showImages}
+                    onClick={() => setShowImages(!showImages)}
+                />
             </div>
         </div>
     );

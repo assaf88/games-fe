@@ -140,4 +140,68 @@ export function CrownIcon({ size = 24, isLeader = false, style = {} }) {
       </svg>
     );
   }
+
+export function EyeIcon({ size = 32, isActive = false, onClick, style = {} }) {
+  const glow = isActive ? '0 0 8px rgba(255,255,255,0.6)' : 'none';
+  const color = isActive ? '#ffffff' : '#cccccc';
+  
+  return (
+    <div 
+      style={{
+        width: size,
+        height: size,
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        filter: isActive ? 'drop-shadow(0 0 4px rgba(255,255,255,0.4))' : 'none',
+        ...style
+      }}
+      onClick={onClick}
+    >
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {isActive ? (
+          // Open eye (active state)
+          <>
+            <path
+              d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+              fill={color}
+              stroke={color}
+              strokeWidth="0.5"
+            />
+            <circle cx="12" cy="12" r="3" fill={color} />
+          </>
+        ) : (
+          // Closed eye (inactive state)
+          <>
+            <path
+              d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"
+              fill="none"
+              stroke={color}
+              strokeWidth="1.5"
+              opacity="0.6"
+            />
+            <path
+              d="M2 2l20 20"
+              stroke={color}
+              strokeWidth="1.5"
+              opacity="0.8"
+            />
+            <path
+              d="M6.71 6.71C4.08 8.63 2 10.17 2 12c1.73 4.39 6 7.5 11 7.5 1.94 0 3.76-.48 5.44-1.32"
+              fill="none"
+              stroke={color}
+              strokeWidth="1.5"
+              opacity="0.6"
+            />
+          </>
+        )}
+      </svg>
+    </div>
+  );
+}
   
