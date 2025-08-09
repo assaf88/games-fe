@@ -16,7 +16,7 @@ export function AvalonControlPanel({
       display: 'flex',
       alignItems: 'center',
       gap: '12px',
-      padding: '8px 16px',
+      padding: '9px 16px 7px 16px',
       background: 'linear-gradient(135deg, rgba(20,20,20,0.95) 0%, rgba(40,40,40,0.9) 50%, rgba(20,20,20,0.95) 100%)',
       border: '2px solid rgba(61, 56, 0, 0.8)',
       borderRadius: '12px',
@@ -62,7 +62,7 @@ export function AvalonControlPanel({
           transition: 'all 0.3s ease',
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(76,175,80,0.2) 0%, rgba(76,175,80,0.1) 70%)',
-          border: '2px solid rgba(76,175,80,0.4)',
+          border: '3px solid rgba(76,175,80,0.4)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -75,13 +75,13 @@ export function AvalonControlPanel({
         onClick={onYesClick}
         onMouseEnter={(e) => {
           e.target.style.background = 'radial-gradient(circle, rgba(76,175,80,0.4) 0%, rgba(76,175,80,0.2) 70%)';
-          e.target.style.border = '2px solid rgba(76,175,80,0.6)';
+          e.target.style.border = '3px solid rgba(76,175,80,0.65)';
           e.target.style.transform = 'scale(1.05)';
           e.target.style.outline = 'none';
         }}
         onMouseLeave={(e) => {
           e.target.style.background = 'radial-gradient(circle, rgba(76,175,80,0.2) 0%, rgba(76,175,80,0.1) 70%)';
-          e.target.style.border = '2px solid rgba(76,175,80,0.4)';
+          e.target.style.border = '3px solid rgba(76,175,80,0.4)';
           e.target.style.transform = 'scale(1)';
           e.target.style.outline = 'none';
         }}
@@ -90,8 +90,8 @@ export function AvalonControlPanel({
           src={yesImage} 
           alt="Yes" 
           style={{
-            width: size * 0.6,
-            height: size * 0.6,
+            width: size,
+            height: size,
             filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))',
             outline: 'none',
             WebkitTapHighlightColor: 'transparent',
@@ -109,7 +109,7 @@ export function AvalonControlPanel({
           cursor: 'pointer',
           transition: 'all 0.3s ease',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(244,67,54,0.2) 0%, rgba(244,67,54,0.1) 70%)',
+          background: 'radial-gradient(circle, rgba(244,67,54,0.2) 0%, rgba(244,67,54,0.4) 70%)',
           border: '2px solid rgba(244,67,54,0.4)',
           display: 'flex',
           alignItems: 'center',
@@ -122,13 +122,13 @@ export function AvalonControlPanel({
         }}
         onClick={onNoClick}
         onMouseEnter={(e) => {
-          e.target.style.background = 'radial-gradient(circle, rgba(244,67,54,0.4) 0%, rgba(244,67,54,0.2) 70%)';
-          e.target.style.border = '2px solid rgba(244,67,54,0.6)';
+          e.target.style.background = 'radial-gradient(circle, rgba(244,67,54,0.4) 0%, rgba(244,67,54,0.4) 70%)';
+          e.target.style.border = '2px solid rgba(244,67,54,0.8)';
           e.target.style.transform = 'scale(1.05)';
           e.target.style.outline = 'none';
         }}
         onMouseLeave={(e) => {
-          e.target.style.background = 'radial-gradient(circle, rgba(244,67,54,0.2) 0%, rgba(244,67,54,0.1) 70%)';
+          e.target.style.background = 'radial-gradient(circle, rgba(244,67,54,0.2) 0%, rgba(244,67,54,0.4) 70%)';
           e.target.style.border = '2px solid rgba(244,67,54,0.4)';
           e.target.style.transform = 'scale(1)';
           e.target.style.outline = 'none';
@@ -138,8 +138,8 @@ export function AvalonControlPanel({
           src={noImage} 
           alt="No" 
           style={{
-            width: size * 0.6,
-            height: size * 0.6,
+            width: size * 0.95,
+            height: size * 0.95,
             filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))',
             outline: 'none',
             WebkitTapHighlightColor: 'transparent',

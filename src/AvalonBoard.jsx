@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { QuestTeamToken, QuestVote, CrownIcon, DecisionSword, EyeIcon } from './AvalonTokens';
+import { QuestTeamToken, QuestVote, CrownIcon, DecisionSword } from './AvalonTokens';
 import { AvalonControlPanel } from './AvalonControlPanel';
 import './styles/avalon/avalon.css';
 
@@ -227,7 +227,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                     const finalAngle = ((i) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
                     const tokenRadius = radius * (isVertical ? 0.64 : 0.70);
                     const tokenX = center + tokenRadius*1.15 * Math.cos(finalAngle) - (portraitWidth * 0.25) / 2 - (portraitWidth * 0.16);
-                    const tokenY = center + tokenRadius * Math.sin(finalAngle) - (portraitWidth * 0.25) / 2 - (portraitHeight * (isVertical ? 0.05 : 0));
+                    const tokenY = center + tokenRadius*(isVertical ? 1.1 : 1) * Math.sin(finalAngle) - (portraitWidth * 0.25) / 2 - (portraitHeight * (isVertical ? 0.1 : 0));
                     const isSelf = player.id === getLocalPlayerId();
                     
                     const isTeam = true;
@@ -330,14 +330,14 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
             <div
                 style={{
                     position: 'fixed',
-                    bottom: '8%',
+                    bottom: `${isVertical ? '10%' : '8%'}`,
                     left: '50%',
                     transform: 'translateX(-50%)',
                     zIndex: 10,
                 }}
             >
                 <AvalonControlPanel
-                    size={40}
+                    size={isVertical ? 35 : 45}
                     showImages={showImages}
                     onToggleImages={() => setShowImages(!showImages)}
                     onYesClick={() => console.log('Yes clicked')}
