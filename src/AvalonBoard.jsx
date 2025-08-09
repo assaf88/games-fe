@@ -103,19 +103,25 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                     let bgImage = images.unknown;
                     let isEvilPlayer = false;
                     
-                    if (player.specialId === 'servant' && player.characterSex) {
-                        bgImage = images[`servant-${player.characterSex}`] || images.unknown;
-                    } else if (player.specialId === 'minion') {
-                        isEvilPlayer = true;
-                        if (player.characterSex) {
-                            // Self player with assigned sex
-                            bgImage = images[`minion-${player.characterSex}`] || images.unknown;
-                        } else {
-                            // Other minion players - show unknown with evil styling
-                            bgImage = images.unknown;
+                    if (progress >= 1) {
+                        // After animation: show actual character images
+                        if (player.specialId === 'servant' && player.characterSex) {
+                            bgImage = images[`servant-${player.characterSex}`] || images.unknown;
+                        } else if (player.specialId === 'minion') {
+                            isEvilPlayer = true;
+                            if (player.characterSex) {
+                                // Self player with assigned sex
+                                bgImage = images[`minion-${player.characterSex}`] || images.unknown;
+                            } else {
+                                // Other minion players - show unknown with evil styling
+                                bgImage = images.unknown;
+                            }
+                        } else if (player.specialId && images[player.specialId]) {
+                            bgImage = images[player.specialId];
                         }
-                    } else if (player.specialId && images[player.specialId]) {
-                        bgImage = images[player.specialId];
+                    } else {
+                        // During animation: show unknown for all players
+                        bgImage = images.unknown;
                     }
                     
                     const isLeader = questLeader && player.id === questLeader;
@@ -146,7 +152,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                     <div
                                         className="avalon-portrait-frame"
                                     />
-                                    {(!isSelf || progress > 1) && (
+                                    {(!isSelf || progress < 1) && (
                                       <div style={{
                                         position: 'absolute',
                                         inset: 0,
@@ -158,7 +164,9 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         zIndex: 2,
-                                      }}/>
+                                      }}>
+                                        
+                                      </div>
                                     )}
                                     
                                     {/* Crown + tokens: vertical orientation, positioned in front of portrait */}
