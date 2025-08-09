@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { QuestTeamToken, QuestVote, CrownIcon, DecisionSword, EyeIcon } from './AvalonTokens';
+import { QuestTeamToken, QuestVote, CrownIcon, DecisionSword, EyeIcon, ControlPanel } from './AvalonTokens';
 import './styles/avalon/avalon.css';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
@@ -254,13 +254,10 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                             <div className='quest-team-token'
                                 style={{  '--portrait-width': `${portraitWidth}px`,
                                     position: 'absolute',
-                                    // left: `${isVertical ? '1.9vw' : '0.6vw'}`, //increasing will take it left
-                                    // top: `${isVertical ? '4.8vw' : '1.6vw'}`,//increasing will take it to circle center
                                     left: `${isVertical ? '25%' : '25%'}`, //increasing will take it left
                                     top: `${isVertical ? '113%' : '120%'}`,//increasing will take it to circle center
                                     // display: 'none'
                                 }}>
-                                {/*{!isVertical2 + " sdgf"}*/}
                                 <QuestTeamToken portraitWidth={isVertical ? portraitWidth*0.9 : portraitWidth} isVertical={isVertical} />
                             </div>
                             
@@ -328,25 +325,24 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                     );
                 })}
             </div>
-            {/* Eye toggle button */}
+            {/* Control Panel */}
             <div
                 style={{
                     position: 'fixed',
-                    // bottom: '20px',
-                    // left: '50%',
-                    bottom: '10%',
+                    bottom: '8%',
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    // left: '50%',
-                    // transform: 'translateX(-50%)',
                     zIndex: 10,
-                    // direction: 'ltr',
                 }}
             >
-                <EyeIcon
-                    size={portraitWidth * 0.45}
-                    isActive={showImages}
-                    onClick={() => setShowImages(!showImages)}
+                <ControlPanel
+                    size={40}
+                    showImages={showImages}
+                    onToggleImages={() => setShowImages(!showImages)}
+                    onYesClick={() => console.log('Yes clicked')}
+                    onNoClick={() => console.log('No clicked')}
+                    yesImage={images.yes}
+                    noImage={images.no}
                 />
             </div>
         </div>

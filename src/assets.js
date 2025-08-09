@@ -16,6 +16,9 @@ const avalonImages = {
 
   'minion-m': BASE_AVALON_PATH + 'minion-m.webp',
   'minion-f': BASE_AVALON_PATH + 'minion-f.webp',
+
+  yes: BASE_AVALON_PATH + 'yes.png',
+  no: BASE_AVALON_PATH + 'no.png',
 };
 
 const codenamesImages = [

@@ -142,8 +142,7 @@ export function CrownIcon({ size = 24, isLeader = false, style = {} }) {
   }
 
 export function EyeIcon({ size = 32, isActive = false, onClick, style = {} }) {
-  const glow = isActive ? '0 0 8px rgba(255,255,255,0.6)' : 'none';
-  const color = isActive ? '#ffffff' : '#cccccc';
+  const color = isActive ? '#DDBB53' : '#B58020';
   
   return (
     <div 
@@ -152,7 +151,6 @@ export function EyeIcon({ size = 32, isActive = false, onClick, style = {} }) {
         height: size,
         cursor: 'pointer',
         transition: 'all 0.3s ease',
-        filter: isActive ? 'drop-shadow(0 0 4px rgba(255,255,255,0.4))' : 'none',
         ...style
       }}
       onClick={onClick}
@@ -164,43 +162,203 @@ export function EyeIcon({ size = 32, isActive = false, onClick, style = {} }) {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <defs>
+          {/* Realistic eye gradients */}
+          <radialGradient id="scleraGrad" cx="50%" cy="40%">
+            <stop offset="0" stopColor="#f8f8f8" />
+            <stop offset="0.7" stopColor="#e8e8e8" />
+            <stop offset="1" stopColor="#d0d0d0" />
+          </radialGradient>
+          <radialGradient id="irisGrad" cx="45%" cy="40%">
+            <stop offset="0" stopColor="#4a90e2" />
+            <stop offset="0.6" stopColor="#357abd" />
+            <stop offset="1" stopColor="#2c5aa0" />
+          </radialGradient>
+          <radialGradient id="pupilGrad" cx="50%" cy="50%">
+            <stop offset="0" stopColor="#1a1a1a" />
+            <stop offset="0.8" stopColor="#000000" />
+            <stop offset="1" stopColor="#000000" />
+          </radialGradient>
+          <radialGradient id="highlightGrad" cx="40%" cy="30%">
+            <stop offset="0" stopColor="#ffffff" />
+            <stop offset="0.6" stopColor="rgba(255,255,255,0.8)" />
+            <stop offset="1" stopColor="rgba(255,255,255,0)" />
+          </radialGradient>
+          <radialGradient id="irisGradGolden" cx="45%" cy="45%">
+            <stop offset="0.5" stopColor="#8B4513" />
+            <stop offset="0.15" stopColor="#A0522D" />
+            <stop offset="0.65" stopColor="#556B2F" />
+            <stop offset="1.2" stopColor="#2F3F2F" />
+          </radialGradient>
+        </defs>
+        
         {isActive ? (
-          // Open eye (active state)
+          // Closed eye (active state) - HIDE images
           <>
-            <path
-              d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-              fill={color}
-              stroke={color}
-              strokeWidth="0.5"
-            />
-            <circle cx="12" cy="12" r="3" fill={color} />
-          </>
-        ) : (
-          // Closed eye (inactive state)
-          <>
+            {/* Sclera (white part) */}
             <path
               d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"
-              fill="none"
-              stroke={color}
-              strokeWidth="1.5"
-              opacity="0.6"
+              fill="url(#scleraGrad)"
+              stroke="#c0c0c0"
+              strokeWidth="0.5"
             />
+            
+            {/* Iris - larger to match pupil */}
+            <circle cx="12" cy="12" r="7.5" fill="url(#irisGradGolden)" stroke="#8B6914" strokeWidth="0.3" />
+            
+            {/* Pupil - even larger now */}
+            <circle cx="12" cy="12" r="3.5" fill="url(#pupilGrad)" />
+            
+            {/* Eye highlight */}
+            <circle cx="10.5" cy="10.5" r="1.2" fill="url(#highlightGrad)" />
+            
+            {/* Big bold black slash */}
             <path
               d="M2 2l20 20"
-              stroke={color}
-              strokeWidth="1.5"
-              opacity="0.8"
+              stroke="#000000"
+              strokeWidth="3"
+              strokeLinecap="round"
             />
+          </>
+        ) : (
+          // Open eye (inactive state) - SHOW images
+          <>
+            {/* Sclera (white part) */}
             <path
-              d="M6.71 6.71C4.08 8.63 2 10.17 2 12c1.73 4.39 6 7.5 11 7.5 1.94 0 3.76-.48 5.44-1.32"
-              fill="none"
-              stroke={color}
-              strokeWidth="1.5"
-              opacity="0.6"
+              d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"
+              fill="url(#scleraGrad)"
+              stroke="#c0c0c0"
+              strokeWidth="0.5"
             />
+            
+            {/* Iris - larger to match pupil */}
+            <circle cx="12" cy="12" r="7.5" fill="url(#irisGradGolden)" stroke="#8B6914" strokeWidth="0.3" />
+            
+            {/* Pupil - even larger now */}
+            <circle cx="12" cy="12" r="3.5" fill="url(#pupilGrad)" />
+            
+            {/* Eye highlight */}
+            <circle cx="10.5" cy="10.5" r="1.2" fill="url(#highlightGrad)" />
           </>
         )}
       </svg>
+    </div>
+  );
+}
+
+export function ControlPanel({ 
+  showImages, 
+  onToggleImages, 
+  onYesClick, 
+  onNoClick, 
+  yesImage, 
+  noImage, 
+  size = 40,
+  style = {} 
+}) {
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+      padding: '8px 16px',
+      background: 'linear-gradient(135deg, rgba(20,20,20,0.95) 0%, rgba(40,40,40,0.9) 50%, rgba(20,20,20,0.95) 100%)',
+      border: '2px solid rgba(61, 56, 0, 0.8)',
+      borderRadius: '12px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1)',
+      backdropFilter: 'blur(4px)',
+      ...style
+    }}>
+      {/* Eye Icon */}
+      <EyeIcon
+        size={size}
+        isActive={showImages}
+        onClick={onToggleImages}
+      />
+      
+      {/* Separator */}
+      <div style={{
+        width: '1px',
+        height: size * 0.8,
+        background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.3), transparent)',
+        boxShadow: '0 0 4px rgba(255,255,255,0.2)'
+      }} />
+      
+      {/* Yes Button */}
+      <div
+        style={{
+          width: size,
+          height: size,
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(76,175,80,0.2) 0%, rgba(76,175,80,0.1) 70%)',
+          border: '2px solid rgba(76,175,80,0.4)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+        }}
+        onClick={onYesClick}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'radial-gradient(circle, rgba(76,175,80,0.4) 0%, rgba(76,175,80,0.2) 70%)';
+          e.target.style.border = '2px solid rgba(76,175,80,0.6)';
+          e.target.style.transform = 'scale(1.05)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'radial-gradient(circle, rgba(76,175,80,0.2) 0%, rgba(76,175,80,0.1) 70%)';
+          e.target.style.border = '2px solid rgba(76,175,80,0.4)';
+          e.target.style.transform = 'scale(1)';
+        }}
+      >
+        <img 
+          src={yesImage} 
+          alt="Yes" 
+          style={{
+            width: size * 0.6,
+            height: size * 0.6,
+            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
+          }}
+        />
+      </div>
+      
+      {/* No Button */}
+      <div
+        style={{
+          width: size,
+          height: size,
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(244,67,54,0.2) 0%, rgba(244,67,54,0.1) 70%)',
+          border: '2px solid rgba(244,67,54,0.4)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+        }}
+        onClick={onNoClick}
+        onMouseEnter={(e) => {
+          e.target.style.background = 'radial-gradient(circle, rgba(244,67,54,0.4) 0%, rgba(244,67,54,0.2) 70%)';
+          e.target.style.border = '2px solid rgba(244,67,54,0.6)';
+          e.target.style.transform = 'scale(1.05)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'radial-gradient(circle, rgba(244,67,54,0.2) 0%, rgba(244,67,54,0.1) 70%)';
+          e.target.style.border = '2px solid rgba(244,67,54,0.4)';
+          e.target.style.transform = 'scale(1)';
+        }}
+      >
+        <img 
+          src={noImage} 
+          alt="No" 
+          style={{
+            width: size * 0.6,
+            height: size * 0.6,
+            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
+          }}
+        />
+      </div>
     </div>
   );
 }
