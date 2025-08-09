@@ -203,10 +203,10 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                     const isSelf = player.id === getLocalPlayerId();
                     
                     const isTeam = true;
-                    const isVoting = true;
+                    const isVoting = false;
                     const hasVoted = true;
-                    const isDeciding = false;
-                    const hasDecided = false;
+                    const isDeciding = true;
+                    const hasDecided = true;
                     
                     return (
                         <div key={`tokens-${player.id}`} style={{
