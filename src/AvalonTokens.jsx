@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const QuestTeamToken = ({ portraitWidth }) => (
+export const QuestTeamToken = ({ portraitWidth, isVertical }) => (
     <>
         <div style={{
             fontSize: portraitWidth * 0.27,
@@ -13,7 +13,8 @@ export const QuestTeamToken = ({ portraitWidth }) => (
             // transform: 'translateX(-50%)',
             color: '#fff',
             textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-            transform: 'rotate(90deg)'
+            // transform: `${isVertical ? 'rotate(180deg)' : 'rotate(90deg)'}`
+            transform: isVertical ? 'rotate(180deg)' : 'rotate(90deg)'
         }}>🗡️</div>
     </>
 );

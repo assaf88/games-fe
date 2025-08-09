@@ -197,7 +197,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                 {/* Tokens positioned independently in inner circle */}
                 {progress >= 1 && rotatedPlayers.map((player, i) => {
                     const finalAngle = ((i) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
-                    const tokenRadius = radius * 0.71;
+                    const tokenRadius = radius * (isVertical ? 0.68 : 0.70);
                     const tokenX = center + tokenRadius*1.12 * Math.cos(finalAngle) - (portraitWidth * 0.25) / 2 - (portraitWidth * 0.16);
                     const tokenY = center + tokenRadius*1 * Math.sin(finalAngle) - (portraitWidth * 0.25) / 2 - (portraitHeight * 0.0);
                     const isSelf = player.id === getLocalPlayerId();
@@ -226,11 +226,15 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                             <div className='quest-team-token'
                                 style={{  '--portrait-width': `${portraitWidth}px`,
                                     position: 'absolute',
-                                    left: 15,
-                                    top: 40
-                                    // display: 'none' 
+                                    // left: 15,
+                                    left: '0.9vw',
+                                    // top: `${isVertical ? '15' : '40'}`,
+                                    top: `${isVertical ? '3vw' : '2.4vw'}`,
+                                    // top: 40
+                                    // display: 'none'
                                 }}>
-                                <QuestTeamToken portraitWidth={portraitWidth} />
+                                {/*{!isVertical2 + " sdgf"}*/}
+                                <QuestTeamToken portraitWidth={isVertical ? portraitWidth*0.9 : portraitWidth} isVertical={isVertical} />
                             </div>
                             
                             {/* Purple token cards */}
@@ -256,7 +260,8 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                     position: 'absolute',
                                     // left: `calc(${portraitWidth * 0.25 + 2}px)`,
                                     // top: '260px',
-                                    left: '15px',
+                                    // left: '15px',
+                                    left: '0.9vw',
                                     zIndex: 5,
                                     display: `${isDeciding? 'none' : 'inherit'}`,
                                     visibility: `${isVoting && hasVoted ? 'visible' : 'hidden'}`,
@@ -285,7 +290,8 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                  style={{ 
                                     '--portrait-width': `${portraitWidth}px` ,
                                     position: 'absolute',
-                                    top: '270px',
+                                    top: '19vw',
+                                    // top: '270px',
                                     zIndex: 5,
                                     display: `${isDeciding? 'inherit' : 'none'}`,
                                     visibility: `${isDeciding && hasDecided ? 'visible' : 'hidden'}`,
