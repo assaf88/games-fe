@@ -10,6 +10,12 @@ const avalonImages = {
   morgana: BASE_AVALON_PATH + 'morgana.webp',
   mordred: BASE_AVALON_PATH + 'mordred.webp',
   oberon: BASE_AVALON_PATH + 'oberon.webp',
+
+  'servant-m': BASE_AVALON_PATH + 'servant-m.webp',
+  'servant-f': BASE_AVALON_PATH + 'servant-f.webp',
+
+  'minion-m': BASE_AVALON_PATH + 'minion-m.webp',
+  'minion-f': BASE_AVALON_PATH + 'minion-f.webp',
 };
 
 const codenamesImages = [

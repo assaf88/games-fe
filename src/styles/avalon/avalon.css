@@ -78,7 +78,7 @@
   to {
     transform: rotate(360deg);
   }
-} 
+}
 
 .quest-vote-card {
   width: calc(var(--portrait-width) * 0.25);

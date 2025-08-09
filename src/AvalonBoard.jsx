@@ -35,6 +35,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
             ...players.slice(0, selfIndex)
         ];
     }
+    
     const portraitWidth = circleSize / (isVertical ? 7: 8.2);
     const portraitHeight = portraitWidth * 1.31;
     const center = circleSize / 2;
@@ -97,7 +98,26 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                     const nameY = center + radius * Math.sin(finalAngle) - height / 2;
                     const boxShadowWidth = portraitWidth * 0.1;
                     const boxShadowHeight = portraitHeight * 0.1;
-                    const bgImage = (isSelf && player.specialId && images[player.specialId]) ? images[player.specialId] : images.unknown;
+                    
+                    // Add sex letter for servant and minion
+                    let bgImage = images.unknown;
+                    let isEvilPlayer = false;
+                    
+                    if (player.specialId === 'servant' && player.characterSex) {
+                        bgImage = images[`servant-${player.characterSex}`] || images.unknown;
+                    } else if (player.specialId === 'minion') {
+                        isEvilPlayer = true;
+                        if (player.characterSex) {
+                            // Self player with assigned sex
+                            bgImage = images[`minion-${player.characterSex}`] || images.unknown;
+                        } else {
+                            // Other minion players - show unknown with evil styling
+                            bgImage = images.unknown;
+                        }
+                    } else if (player.specialId && images[player.specialId]) {
+                        bgImage = images[player.specialId];
+                    }
+                    
                     const isLeader = questLeader && player.id === questLeader;
                     return (
                         <React.Fragment key={player.id}>
@@ -131,20 +151,16 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                         position: 'absolute',
                                         inset: 0,
                                         borderRadius: '50%',
-                                        background: 'radial-gradient(ellipse at center, rgba(60,60,60,0.9) 0%, rgba(20,20,20,0.95) 70%)',
+                                        background: `${isEvilPlayer ? 
+                                            'radial-gradient(ellipse at center, rgba(60,60,60) 0%, rgba(60,60,60,0.75) 0%, rgba(40,0,0,0.6) 40%, rgb(79, 20, 2,0.99) 60%)' : 
+                                            'radial-gradient(ellipse at center, rgba(60,60,60,0.8) 50%, rgba(60,60,60,0.8) 40%, rgba(20,20,20,0.95) 70%)'}`,
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         zIndex: 2,
-                                      }}>
-                                        <div style={{
-                                          color: '#cfcfcf',
-                                          fontFamily: 'Cinzel, serif',
-                                          fontSize: Math.max(18, portraitWidth * 0.45),
-                                          textShadow: '0 0 6px rgba(0,0,0,0.8)',
-                                        }}>?</div>
-                                      </div>
+                                      }}/>
                                     )}
+                                    
                                     {/* Crown + tokens: vertical orientation, positioned in front of portrait */}
                                     {progress >= 1 && (
                                       <div style={{
@@ -204,9 +220,9 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                     
                     const isTeam = true;
                     const isVoting = false;
-                    const hasVoted = true;
-                    const isDeciding = true;
-                    const hasDecided = true;
+                    const hasVoted = false;
+                    const isDeciding = false;
+                    const hasDecided = false;
                     
                     return (
                         <div key={`tokens-${player.id}`} style={{
@@ -289,7 +305,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                     '--portrait-width': `${portraitWidth}px` ,
                                     position: 'absolute',
                                     // top: `${isVertical ? '26vw' : '800%'}`, //increasing will shrink
-                                    top: `${isVertical ? '620%' : '800%'}`, //increasing will shrink
+                                    top: `${isVertical ? '600%' : '800%'}`, //increasing will shrink
                                     // top: '270px',
                                     zIndex: 5,
                                     display: `${isDeciding? 'inherit' : 'none'}`,
