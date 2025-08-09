@@ -230,7 +230,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                     // left: `${isVertical ? '1.9vw' : '0.6vw'}`, //increasing will take it left
                                     // top: `${isVertical ? '4.8vw' : '1.6vw'}`,//increasing will take it to circle center
                                     left: `${isVertical ? '25%' : '25%'}`, //increasing will take it left
-                                    top: `${isVertical ? '120%' : '120%'}`,//increasing will take it to circle center
+                                    top: `${isVertical ? '115%' : '120%'}`,//increasing will take it to circle center
                                     // display: 'none'
                                 }}>
                                 {/*{!isVertical2 + " sdgf"}*/}
@@ -289,7 +289,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                     '--portrait-width': `${portraitWidth}px` ,
                                     position: 'absolute',
                                     // top: `${isVertical ? '26vw' : '800%'}`, //increasing will shrink
-                                    top: `${isVertical ? '800%' : '800%'}`, //increasing will shrink
+                                    top: `${isVertical ? '1000%' : '800%'}`, //increasing will shrink
                                     // top: '270px',
                                     zIndex: 5,
                                     display: `${isDeciding? 'inherit' : 'none'}`,
