@@ -142,7 +142,7 @@ export function CrownIcon({ size = 24, isLeader = false, style = {} }) {
   }
 
 export function EyeIcon({ size = 32, isActive = false, onClick, style = {} }) {
-  const color = isActive ? '#DDBB53' : '#B58020';
+  // const color = isActive ? '#DDBB53' : '#B58020';
   
   return (
     <div 
@@ -190,10 +190,18 @@ export function EyeIcon({ size = 32, isActive = false, onClick, style = {} }) {
             <stop offset="0.65" stopColor="#556B2F" />
             <stop offset="1.2" stopColor="#2F3F2F" />
           </radialGradient>
+          <filter id="blurFilter">
+            <feGaussianBlur stdDeviation="0.8" />
+          </filter>
+          <radialGradient id="greyGrad" cx="50%" cy="50%">
+            <stop offset="0" stopColor="rgba(64,64,64,0.9)" />
+            <stop offset="0.5" stopColor="rgba(96,96,96,0.6)" />
+            <stop offset="1" stopColor="rgba(128,128,128,0.4)" />
+          </radialGradient>
         </defs>
         
-        {isActive ? (
-          // Closed eye (active state) - HIDE images
+        {!isActive ? (
+          // Closed eye (no images) 
           <>
             {/* Sclera (white part) */}
             <path
@@ -212,16 +220,28 @@ export function EyeIcon({ size = 32, isActive = false, onClick, style = {} }) {
             {/* Eye highlight */}
             <circle cx="10.5" cy="10.5" r="1.2" fill="url(#highlightGrad)" />
             
-            {/* Big bold black slash */}
+            {/* Blur the entire eye */}
+            <g filter="url(#blurFilter)">
+              <path
+                d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"
+                fill="url(#scleraGrad)"
+                stroke="#c0c0c0"
+                strokeWidth="0.5"
+              />
+              <circle cx="12" cy="12" r="7.5" fill="url(#irisGradGolden)" stroke="#8B6914" strokeWidth="0.3" />
+              <circle cx="12" cy="12" r="3.5" fill="url(#pupilGrad)" />
+              <circle cx="10.5" cy="10.5" r="1.2" fill="url(#highlightGrad)" />
+            </g>
+            
+            {/* Grey gradient overlay */}
             <path
-              d="M2 2l20 20"
-              stroke="#000000"
-              strokeWidth="3"
-              strokeLinecap="round"
+              d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"
+              fill="url(#greyGrad)"
+              opacity="0.6"
             />
           </>
         ) : (
-          // Open eye (inactive state) - SHOW images
+          // Open eye (show images)
           <>
             {/* Sclera (white part) */}
             <path
@@ -269,6 +289,20 @@ export function ControlPanel({
       backdropFilter: 'blur(4px)',
       ...style
     }}>
+      <style>
+        {`
+          * {
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-focus-ring-color: transparent !important;
+          }
+          *:focus {
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-focus-ring-color: transparent !important;
+          }
+        `}
+      </style>
       {/* Eye Icon */}
       <EyeIcon
         size={size}
@@ -297,18 +331,24 @@ export function ControlPanel({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+          outline: 'none',
+          WebkitTapHighlightColor: 'transparent',
+          WebkitFocusRingColor: 'transparent',
+          pointerEvents: 'auto'
         }}
         onClick={onYesClick}
         onMouseEnter={(e) => {
           e.target.style.background = 'radial-gradient(circle, rgba(76,175,80,0.4) 0%, rgba(76,175,80,0.2) 70%)';
           e.target.style.border = '2px solid rgba(76,175,80,0.6)';
           e.target.style.transform = 'scale(1.05)';
+          e.target.style.outline = 'none';
         }}
         onMouseLeave={(e) => {
           e.target.style.background = 'radial-gradient(circle, rgba(76,175,80,0.2) 0%, rgba(76,175,80,0.1) 70%)';
           e.target.style.border = '2px solid rgba(76,175,80,0.4)';
           e.target.style.transform = 'scale(1)';
+          e.target.style.outline = 'none';
         }}
       >
         <img 
@@ -317,7 +357,11 @@ export function ControlPanel({
           style={{
             width: size * 0.6,
             height: size * 0.6,
-            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
+            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))',
+            outline: 'none',
+            WebkitTapHighlightColor: 'transparent',
+            WebkitFocusRingColor: 'transparent',
+            pointerEvents: 'none'
           }}
         />
       </div>
@@ -335,18 +379,24 @@ export function ControlPanel({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+          outline: 'none',
+          WebkitTapHighlightColor: 'transparent',
+          WebkitFocusRingColor: 'transparent',
+          pointerEvents: 'auto'
         }}
         onClick={onNoClick}
         onMouseEnter={(e) => {
           e.target.style.background = 'radial-gradient(circle, rgba(244,67,54,0.4) 0%, rgba(244,67,54,0.2) 70%)';
           e.target.style.border = '2px solid rgba(244,67,54,0.6)';
           e.target.style.transform = 'scale(1.05)';
+          e.target.style.outline = 'none';
         }}
         onMouseLeave={(e) => {
           e.target.style.background = 'radial-gradient(circle, rgba(244,67,54,0.2) 0%, rgba(244,67,54,0.1) 70%)';
           e.target.style.border = '2px solid rgba(244,67,54,0.4)';
           e.target.style.transform = 'scale(1)';
+          e.target.style.outline = 'none';
         }}
       >
         <img 
@@ -355,7 +405,11 @@ export function ControlPanel({
           style={{
             width: size * 0.6,
             height: size * 0.6,
-            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
+            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))',
+            outline: 'none',
+            WebkitTapHighlightColor: 'transparent',
+            WebkitFocusRingColor: 'transparent',
+            pointerEvents: 'none'
           }}
         />
       </div>
