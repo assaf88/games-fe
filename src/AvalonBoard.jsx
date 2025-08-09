@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { QuestTeamToken, QuestVote, CrownIcon, DecisionSword, EyeIcon, ControlPanel } from './AvalonTokens';
+import { QuestTeamToken, QuestVote, CrownIcon, DecisionSword, EyeIcon } from './AvalonTokens';
+import { AvalonControlPanel } from './AvalonControlPanel';
 import './styles/avalon/avalon.css';
 
 const getLocalPlayerId = () => localStorage.getItem('player_id');
@@ -335,7 +336,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                     zIndex: 10,
                 }}
             >
-                <ControlPanel
+                <AvalonControlPanel
                     size={40}
                     showImages={showImages}
                     onToggleImages={() => setShowImages(!showImages)}
