@@ -289,7 +289,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                     '--portrait-width': `${portraitWidth}px` ,
                                     position: 'absolute',
                                     // top: `${isVertical ? '26vw' : '800%'}`, //increasing will shrink
-                                    top: `${isVertical ? '650%' : '800%'}`, //increasing will shrink
+                                    top: `${isVertical ? '620%' : '800%'}`, //increasing will shrink
                                     // top: '270px',
                                     zIndex: 5,
                                     display: `${isDeciding? 'inherit' : 'none'}`,
