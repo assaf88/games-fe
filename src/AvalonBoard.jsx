@@ -197,7 +197,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                 {/* Tokens positioned independently in inner circle */}
                 {progress >= 1 && rotatedPlayers.map((player, i) => {
                     const finalAngle = ((i) * (2 * Math.PI) / numPlayers) + (Math.PI / 2);
-                    const tokenRadius = radius * (isVertical ? 0.66 : 0.70);
+                    const tokenRadius = radius * (isVertical ? 0.62 : 0.70);
                     const tokenX = center + tokenRadius*1.15 * Math.cos(finalAngle) - (portraitWidth * 0.25) / 2 - (portraitWidth * 0.16);
                     const tokenY = center + tokenRadius * Math.sin(finalAngle) - (portraitWidth * 0.25) / 2 - (portraitHeight * 0.0);
                     const isSelf = player.id === getLocalPlayerId();
@@ -228,9 +228,9 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                     position: 'absolute',
                                     // left: 15,
                                     // left: '0.9vw',
-                                    left: `${isVertical ? '1.2vw' : '0.9vw'}`, //increasing will take it left
+                                    left: `${isVertical ? '1.3vw' : '0.9vw'}`, //increasing will take it left
                                     // top: `${isVertical ? '15' : '40'}`,
-                                    top: `${isVertical ? '3.3vw' : '2.4vw'}`,//increasing will take it to circle center
+                                    top: `${isVertical ? '3.6vw' : '2.4vw'}`,//increasing will take it to circle center
                                     // top: 40
                                     // display: 'none'
                                 }}>
@@ -291,7 +291,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                  style={{ 
                                     '--portrait-width': `${portraitWidth}px` ,
                                     position: 'absolute',
-                                    top: `${isVertical ? '30vw' : '15.5vw'}`, //increasing will shrink
+                                    top: `${isVertical ? '29vw' : '15.5vw'}`, //increasing will shrink
                                     // top: '270px',
                                     zIndex: 5,
                                     display: `${isDeciding? 'inherit' : 'none'}`,
