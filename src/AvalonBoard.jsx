@@ -146,7 +146,7 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                     <div
                                         className="avalon-portrait-frame"
                                     />
-                                    {(!isSelf || progress < 1) && (
+                                    {(!isSelf || progress > 1) && (
                                       <div style={{
                                         position: 'absolute',
                                         inset: 0,
@@ -172,7 +172,9 @@ const AvalonBoard = ({ players, hostId, gameStarting, gameStarted, images, quest
                                         pointerEvents: 'none',
                                         zIndex: 3,
                                       }}>    
-                                        <CrownIcon size={Math.max(16, portraitWidth * 0.38)} isLeader={isLeader} />
+                                        {isLeader && (
+                                          <CrownIcon size={Math.max(16, portraitWidth * 0.38)} isLeader={isLeader} />
+                                        )}
                                     </div>
                                     )}
                                 </div>
